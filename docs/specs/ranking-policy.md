@@ -126,9 +126,11 @@ Operator pause is applied before active-feed ranking:
 1. Exclude paused project/item work from the active feed by default.
 2. Keep paused work visible in a separate paused queue.
 3. Rank the paused queue by project priority, today focus, pause age, review trigger, and source freshness.
-4. Generate an active `pause_review` item only when the pause itself needs attention: review time elapsed, source changed since pause, external dependency may be ready, or there are no active items.
+4. Generate an active `pause_review` item only when the pause itself needs attention: review time elapsed, source changed since pause, external dependency may be ready, or the active feed is empty.
 
 When pause conflicts with priority, pause wins for active-feed eligibility. A priority 100 paused repo should not outrank a lower-priority unpaused active item unless a `pause_review` breakthrough condition is present.
+
+If the active feed is empty, the top paused item becomes the next pause review candidate. This does not unpause the original work automatically; it asks the user to review the pause.
 
 ## Tie Breakers
 

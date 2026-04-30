@@ -97,7 +97,7 @@ Default behavior:
 1. If an item or project is paused, it is excluded from the active feed.
 2. Paused items appear in the paused queue with reason, age, source freshness, and review trigger.
 3. Project priority ranks items inside each queue, but priority does not automatically pull paused work back into the active feed.
-4. If the active feed is empty, DevDeck may show the paused queue as the next review surface instead of claiming everything is clear.
+4. If the active feed is empty, DevDeck should promote the paused queue as the next review surface instead of claiming everything is clear.
 
 ## Priority Conflict Policy
 
@@ -120,9 +120,9 @@ An active-feed item may be generated for paused work only when the item is about
 - pause review is due
 - source changed since the pause fingerprint
 - external dependency may now be ready
-- all active work is empty and paused work needs review
+- active feed is empty and paused work is the next best review surface
 
-Default dogfood behavior should avoid breaking through just because a paused repo is high priority. If future live signals need urgent interruption, add an explicit `breakthrough` policy rather than relying on priority.
+Default dogfood behavior should avoid breaking through just because a paused repo is high priority. Empty active feed is the exception: DevDeck should show the highest-ranked paused item as a pause review candidate, while preserving the original task's paused state until the user unpauses it. If future live signals need urgent interruption, add an explicit `breakthrough` policy rather than relying on priority.
 
 ## Storage
 

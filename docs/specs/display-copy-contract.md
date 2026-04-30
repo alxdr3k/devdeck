@@ -194,6 +194,7 @@ Handoff may keep "why this is next" because it is context for another coding ses
 |---|---|
 | No configured projects | No projects configured. Add `devdeck.yml` with explicit repo paths. |
 | All repos clear | No human-attention items found. Review the project table or rescan. |
+| Active feed empty, paused work exists | No active items. Review paused work next. |
 | One repo missing | `<repo>` path is missing. Check `devdeck.yml` path. |
 | GitHub unavailable | GitHub state unavailable. Local docs and git were still scanned. |
 | Source contract unsupported | Source format changed. Other sources were still scanned. |
