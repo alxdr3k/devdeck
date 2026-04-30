@@ -22,7 +22,7 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 
 | Milestone | Product / user gate | Target | Status | Gate | Evidence | Notes |
 |---|---|---|---|---|---|---|
-| `P0-M1` | Project contract, docs, reviews, and acceptance gates are ready for implementation. | now | `accepted` | docs review | source docs + reviews + this ledger | No code yet. |
+| `P0-M1` | Project contract, docs, reviews, acceptance gates, and leaf roadmap are ready for implementation. | now | `accepted` | docs review | source docs + reviews + this ledger | No code yet. |
 | `P0-M2` | DevDeck can load config and produce local-only statuses for all dogfood repos. | next | `planned` | AC-001..AC-006 | not started | Includes path resolver and docs/git/dev-cycle adapters. |
 | `P0-M3` | DevDeck can include GitHub PR/check/review state without blocking local scans. | after P0-M2 | `planned` | AC-007..AC-009, AC-017 | not started | `gh` adapter boundary. |
 | `P0-M4` | DevDeck can generate ranked attention feed and handoff prompts from fixtures. | after P0-M3 | `planned` | AC-010..AC-014 | not started | Domain-first before Ink polish. |
@@ -35,6 +35,7 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `DOC` | Source-of-truth docs, reviews, traceability | `DOC-1A` | `accepted` | Current phase complete. |
 | `CORE` | TypeScript project, config, cache, CLI shell | `CORE-1A` | `ready` | First code track. |
 | `SRC` | Source adapters for docs/git/GitHub/dev-cycle | `SRC-1A` | `planned` | Fixture-heavy. |
+| `GH` | GitHub adapter details and `gh` fixture coverage | `GH-1A` | `planned` | Split from local source adapters because failure modes differ. |
 | `MODEL` | ProjectStatus and AttentionItem domain | `MODEL-1A` | `planned` | Pure functions first. |
 | `RANK` | Ranking bands, scoring, explanations | `RANK-1A` | `planned` | Dogfood-calibrated. |
 | `UI` | Ink feed/detail/handoff/command display | `UI-1A` | `planned` | No execution actions. |
@@ -46,19 +47,48 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 |---|---|---|---|---|---|---|---|---|---|---|
 | `DOC-1A.1` | `P0-M1` | `DOC` | `DOC-1A` | Create source-of-truth docs from second-brain handoff. | handoff | docs review | `passing` | `accepted` | `docs/product/PRD.md`, specs, eval | Complete. |
 | `DOC-1A.2` | `P0-M1` | `DOC` | `DOC-1A` | Run CEO, Design, DevEx, Engineering reviews and backfill findings. | `DOC-1A.1` | review backfill | `passing` | `accepted` | `docs/reviews/`, this ledger | Complete. |
-| `CORE-1A.1` | `P0-M2` | `CORE` | `CORE-1A` | Scaffold Node 22 + npm + TypeScript + Vitest project. | `DOC-1A.2` | AC-001, TEST-001 | `defined` | `ready` | not started | Start here. |
-| `CORE-1A.2` | `P0-M2` | `CORE` | `CORE-1A` | Add `devdeck.yml` loader, validation, `ProjectLocator`, path resolution, first-run missing-config output. | `CORE-1A.1` | AC-002, AC-003, TEST-002 | `defined` | `planned` | not started | Implement after scaffold. |
-| `CORE-1A.3` | `P0-M2` | `CORE` | `CORE-1A` | Add user-local JSON scan cache with freshness metadata and override path. | `CORE-1A.1` | AC-014, TEST-014 | `defined` | `planned` | not started | Implement after scanner shape exists. |
-| `SRC-1A.1` | `P0-M2` | `SRC` | `SRC-1A` | Implement filesystem/path and git read-only adapters. | `CORE-1A.2` | AC-004, AC-005, TEST-004 | `defined` | `planned` | not started | Use fixtures. |
-| `SRC-1A.2` | `P0-M2` | `SRC` | `SRC-1A` | Implement known-path docs resolver and boilerplate docs adapter. | `SRC-1A.1`, `SPIKE-002` | AC-006, TEST-006 | `defined` | `planned` | not started | Include `docs/TESTING.md` fallback. |
-| `SRC-1A.3` | `P0-M3` | `SRC` | `SRC-1A` | Implement `gh` adapter for current branch PR, open PRs, checks, reviews. | `SPIKE-001` | AC-007, AC-017, TEST-007 | `defined` | `planned` | not started | Add timeouts. |
-| `SRC-1A.4` | `P0-M3` | `SRC` | `SRC-1A` | Implement `.dev-cycle` latest brief parser. | `SRC-1A.1` | AC-008, TEST-008 | `defined` | `planned` | not started | Parse latest cycle. |
-| `MODEL-1A.1` | `P0-M4` | `MODEL` | `MODEL-1A` | Build `ProjectStatus` and source trust builder. | `SRC-1A.1` | AC-009, TEST-009 | `defined` | `planned` | not started | Keep adapter output out of UI. |
-| `MODEL-1A.2` | `P0-M4` | `MODEL` | `MODEL-1A` | Build `AttentionItem` generator and suppression rules. | `MODEL-1A.1` | AC-010, TEST-010 | `defined` | `planned` | not started | Prefer one root-cause item. |
-| `RANK-1A.1` | `P0-M4` | `RANK` | `RANK-1A` | Implement hard ranking bands, score, tie-breakers, explanation. | `MODEL-1A.2` | AC-011, TEST-011 | `defined` | `planned` | not started | Tune after eval, not before. |
-| `UI-1A.1` | `P0-M5` | `UI` | `UI-1A` | Implement Ink feed, top item, top 5 queue, project table, detail pane. | `RANK-1A.1` | AC-012, AC-018, TEST-012 | `defined` | `planned` | not started | Evidence must remain visible. |
-| `UI-1A.2` | `P0-M5` | `UI` | `UI-1A` | Implement handoff and command display panes with no execution. | `UI-1A.1` | AC-013, TEST-013 | `defined` | `planned` | not started | No execution handlers. |
-| `EVAL-1A.1` | `P0-M5` | `EVAL` | `EVAL-1A` | Capture dogfood fixtures and run top-item quality eval. | `UI-1A.2`, `SPIKE-003` | AC-015..AC-018, TEST-015 | `defined` | `planned` | not started | Product release gate. |
+| `DOC-1A.3` | `P0-M1` | `DOC` | `DOC-1A` | Run implementation readiness review, close implementation-blocking decisions, and decompose roadmap to leaf slices. | `DOC-1A.2` | readiness review | `passing` | `accepted` | `docs/reviews/0005-implementation-readiness-review.md`, DEC-010..DEC-012 | Complete. |
+| `CORE-1A.1` | `P0-M2` | `CORE` | `CORE-1A` | Scaffold `package.json`, Node 22/npm scripts, TypeScript strict config, TSX dev entrypoint, Vitest. | `DOC-1A.3` | AC-001, TEST-001 | `defined` | `ready` | not started | Start here. |
+| `CORE-1A.2` | `P0-M2` | `CORE` | `CORE-1A` | Create source/test directory skeleton and export domain placeholder types without behavior. | `CORE-1A.1` | TEST-001 | `defined` | `planned` | not started | Keep compile green. |
+| `CORE-1A.3` | `P0-M2` | `CORE` | `CORE-1A` | Implement config schema, YAML loader, snake_case to camelCase mapping, and no-config first-run output. | `CORE-1A.2` | AC-002, TEST-002 | `defined` | `planned` | not started | Include dogfood example. |
+| `CORE-1A.4` | `P0-M2` | `CORE` | `CORE-1A` | Implement `ProjectLocator` local_path provider and path validation for dogfood repos. | `CORE-1A.3` | AC-003, TEST-002 | `defined` | `planned` | not started | Do not leak raw path into domain beyond `LocatedProject`. |
+| `CORE-1A.5` | `P0-M2` | `CORE` | `CORE-1A` | Implement scan orchestration shell with per-project result collection and non-fatal source errors. | `CORE-1A.4` | AC-004, TEST-004 | `defined` | `planned` | not started | Local sources can be stubbed initially. |
+| `CORE-1A.6` | `P0-M2` | `CORE` | `CORE-1A` | Implement user-local JSON cache path resolution, read/write, stale marker, and `DEVDECK_CACHE_PATH`. | `CORE-1A.5` | AC-014, TEST-014 | `defined` | `planned` | not started | Do not write into dogfood repos. |
+| `SRC-1A.1` | `P0-M2` | `SRC` | `SRC-1A` | Add adapter result/test fixture conventions shared by filesystem, git, docs, dev-cycle, GitHub. | `CORE-1A.2` | TEST-004 | `defined` | `planned` | not started | Keeps adapters consistent. |
+| `SRC-1A.2` | `P0-M2` | `SRC` | `SRC-1A` | Implement filesystem adapter for exists/not-directory/missing state and mtimes. | `SRC-1A.1`, `CORE-1A.4` | AC-004, TEST-004 | `defined` | `planned` | not started | Missing project does not abort scan. |
+| `SRC-1A.3` | `P0-M2` | `SRC` | `SRC-1A` | Implement read-only git adapter for repo root, branch, default branch, dirty files, ahead/behind, recent commit. | `SRC-1A.1`, `CORE-1A.5` | AC-005, TEST-004 | `defined` | `planned` | not started | Use bounded shell wrapper. |
+| `SRC-1A.4` | `P0-M2` | `SRC` | `SRC-1A` | Implement known-path docs resolver for current/testing/runtime/data/code/operations docs. | `SRC-1A.2`, `SPIKE-002` | AC-006, TEST-006 | `defined` | `planned` | not started | Include `docs/TESTING.md` fallback. |
+| `SRC-1A.5` | `P0-M2` | `SRC` | `SRC-1A` | Parse current-state doc summary, roadmap position, current priorities, and needs-audit sections. | `SRC-1A.4` | AC-006, TEST-006 | `defined` | `planned` | not started | Preserve raw anchors on parse gaps. |
+| `SRC-1A.6` | `P0-M2` | `SRC` | `SRC-1A` | Parse implementation plan active milestone/track/phase/slice and next ready leaf. | `SRC-1A.4` | AC-006, TEST-006 | `defined` | `planned` | not started | Start with table/heading parser. |
+| `SRC-1A.7` | `P0-M2` | `SRC` | `SRC-1A` | Parse testing docs for known validation commands and mark unknown commands explicitly. | `SRC-1A.4` | AC-006, TEST-006 | `defined` | `planned` | not started | No invented commands. |
+| `SRC-1A.8` | `P0-M3` | `SRC` | `SRC-1A` | Parse `.dev-cycle` latest run id, latest cycle, result, work, verification, review/ship, risk. | `SRC-1A.2` | AC-008, TEST-008 | `defined` | `planned` | not started | Handles missing `.dev-cycle`. |
+| `GH-1A.1` | `P0-M3` | `GH` | `GH-1A` | Run SPIKE-001 and capture read-only `gh` JSON/error fixtures for dogfood repos. | `CORE-1A.1` | spike result | `defined` | `planned` | not started | Report any blocker before `GH-1A.3`. |
+| `GH-1A.2` | `P0-M3` | `GH` | `GH-1A` | Implement `gh` availability, auth, repo resolution, timeout, and error-code mapping. | `GH-1A.1` | AC-017, TEST-007 | `defined` | `planned` | not started | Local scan remains usable on failure. |
+| `GH-1A.3` | `P0-M3` | `GH` | `GH-1A` | Implement current-branch PR and open PR summary adapter. | `GH-1A.2` | AC-007, TEST-007 | `defined` | `planned` | not started | Avoid single-PR domain assumption. |
+| `GH-1A.4` | `P0-M3` | `GH` | `GH-1A` | Implement checks, review decision, actionable count, and Codex pass/feedback best-effort adapter. | `GH-1A.3` | AC-007, AC-017, TEST-007 | `defined` | `planned` | not started | If Codex signal is weak, lower confidence. |
+| `GH-1A.5` | `P0-M3` | `GH` | `GH-1A` | Integrate GitHub adapter into scan orchestration with cache fallback and source trust. | `GH-1A.4`, `CORE-1A.6` | AC-007, AC-017, TEST-007, TEST-014 | `defined` | `planned` | not started | No `--watch` commands. |
+| `MODEL-1A.1` | `P0-M4` | `MODEL` | `MODEL-1A` | Define and export concrete TypeScript domain models matching specs. | `CORE-1A.2` | TEST-009 | `defined` | `planned` | not started | Keep raw adapter output separate. |
+| `MODEL-1A.2` | `P0-M4` | `MODEL` | `MODEL-1A` | Build source trust aggregation and project confidence rules. | `MODEL-1A.1`, `SRC-1A.3`, `SRC-1A.4` | AC-009, TEST-009 | `defined` | `planned` | not started | Trust is visible data. |
+| `MODEL-1A.3` | `P0-M4` | `MODEL` | `MODEL-1A` | Build `ProjectStatus` builder and derived work-status rules. | `MODEL-1A.2`, `SRC-1A.8`, `GH-1A.5` | AC-009, TEST-009 | `defined` | `planned` | not started | Evaluate status rule order. |
+| `MODEL-1B.1` | `P0-M4` | `MODEL` | `MODEL-1B` | Generate urgent blocker and ship-ready attention items from PR/check/review/dev-cycle states. | `MODEL-1A.3` | AC-010, TEST-010 | `defined` | `planned` | not started | Root-cause item first. |
+| `MODEL-1B.2` | `P0-M4` | `MODEL` | `MODEL-1B` | Generate resume, trust-repair, hygiene, and unknown-state items. | `MODEL-1A.3` | AC-010, TEST-010 | `defined` | `planned` | not started | No noisy duplicates. |
+| `MODEL-1B.3` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement deterministic item ids and suppression rules. | `MODEL-1B.1`, `MODEL-1B.2` | AC-010, TEST-010 | `defined` | `planned` | not started | Prevent feed flicker. |
+| `MODEL-1B.4` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement command suggestions as display-only data with prohibited execution coverage. | `MODEL-1B.3`, `DEC-011` | AC-013, TEST-013 | `defined` | `planned` | not started | `executesInMvp: false`. |
+| `MODEL-1B.5` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement handoff generator from attention items and known doc path fallbacks. | `MODEL-1B.4`, `SRC-1A.4` | AC-010, AC-016, TEST-010, TEST-015 | `defined` | `planned` | not started | Keep prompt under 2-minute resume target. |
+| `RANK-1A.1` | `P0-M4` | `RANK` | `RANK-1A` | Implement ranking band assignment and band-order sort. | `MODEL-1B.3` | AC-011, TEST-011 | `defined` | `planned` | not started | Blockers outrank hygiene. |
+| `RANK-1A.2` | `P0-M4` | `RANK` | `RANK-1A` | Implement score within band, trust/freshness/effort modifiers, and deterministic tie-breakers. | `RANK-1A.1` | AC-011, TEST-011 | `defined` | `planned` | not started | No tuning without eval. |
+| `RANK-1A.3` | `P0-M4` | `RANK` | `RANK-1A` | Implement "why this is #1" explanation and nearby-item explanation fields. | `RANK-1A.2` | AC-011, TEST-011 | `defined` | `planned` | not started | Explanation names decisive factors. |
+| `UI-1A.1` | `P0-M5` | `UI` | `UI-1A` | Implement CLI bootstrap for no-config, scan-start, and non-interactive smoke rendering. | `CORE-1A.5`, `RANK-1A.3` | AC-001, AC-002, TEST-001, TEST-012 | `defined` | `planned` | not started | Useful before full TUI. |
+| `UI-1A.2` | `P0-M5` | `UI` | `UI-1A` | Implement Ink top item and top 5 feed layout from ranked items. | `UI-1A.1` | AC-012, TEST-012 | `defined` | `planned` | not started | Top item dominates. |
+| `UI-1A.3` | `P0-M5` | `UI` | `UI-1A` | Implement project table as secondary map with plain-language copy. | `UI-1A.2` | AC-012, TEST-012 | `defined` | `planned` | not started | Table must not outrank feed. |
+| `UI-1A.4` | `P0-M5` | `UI` | `UI-1A` | Implement detail pane with trust, source refs, checked timestamps, and ranking explanation. | `UI-1A.2` | AC-018, TEST-012 | `defined` | `planned` | not started | Evidence visible. |
+| `UI-1A.5` | `P0-M5` | `UI` | `UI-1A` | Implement keyboard flow for selection, detail, rescan, handoff pane, command pane, quit. | `UI-1A.4` | AC-012, AC-013, TEST-012, TEST-013 | `defined` | `planned` | not started | No execution handlers. |
+| `UI-1A.6` | `P0-M5` | `UI` | `UI-1A` | Implement handoff and command text panes with clipboard copy fallback to selectable text. | `UI-1A.5`, `DEC-012` | AC-013, AC-016, TEST-013 | `defined` | `planned` | not started | Copy failure is non-blocking. |
+| `UI-1A.7` | `P0-M5` | `UI` | `UI-1A` | Implement loading, empty, stale cache, missing repo, GitHub unavailable, and parser-failed states. | `UI-1A.5` | AC-012, AC-017, AC-018, TEST-012 | `defined` | `planned` | not started | Plain-language errors. |
+| `EVAL-1A.1` | `P0-M5` | `EVAL` | `EVAL-1A` | Capture minimized dogfood source fixtures for docs/git/dev-cycle/GitHub states. | `SRC-1A.8`, `GH-1A.5` | TEST-015 | `defined` | `planned` | not started | Redact private content if needed. |
+| `EVAL-1A.2` | `P0-M5` | `EVAL` | `EVAL-1A` | Implement automated top-item fixture eval and rubric output. | `EVAL-1A.1`, `RANK-1A.3`, `MODEL-1B.5` | AC-015, AC-016, TEST-015 | `defined` | `planned` | not started | Product gate. |
+| `EVAL-1A.3` | `P0-M5` | `EVAL` | `EVAL-1A` | Run live dogfood eval and record false positives/negatives plus follow-up slices. | `UI-1A.7`, `EVAL-1A.2` | AC-015..AC-018 | `defined` | `planned` | not started | Must pass before MVP accepted. |
+| `DOC-1B.1` | `P0-M5` | `DOC` | `DOC-1B` | Update current docs, testing commands, and traceability after implementation slices land. | each implementation slice | docs freshness | `defined` | `planned` | not started | Keep docs current during implementation. |
 
 ## Dependencies
 

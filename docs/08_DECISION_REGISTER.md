@@ -142,3 +142,54 @@ Dogfood needs local paths now. A future hosted service may need repo snapshots, 
 - Positive: MVP stays simple while preserving a migration path.
 - Trade-off: one small abstraction exists before multiple providers.
 - Follow-ups: `CORE-1A.2` should introduce `ProjectLocator` rather than passing raw paths everywhere.
+
+---
+
+### DEC-010: Use a minimal npm package set for the first scaffold
+
+- Date: 2026-04-30
+- Status: accepted
+- Resolves: implementation readiness review
+- Impacts: CORE-1A.1, docs/current/TESTING.md
+
+**Decision**
+
+Start with Node 22, npm, TypeScript, TSX, Vitest, Ink, React, YAML, Zod, and `@types/node`. Use Node `child_process` through a small local wrapper first; add `execa` only if the wrapper becomes noisy.
+
+**Rationale**
+
+This keeps the first scaffold small while preserving typed config validation and fixture-driven tests.
+
+---
+
+### DEC-011: Allow read-only scanner shell-outs but prohibit workflow command execution
+
+- Date: 2026-04-30
+- Status: accepted
+- Resolves: command safety boundary
+- Impacts: REQ-003, REQ-004, REQ-012, NFR-001
+
+**Decision**
+
+DevDeck may run bounded read-only `git` and `gh` commands to collect state. It must not execute generated workflow commands, tests, builds, merge/push commands, `codex-loop`, or mutation commands in MVP.
+
+**Rationale**
+
+The product cannot scan repo state without local read commands, but the MVP safety promise is about not acting on the repo on the user's behalf.
+
+---
+
+### DEC-012: Clipboard copy falls back to selectable text
+
+- Date: 2026-04-30
+- Status: accepted
+- Resolves: first-run / terminal portability
+- Impacts: REQ-011, REQ-012
+
+**Decision**
+
+Handoff and command panes should support copy when terminal/platform support is available, but must always fall back to showing selectable text.
+
+**Rationale**
+
+Clipboard support varies across terminals, SSH sessions, and OS setups. Copy failure should not block the workflow.

@@ -76,6 +76,7 @@ Config loader + project locator
 ## Cross-cutting
 
 - Safety: command suggestions are display-only in MVP. No repo command execution.
+- Scanner command boundary: adapters may run bounded read-only `git` and `gh` reads; workflow/mutation commands are prohibited.
 - Privacy: local repo state stays local except user-triggered `gh` calls to GitHub.
 - Errors: source failures become `SourceTrust` entries; one failed repo/source does not stop the scan.
 - Determinism: ranking is pure for a fixed input fixture.
@@ -92,6 +93,9 @@ Config loader + project locator
 - DEC-005: ranking bands before numeric score.
 - DEC-006: display-only commands in MVP.
 - DEC-009: project locator abstraction with local filesystem provider for dogfood MVP.
+- DEC-010: initial npm package/tooling set.
+- DEC-011: read-only scanner shell-outs are allowed; workflow command execution is prohibited.
+- DEC-012: clipboard copy falls back to selectable text.
 
 ## Open Questions
 

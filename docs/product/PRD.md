@@ -71,6 +71,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Handoff prompt generation.
 - Open target and command display actions.
 - Local JSON cache for last scan results and freshness metadata.
+- Read-only scanner shell-outs for `git` and `gh`.
 
 ### Out of Scope
 
@@ -123,11 +124,18 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Language: TypeScript.
 - Package manager: npm.
 - TUI: Ink.
-- Config: YAML file parsed into typed config.
+- Config: YAML parsed and validated into typed config.
 - GitHub adapter: `gh` shell-out with JSON output.
 - Local adapters: filesystem and git read-only commands.
 - Cache: user-local JSON cache for MVP, with freshness metadata. Do not start with SQLite.
 - Tests: Vitest for model, parser, ranking, and handoff fixtures.
+
+Planned initial package set:
+
+- Runtime/UI: `ink`, `react`.
+- Config/validation: `yaml`, `zod`.
+- Shell adapters: Node `child_process` or a thin local wrapper; add `execa` only if the wrapper becomes noisy.
+- Tests/tooling: `typescript`, `tsx`, `vitest`, `@types/node`.
 
 This stack is accepted for MVP. The reasoning is workflow fit, fast iteration, and future model sharing with a possible web dashboard, not inherited boilerplate implementation.
 
@@ -164,6 +172,23 @@ Top item appears or a clear empty state appears
 ```
 
 No first-run state should require reading source code to recover.
+
+## Command Safety Boundary
+
+DevDeck may execute bounded read-only scanner commands for its own data collection:
+
+- `git` status/log/branch/rev-parse style reads
+- `gh` JSON/API reads
+
+DevDeck must not execute workflow or mutation commands in MVP:
+
+- no `codex-loop`
+- no tests/builds in dogfood repos
+- no `git add`, `commit`, `push`, `merge`, checkout/switch, reset, stash
+- no `gh pr merge`, `gh pr create`, `gh pr checks --watch`
+- no shell command generated from an `AttentionItem`
+
+Generated commands are display/copy text only. Clipboard copy should fall back to showing selectable text when clipboard support is unavailable.
 
 ## Open Questions
 

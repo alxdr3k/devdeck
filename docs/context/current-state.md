@@ -15,7 +15,7 @@ ai_include: true
 
 # Current State
 
-Status: project kickoff docs and review backfill complete. No implementation exists yet.
+Status: implementation-ready docs and leaf roadmap complete. No implementation exists yet.
 
 This repo is now the current truth for DevDeck. The second-brain ideation handoff is history and should be used only for background.
 
@@ -25,11 +25,11 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 
 ## Current roadmap position
 
-- current milestone: `P0-M1` project contract and dogfood MVP plan
-- active tracks: product contract, source/status model, attention/ranking model, TUI display contract, evals
-- active phase: `DOC-1A` kickoff documentation
-- active slice: `DOC-1A.1` create source-of-truth docs and stage reviews
-- last accepted gate: CEO, Design, DevEx, and Engineering review findings backfilled on 2026-04-30
+- current milestone: `P0-M2` local config and local-source status implementation
+- active tracks: `CORE`, then `SRC`
+- active phase: `CORE-1A`
+- active slice: `CORE-1A.1` scaffold Node 22 + npm + TypeScript + Vitest project
+- last accepted gate: implementation readiness review findings backfilled on 2026-04-30
 - next gate: `CORE-1A.1` TypeScript/Node scaffold with documented checks
 - canonical ledger: `docs/04_IMPLEMENTATION_PLAN.md`
 
@@ -37,6 +37,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 
 - Boilerplate documentation and agent-command scaffold copied into this repo.
 - DevDeck PRD, workflow ADR, status model, attention item model, ranking policy, display copy contract, dogfood eval, and project-stage reviews created.
+- Implementation readiness review completed; roadmap is decomposed to commit-sized leaf slices.
 - No TypeScript, Node, Ink, scanner, model, ranking, cache, or TUI implementation exists yet.
 
 ## Planned
@@ -58,16 +59,15 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 
 ## Current priorities
 
-1. Scaffold TypeScript/Node 22 + npm + strict TypeScript + Vitest.
-2. Implement config/path resolver and source adapters behind fixture tests.
-3. Build `ProjectStatus`, `AttentionItem`, ranking bands, handoff, and Ink UI in that order.
+1. Start `CORE-1A.1`: scaffold TypeScript/Node 22 + npm + strict TypeScript + Vitest.
+2. Keep `npm run build`, `npm run typecheck`, and `npm test` green as soon as scripts exist.
+3. Do not begin GitHub adapter implementation before `GH-1A.1` captures `gh` fixtures.
 
 ## Current risks / unknowns
 
-- `Q-002`: `gh` JSON fields and failure modes need a tight adapter boundary.
-- `Q-003`: Exact ranking weights are dogfood defaults, not product truth.
 - `Q-005`: Parser depth for boilerplate docs and `.dev-cycle` briefs needs to be right-sized.
 - `Q-010`: Manual defer/pin/snooze remains undecided for post-MVP.
+- `Q-012`: Final product name remains open and does not block implementation.
 
 ## Current validation
 

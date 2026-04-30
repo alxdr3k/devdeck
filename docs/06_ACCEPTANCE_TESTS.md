@@ -24,6 +24,8 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | AC-016 | Success metric | Given generated handoff, when pasted into a fresh Claude/Codex session, then work can resume in under 2 minutes. | TEST-015 / manual dogfood | defined |
 | AC-017 | NFR-004 | Given `gh` auth fails, when scanning, then local docs/git statuses remain available and GitHub trust shows a fix hint. | TEST-007 | defined |
 | AC-018 | NFR-006 | Given any top item, when detail is opened, then source freshness, confidence, missing source, and checked time are visible. | TEST-012 | defined |
+| AC-019 | REQ-003, REQ-004, REQ-012, NFR-001 | Given scanner adapters run, when collecting state, then only bounded read-only `git`/`gh` commands are invoked and no generated workflow command can execute. | TEST-003, TEST-013 | defined |
+| AC-020 | REQ-011, REQ-012 | Given clipboard copy is unavailable, when handoff or command copy is requested, then DevDeck falls back to showing selectable text. | TEST-013 | defined |
 
 ## Tests
 
@@ -31,7 +33,9 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 |---|---|---|---|
 | TEST-001 | Scaffold smoke | `tests/cli/startup.test.ts` | AC-001 |
 | TEST-002 | Config loader and first-run output | `tests/config/config-loader.test.ts` | AC-002, AC-003 |
+| TEST-003 | Shell command boundary | `tests/shell/read-only-command-boundary.test.ts` | AC-019 |
 | TEST-004 | Filesystem and git adapter fixtures | `tests/adapters/git-adapter.test.ts` | AC-004, AC-005 |
+| TEST-005 | Scan orchestration resilience | `tests/scan/scan-orchestrator.test.ts` | AC-004, AC-014 |
 | TEST-006 | Known-path docs resolver | `tests/adapters/docs-resolver.test.ts` | AC-006 |
 | TEST-007 | GitHub adapter fixtures | `tests/adapters/github-adapter.test.ts` | AC-007, AC-017 |
 | TEST-008 | Dev-cycle brief parser | `tests/adapters/dev-cycle-adapter.test.ts` | AC-008 |
@@ -39,7 +43,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | TEST-010 | Attention item generator | `tests/domain/attention-items.test.ts` | AC-010 |
 | TEST-011 | Ranking policy | `tests/domain/ranking.test.ts` | AC-011 |
 | TEST-012 | Display copy and Ink render smoke | `tests/ui/display-copy.test.ts` | AC-012, AC-018 |
-| TEST-013 | Command safety | `tests/domain/command-suggestions.test.ts` | AC-013 |
+| TEST-013 | Command safety and copy fallback | `tests/domain/command-suggestions.test.ts` | AC-013, AC-019, AC-020 |
 | TEST-014 | Scan cache | `tests/cache/scan-cache.test.ts` | AC-014 |
 | TEST-015 | Dogfood top item quality eval | `tests/evals/dogfood-top-item-quality.test.ts` or manual eval packet | AC-015, AC-016 |
 
@@ -49,7 +53,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 |---|---|---|---|---|
 | PR validation | local/CI once configured | TEST-001..TEST-014 | yes after scaffold | No CI workflow is active yet. |
 | MVP dogfood | local realistic environment | TEST-015 + manual dogfood rubric | yes for MVP | Uses real `actwyn`, `concluv`, `../xeflabs/xef-scale`. |
-| Command-safety review | local/CI | TEST-013 + code review | yes | MVP must not execute repo commands. |
+| Command-safety review | local/CI | TEST-003 + TEST-013 + code review | yes | Scanner may run read-only `git`/`gh`; workflow commands must not execute. |
 
 ## Definition of Done
 
