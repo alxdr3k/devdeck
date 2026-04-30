@@ -1,0 +1,170 @@
+---
+id: devdeck-prd
+type: prd
+title: DevDeck Product Requirements
+status: active
+created_at: 2026-04-30
+updated_at: 2026-04-30
+scope: product
+project_id: devdeck
+provenance: user_curated_ai_assisted
+sensitivity: private
+retention: long_term
+ai_include: true
+---
+
+# DevDeck PRD
+
+## Summary
+
+DevDeck helps one developer operate 3-5 simultaneous Claude Code/Codex projects without carrying each repo's state in working memory. The MVP is a local TypeScript/Node + Ink TUI that reads project evidence, ranks the next human-attention item, and generates a 2-minute handoff prompt.
+
+## Problem
+
+The user is running multiple AI coding projects at once. The hard part is not listing tasks. The hard part is knowing which repo needs human attention now, why it needs attention, what evidence supports that claim, and how to resume the right Claude/Codex session quickly.
+
+Generic Kanban misses this because the actionable state is distributed across boilerplate docs, local git, GitHub PR/check/review state, and `.dev-cycle` / `codex-loop` artifacts.
+
+## Target User
+
+- Primary user: a solo developer dogfooding Claude Code/Codex across `actwyn`, `concluv`, and `xef-scale`.
+- User goal: open one local TUI and know the next best unblock within 30 seconds.
+- Workflow goal: produce a handoff that lets the user resume work in under 2 minutes.
+
+## Dogfood Repos
+
+Initial explicit config:
+
+| Repo | Path | Priority | Today focus |
+|---|---|---:|---|
+| actwyn | `../actwyn` | 100 | yes |
+| concluv | `../concluv` | 90 | no |
+| xef-scale | `../xeflabs/xef-scale` | 70 | no |
+
+## MVP Thesis
+
+The right MVP is a read-mostly, local-first developer cockpit:
+
+```text
+boilerplate docs + git + GitHub + dev-cycle/codex-loop
+  -> ProjectStatus
+  -> AttentionItem
+  -> ranked priority feed
+  -> handoff prompt / open target / command display
+```
+
+The product should be dogfood-first. It should fit the user's existing terminal workflow before broadening to generic project management.
+
+## Scope
+
+### In Scope
+
+- Explicit `devdeck.yml` project config for dogfood repos.
+- Local scans of boilerplate docs and `.dev-cycle` state.
+- Local git status, branch, ahead/behind, changed files, and recent commits.
+- GitHub PR, checks, review, and Codex review state through `gh`.
+- Project-level status model with source, freshness, confidence, and missing-source handling.
+- Attention item model for human-actionable work.
+- Deterministic ranking policy with visible "why this is #1" explanation.
+- Ink TUI priority feed with a strong top item and short top 5 queue.
+- Secondary project table as a map, not the primary action UI.
+- Handoff prompt generation.
+- Open target and command display actions.
+- Local JSON cache for last scan results and freshness metadata.
+
+### Out of Scope
+
+- Generic Kanban board.
+- Web/mobile dashboard.
+- Hosted service or multi-user repo connector.
+- Running repo commands, tests, `codex-loop`, merge, push, or deploy from DevDeck.
+- Write-back to docs, GitHub, or `.dev-cycle`.
+- Team workflow, assignment, notifications, or cross-user collaboration.
+- GitHub-less non-developer workflow.
+
+## Functional Requirements
+
+| ID | Requirement | Priority | Notes |
+|---|---|---|---|
+| REQ-001 | Load an explicit project config with repo id, path, priority, and optional `today_focus`. | must | Missing path is a project state, not a process crash. |
+| REQ-002 | Scan boilerplate docs for current state, implementation plan, testing guidance, and stale/missing docs. | must | Parser starts with known files and headings. |
+| REQ-003 | Scan local git state for branch, dirtiness, upstream relation, recent commits, and open PR branch hints. | must | Read-only. |
+| REQ-004 | Read GitHub PR/check/review state through `gh` JSON output. | must | Adapter boundary hides `gh` JSON shape from domain models. |
+| REQ-005 | Read `.dev-cycle` and `codex-loop` state when present. | must | Missing state lowers confidence but does not fail the scan. |
+| REQ-006 | Produce a `ProjectStatus` for every configured repo. | must | Includes trust metadata per source. |
+| REQ-007 | Generate `AttentionItem`s that describe concrete human actions. | must | Items are not raw machine states. |
+| REQ-008 | Rank items using severity, project priority, today focus, age, trust, freshness, and estimated effort. | must | Deterministic ties. |
+| REQ-009 | Show top 1 item and top 5 queue in the default TUI view. | must | Strong top 1 emphasis. |
+| REQ-010 | Show why the top item is ranked first. | must | Expose inputs, not just score. |
+| REQ-011 | Generate a 2-minute handoff prompt with current task, why next, next action, trust, read order, and commands. | must | Copyable output. |
+| REQ-012 | Display open targets and commands without executing repo commands. | must | MVP action safety boundary. |
+| REQ-013 | Surface stale, missing, auth, and parse errors in plain language. | must | No silent failures. |
+| REQ-014 | Cache scan results locally and mark freshness. | should | JSON cache is sufficient for MVP. |
+| REQ-015 | Allow manual rescan. | should | Pull-first interaction model. |
+| REQ-016 | Provide useful first-run output for missing config, missing repo path, and `gh` auth failure. | must | First run should not collapse into a stack trace. |
+| REQ-017 | Resolve repo-specific boilerplate doc paths through a known-path resolver with fallbacks. | must | Dogfood repos are similar but not identical. |
+| REQ-018 | Represent current-branch PR state separately from other open PRs and default-branch sync state. | should | Prevents single-PR assumptions from hiding blockers. |
+
+## Non-functional Requirements
+
+| ID | Category | Requirement | Measurement |
+|---|---|---|---|
+| NFR-001 | Safety | DevDeck must not execute external project commands in MVP. | Code review and command action tests. |
+| NFR-002 | Privacy | Repo state stays local except user-initiated `gh` calls to GitHub. | No telemetry, no external service. |
+| NFR-003 | Determinism | Same scan input and policy produce same ranking order. | Fixture tests. |
+| NFR-004 | Resilience | One missing repo, auth failure, parse error, or slow source must not block other projects. | Integration fixtures. |
+| NFR-005 | Speed | Local-only scan across 3 configured repos should feel interactive. | Target under 2 seconds without GitHub. |
+| NFR-006 | Trust | Every item shows source, freshness, confidence, and missing source. | Display contract checks. |
+| NFR-007 | Testability | Domain models, ranking, and handoff generation are pure or easily fixture-driven. | Unit test coverage before TUI polish. |
+
+## Implementation Stack
+
+- Runtime: Node.js 22 or newer.
+- Language: TypeScript.
+- Package manager: npm.
+- TUI: Ink.
+- Config: YAML file parsed into typed config.
+- GitHub adapter: `gh` shell-out with JSON output.
+- Local adapters: filesystem and git read-only commands.
+- Cache: user-local JSON cache for MVP, with freshness metadata. Do not start with SQLite.
+- Tests: Vitest for model, parser, ranking, and handoff fixtures.
+
+This stack is accepted for MVP. The reasoning is workflow fit, fast iteration, and future model sharing with a possible web dashboard, not inherited boilerplate implementation.
+
+## Future Service Boundary
+
+MVP config uses local repo paths because DevDeck is dogfood-first and runs on the user's machine. The implementation should still isolate this behind a project locator/source provider boundary:
+
+```text
+ProjectConfig -> ProjectLocator -> LocatedProject -> source adapters
+```
+
+The first provider is local filesystem. A later service could add hosted connectors, repo snapshots, remote agents, or explicit uploads without changing `ProjectStatus`, `AttentionItem`, ranking, or display contracts.
+
+## Success Metrics
+
+- User can identify the top human-attention item within 30 seconds of opening DevDeck.
+- Generated handoff lets the user resume the target repo in under 2 minutes.
+- Dogfood scan works across 3 configured repos, including one stale/error source without crashing the whole TUI.
+- Top item quality eval passes against real `actwyn`, `concluv`, and `../xeflabs/xef-scale` fixtures.
+- User does not need to open all repos manually to know where to start.
+
+## First-run Contract
+
+The first usable path should be:
+
+```text
+npm install
+npm run dev
+DevDeck opens
+No config? show a minimal devdeck.yml example
+Config present? scan repos
+GitHub auth missing? keep local results and show gh auth fix
+Top item appears or a clear empty state appears
+```
+
+No first-run state should require reading source code to recover.
+
+## Open Questions
+
+See `docs/discovery/0001-initial-questions.md`.
