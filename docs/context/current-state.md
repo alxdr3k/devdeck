@@ -50,7 +50,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - `AttentionItem` generator with deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator. Stable identity/fingerprint behavior is a draft under Q-020 review.
 - Operator pause state so high-judgment/external-dependency/milestone-review work can be parked outside the active feed without being forgotten.
 - Optional user intent snapshots so context switching can recover "what did I ask the agent?" when DevDeck captured the prompt or operator note.
-- Draft agent conversation source design, because arbitrary Claude Code/Codex chat tracking is not covered by current repo-state sources.
+- Draft agent conversation source design for dogfood v2, because arbitrary Claude Code/Codex/Gemini/opencode chat tracking is not covered by current repo-state sources.
 - MVP actions: open target, generate/copy handoff, display commands, and local pause/unpause state. DevDeck must not execute repo commands in MVP.
 
 ## Explicit non-goals
@@ -76,7 +76,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - `Q-012`: Final product name remains open and does not block implementation.
 - `Q-019`: Context recovery for prior user instructions remains open where exact chat-log access is needed.
 - `Q-020`: Stable item id/source fingerprint design remains open pending joint review.
-- `Q-021`: AI agent conversation tracking remains open. Current sources cannot reconstruct arbitrary chat history.
+- `Q-021`: AI agent conversation tracking remains open and is moved toward dogfood v2. Current sources cannot reconstruct arbitrary chat history.
 - `Q-022`: Work versus non-work conversation classification remains open.
 
 ## Current validation
@@ -92,7 +92,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Capture source contract fixtures for current and drifted boilerplate/doc shapes.
 - Capture a dogfood pause scenario with one high-priority paused repo and one lower-priority active repo.
 - Jointly review and accept stable identity/fingerprint rules before implementing pause/cache/intent attachments.
-- Decide whether MVP needs an explicit conversation source, or whether DevDeck-generated handoffs/operator notes are enough for dogfood.
+- Treat DevDeck-generated handoffs/operator notes as enough for dogfood v1 unless Q-021 is reopened as implementation-blocking.
 - Verify whether `.dev-cycle` state is always present or must be missing-source tolerant.
 
 ## Links

@@ -118,6 +118,7 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 - Pause may hide important work if count/review triggers are weak.
 - Unstable item identity may break pause, cache, suppression, and intent recovery.
 - User intent recovery may mislead if captured notes are presented as observed chat history.
+- Agent transcript connectors are intentionally dogfood v2 scope; v1 must not claim arbitrary chat-history recovery.
 - TUI may hide evidence and lose user trust.
 
 ## Acceptance

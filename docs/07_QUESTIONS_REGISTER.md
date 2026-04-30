@@ -242,6 +242,8 @@ The user agrees with the rough distinction, but clarified that the core work-uni
 
 Branchless orphan work can exist. A user-agent exchange may describe real work before any branch, PR, or repo mutation exists.
 
+Follow-up concern: leaf/slice may be too specific to the user's boilerplate workflow to become the universal product anchor. Candidate refinement is to make identity anchors workflow/provider-specific: dogfood boilerplate can prefer leaf/slice, PR-centric workflows can prefer PR, and branchless work can use low-confidence local orphan ids until attached.
+
 ---
 
 ### Q-021: Can DevDeck track AI agent conversations?
@@ -249,13 +251,15 @@ Branchless orphan work can exist. A user-agent exchange may describe real work b
 - Opened: 2026-04-30
 - Owner: project
 - Status: open
-- Proposed Answer: Current MVP sources cannot track arbitrary Claude Code/Codex chat history. DevDeck can only use handoffs, operator notes, repo docs, `.dev-cycle`, git, and GitHub evidence unless an explicit conversation source or session-capture design is added.
+- Proposed Answer: Current MVP sources cannot track arbitrary Claude Code/Codex/Gemini/opencode chat history. DevDeck can only use handoffs, operator notes, repo docs, `.dev-cycle`, git, and GitHub evidence unless an explicit conversation source or session-capture design is added. Transcript connectors are deferred toward dogfood v2.
 - Blocks: Q-019, Q-020, REQ-022, future conversation source design
 - Resolution: —
 
 **Context**
 
 DevDeck's core product job is to merge interactions across multiple AI conversational coding agents into one priority queue so the user can reduce context switching and focus on the single next item. This requires a conversation-state story, not only repo-state reading.
+
+Supported local dogfood OS targets are macOS and Linux. Candidate future agent CLI sources are Claude Code, Codex CLI, Gemini CLI, and opencode.
 
 ---
 
@@ -271,3 +275,5 @@ DevDeck's core product job is to merge interactions across multiple AI conversat
 **Context**
 
 The user may ask simple questions or make non-work comments in an AI agent session. DevDeck should avoid turning those messages into task cards or priority items unless they imply a concrete human action.
+
+Classification needs more support than a flat enum. The candidate rule is conservative promotion: create an attention item only when a conversation implies a durable work unit or concrete next human action; otherwise keep it as context, ignore it, or ask the user to attach/dismiss it.

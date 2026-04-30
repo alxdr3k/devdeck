@@ -24,7 +24,7 @@ Question / Decision / Requirement / Gate / Slice links for DevDeck MVP.
 | TRACE-016 | Q-010, Q-018 | DEC-015 | REQ-020, NFR-009 | AC-022, AC-023 / TEST-017 | P0-M5 | MODEL/RANK/UI | MODEL-1C/RANK-1B/UI-1B | MODEL-1C.1..MODEL-1C.3, RANK-1B.1, UI-1B.1..UI-1B.2 | Operator pause gates active-feed eligibility without lowering priority. |
 | TRACE-017 | Q-020 | DEC-016 proposed | REQ-021, NFR-010 | AC-024 / TEST-018 | P0-M4 | MODEL | MODEL-1A/MODEL-1B | MODEL-1A.0, MODEL-1B.3 | Stable identity and source fingerprints are blocked on joint review. |
 | TRACE-018 | Q-019 | none | REQ-022 | AC-025 / TEST-019 | P0-M5 | MODEL/UI | MODEL-1D/UI-1A | MODEL-1D.1, MODEL-1D.2, UI-1A.4, UI-1A.6 | User instruction/context recovery. |
-| TRACE-019 | Q-021, Q-022 | none | REQ-023 | none yet | future/MVP decision | SRC/MODEL/UI | agent conversation source | not planned | Conversation tracking is a product requirement question, not an accepted MVP source yet. |
+| TRACE-019 | Q-021, Q-022 | none | REQ-023 | none yet | dogfood v2 decision | SRC/MODEL/UI | agent conversation source | not planned for v1 | Conversation tracking is deferred; v1 uses handoffs/operator notes only. |
 
 ## Gaps
 
@@ -33,5 +33,5 @@ Question / Decision / Requirement / Gate / Slice links for DevDeck MVP.
 - Generic Q-010 defer/pin/snooze is future; dogfood operator pause is accepted through Q-018 / DEC-015.
 - Q-019 remains open because exact chat-log access is not part of MVP.
 - Q-020 remains open; stable identity/fingerprint rules are draft review material, not accepted implementation truth.
-- Q-021 and Q-022 remain open; current sources cannot track arbitrary AI agent conversations or classify every chat as work/non-work.
+- Q-021 and Q-022 remain open and are deferred toward dogfood v2; current sources cannot track arbitrary AI agent conversations or classify every chat as work/non-work.
 - Q-012 final name remains open and does not block implementation.

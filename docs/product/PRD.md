@@ -68,7 +68,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Attention item model for human-actionable work.
 - Local operator pause state for intentionally parked, high-judgment, external-dependency, or milestone-review work during dogfood.
 - Review and finalize stable item identity and source fingerprint behavior before pause, cache, suppression, handoff, or future context recovery depends on it.
-- Conversation tracking problem framing for multiple AI agent sessions. MVP can only use captured handoffs/operator notes unless an explicit conversation source is designed.
+- Conversation tracking problem framing for multiple AI agent sessions. MVP can only use captured handoffs/operator notes unless an explicit conversation source is designed; local transcript connectors are deferred toward dogfood v2.
 - Deterministic ranking policy with dogfood/diagnostic explanation. Post-dogfood default UI should keep the feed simple and avoid exposing "why this is #1" as primary copy.
 - Ink TUI priority feed with a strong top item and short top 5 queue.
 - Secondary project table as a map, not the primary action UI.
@@ -114,7 +114,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | REQ-020 | Support local operator pause for work the user intentionally parks because it needs high judgment, external setup, milestone review, or leaf promotion. | should | Paused work leaves the active feed by default but remains visible in a paused queue. |
 | REQ-021 | Define, review, and validate stable item identities and source fingerprints before local state attachments depend on them. | must | Q-020 remains open; implementation cannot treat the current draft rules as accepted. |
 | REQ-022 | Preserve or display the user's last instruction/operator intent when available. | should | MVP can capture DevDeck handoff text or operator notes; future connectors may read chat logs if explicitly supported. |
-| REQ-023 | Define whether and how DevDeck can track AI agent conversation state. | must | Current repo-state sources are insufficient for arbitrary chat recovery; Q-021 remains open. |
+| REQ-023 | Define whether and how DevDeck can track AI agent conversation state. | should | Current repo-state sources are insufficient for arbitrary chat recovery; Q-021 remains open and transcript connectors are dogfood v2 scope. |
 
 ## Non-functional Requirements
 

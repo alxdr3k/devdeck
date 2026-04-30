@@ -43,19 +43,21 @@ The intended split is: stable ids prevent feed flicker; fingerprints detect stal
 
 ## Current Discussion Notes
 
-The current user direction is that real work should be identified first by the project leaf/slice when available. Branch and PR state are usually evidence links for that work, not the center of the work identity.
+The current user direction is that leaf/slice is the best anchor in the dogfood boilerplate workflow, but it may be too boilerplate-specific as a generic product default. A generic identity model should not hardcode "leaf" as the universal work-unit anchor.
 
-This suggests a two-layer model:
+This suggests a two-layer model plus a workflow-specific anchor strategy:
 
 | Layer | Question | Candidate anchor |
 |---|---|---|
-| Work unit | Is this the same body of work? | project id plus leaf/slice id when available |
+| Work unit | Is this the same body of work? | chosen by workflow profile: leaf/slice for dogfood, PR for PR-centric flows, local orphan id when neither exists |
 | Attention item | Why should the user look now? | work unit plus item kind plus current evidence anchor |
 | Source fingerprint | Did the evidence change? | normalized repo/chat/source facts |
 
 Branchless orphan work is possible. DevDeck may need a temporary local work-unit identity for user-agent interactions that have not produced a branch, PR, roadmap update, or repo mutation yet.
 
 Non-work conversation is also possible. A simple question or casual message should not automatically create a work unit or attention item.
+
+PR can be a reasonable default anchor in generic workflows, but it is not guaranteed to represent one coherent work unit because users can create very large PRs. Branch can be even weaker because it can be reused, renamed, or missing. DevDeck should track anchor confidence and avoid attaching durable local state too strongly to weak anchors.
 
 ## Principles
 
@@ -142,8 +144,8 @@ If an anchor value can contain unsafe characters, normalize to lowercase where a
 
 Choose the highest-quality anchor available:
 
-1. Leaf/slice id for real work when available.
-2. GitHub PR number for PR-loop items without a known leaf/slice.
+1. Workflow-declared work-unit anchor, such as leaf/slice in the dogfood boilerplate profile.
+2. GitHub PR number for PR-centric items when no stronger work-unit anchor is known.
 3. Source contract id for contract drift.
 4. Source purpose plus error code for missing docs/config/source issues.
 5. Branch name only when no PR or slice anchor exists.

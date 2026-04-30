@@ -44,7 +44,7 @@ Status: planned. No implementation files exist yet.
 | `src/adapters/github-gh.ts` | Planned `gh` JSON adapter. |
 | `src/adapters/docs.ts` | Planned boilerplate docs known-path resolver and parser. |
 | `src/adapters/dev-cycle.ts` | Planned `.dev-cycle` brief parser. |
-| `src/adapters/agent-conversation.ts` | Draft future adapter for explicit conversation sources after Q-021. |
+| `src/adapters/agent-conversation.ts` | Dogfood v2 draft adapter for explicit conversation sources after Q-021. |
 
 ## Tests
 

@@ -14,7 +14,7 @@ Status: planned. Code, tests, and generated references become authoritative afte
 | `StableIdentity` | Draft versioned identity for conceptual attention items and local state attachments. | `docs/specs/stable-identity-fingerprint.md` / Q-020 |
 | `SourceFingerprint` | Draft versioned hash of normalized evidence used to detect stale local state. | `docs/specs/stable-identity-fingerprint.md` / Q-020 |
 | `UserIntentSnapshot` | Optional local/user-declared instruction context attached to an identity after Q-020 is accepted. | `docs/specs/stable-identity-fingerprint.md` / Q-019 / Q-020 |
-| `AgentInteractionSummary` | Draft summary of a user-agent conversation when an explicit conversation source exists. | `docs/specs/agent-conversation-source.md` / Q-021 / Q-022 |
+| `AgentInteractionSummary` | Dogfood v2 draft summary of a user-agent conversation when an explicit conversation source exists. | `docs/specs/agent-conversation-source.md` / Q-021 / Q-022 |
 | `ProjectStatus` | Normalized repo status consumed by attention/ranking/UI. | `docs/specs/status-model.md` |
 | `AttentionItem` | Human-actionable item with source refs, next action, ranking band, commands, handoff seed. | `docs/specs/attention-item-model.md` |
 | `RankingResult` | Ordered feed item plus band/score/explanation. | `docs/specs/ranking-policy.md` |
@@ -29,7 +29,7 @@ Status: planned. Code, tests, and generated references become authoritative afte
 | `devdeck.yml` | Project config. | PRD / HLD |
 | user-local JSON cache | Last scan fallback and freshness metadata. | DEC-004 |
 | user-local JSON state | Operator pause overlays now; source fingerprints and optional intent snapshots after Q-020 review. | DEC-015 / DEC-016 proposed |
-| agent conversation source | DevDeck handoffs/operator notes now; future transcript or session-capture connectors if accepted. | Q-021 / Q-022 |
+| agent conversation source | DevDeck handoffs/operator notes now; dogfood v2 transcript or session-capture connectors if accepted. | Q-021 / Q-022 |
 | dogfood repos | Read-only source state. | ADR-0001 |
 
 ## Observed Vs Local State
