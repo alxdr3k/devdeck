@@ -64,11 +64,13 @@ interface OperatorPause {
   note?: string;
   resumeTriggers: PauseResumeTrigger[];
   reviewAfter?: string; // ISO timestamp
-  sourceFingerprint?: string;
+  sourceFingerprint?: string; // SourceFingerprint.value from the paused item
   createdAt: string;
   updatedAt: string;
 }
 ```
+
+Stable id and fingerprint semantics are defined in `docs/specs/stable-identity-fingerprint.md`.
 
 ## Pause Reasons
 
@@ -169,7 +171,7 @@ Closed
 | Important high-priority work disappears. | Always show paused count and stale/review triggers. |
 | Pause becomes a vague dumping ground. | Require a reason; require note for `other`. |
 | Repo-level pause hides an unrelated urgent PR/check event. | Track source fingerprint and show "paused repo changed" review item. |
-| Item IDs change and pause attaches to the wrong work. | Use stable item ids plus source fingerprints. |
+| Item IDs change and pause attaches to the wrong work. | Use `StableIdentity` plus `SourceFingerprint` fixtures before pause implementation. |
 | User confuses pause with external waiting or done. | Copy and queue naming must say paused/review, not complete. |
 | Future hosted service has multiple users. | Treat pause as user-specific state, not project truth. |
 

@@ -11,6 +11,9 @@ Status: planned. Code, tests, and generated references become authoritative afte
 | `SourceContractProbe` | Per-source contract id, detected version, compatibility, capabilities, and missing required capabilities. | `docs/specs/status-model.md` / `docs/specs/source-contract-versioning.md` |
 | `SourceTrust` | Per-source state, checked time, confidence, summary, and fix hint. | `docs/specs/status-model.md` |
 | `OperatorPause` | Local user pause overlay for intentionally parked project/item work. | `docs/specs/operator-pause-model.md` |
+| `StableIdentity` | Versioned identity for conceptual attention items and local state attachments. | `docs/specs/stable-identity-fingerprint.md` |
+| `SourceFingerprint` | Versioned hash of normalized evidence used to detect stale local state. | `docs/specs/stable-identity-fingerprint.md` |
+| `UserIntentSnapshot` | Optional local/user-declared instruction context attached to a stable identity. | `docs/specs/stable-identity-fingerprint.md` |
 | `ProjectStatus` | Normalized repo status consumed by attention/ranking/UI. | `docs/specs/status-model.md` |
 | `AttentionItem` | Human-actionable item with source refs, next action, ranking band, commands, handoff seed. | `docs/specs/attention-item-model.md` |
 | `RankingResult` | Ordered feed item plus band/score/explanation. | `docs/specs/ranking-policy.md` |
@@ -24,8 +27,18 @@ Status: planned. Code, tests, and generated references become authoritative afte
 |---|---|---|
 | `devdeck.yml` | Project config. | PRD / HLD |
 | user-local JSON cache | Last scan fallback and freshness metadata. | DEC-004 |
-| user-local JSON state | Operator pause overlays and source fingerprints. | DEC-015 |
+| user-local JSON state | Operator pause overlays, source fingerprints, and optional intent snapshots. | DEC-015 / DEC-016 |
 | dogfood repos | Read-only source state. | ADR-0001 |
+
+## Observed Vs Local State
+
+| Term | Meaning | Examples |
+|---|---|---|
+| observed source state | Facts DevDeck reads from repo files, git, GitHub, or `.dev-cycle`. | PR checks failing, active slice, branch dirty. |
+| local user state | DevDeck product state stored for this user outside dogfood repos. | operator pause, intent snapshot, local cache metadata. |
+| user-declared state | Local user state that DevDeck did not independently verify. | "waiting on S3 setup", "review this after lunch", operator note. |
+
+User-declared state can guide ranking and display, but it must be labeled as user/operator context and must not be presented as observed repo truth.
 
 ## Lifecycle States
 

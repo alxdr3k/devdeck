@@ -47,8 +47,9 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Pull-first scanners for boilerplate docs, git, GitHub through `gh`, and `.dev-cycle` state.
 - Source contract probes so evolving boilerplate/project repo shapes degrade safely instead of breaking scans.
 - `ProjectStatus` model with trust/freshness/confidence metadata.
-- `AttentionItem` generator, deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator.
+- `AttentionItem` generator with stable identity/fingerprint support, deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator.
 - Operator pause state so high-judgment/external-dependency/milestone-review work can be parked outside the active feed without being forgotten.
+- Optional user intent snapshots so context switching can recover "what did I ask the agent?" when DevDeck captured the prompt or operator note.
 - MVP actions: open target, generate/copy handoff, display commands, and local pause/unpause state. DevDeck must not execute repo commands in MVP.
 
 ## Explicit non-goals
@@ -72,6 +73,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - `Q-016`: Boilerplate/project contract drift needs fixture coverage before parser assumptions harden.
 - `Q-010`: Generic defer/pin/snooze remains future; dogfood operator pause is accepted as Q-018 / DEC-015.
 - `Q-012`: Final product name remains open and does not block implementation.
+- `Q-019`: Context recovery for prior user instructions remains open where exact chat-log access is needed.
 
 ## Current validation
 
@@ -85,6 +87,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Inspect real `actwyn`, `concluv`, and `../xeflabs/xef-scale` boilerplate docs before locking parser fixtures.
 - Capture source contract fixtures for current and drifted boilerplate/doc shapes.
 - Capture a dogfood pause scenario with one high-priority paused repo and one lower-priority active repo.
+- Capture stable identity/fingerprint fixtures before implementing pause/cache/intent attachments.
 - Verify whether `.dev-cycle` state is always present or must be missing-source tolerant.
 
 ## Links
@@ -98,6 +101,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Display copy contract: `docs/specs/display-copy-contract.md`
 - Source contract versioning: `docs/specs/source-contract-versioning.md`
 - Operator pause model: `docs/specs/operator-pause-model.md`
+- Stable identity/fingerprint: `docs/specs/stable-identity-fingerprint.md`
 - Dogfood eval: `docs/evals/dogfood-top-item-quality.md`
 - Reviews: `docs/reviews/`
 

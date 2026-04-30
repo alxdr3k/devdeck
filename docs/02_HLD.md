@@ -51,6 +51,7 @@ Source contract probes
 | GitHub adapter | Read current branch PR, open PR summaries, checks, reviews, Codex feedback/pass state. | `gh --json`, timeouts |
 | Dev-cycle adapter | Read `.dev-cycle/dev-cycle-run-id` and brief log latest cycle. | filesystem |
 | Status builder | Combine source outputs into `ProjectStatus` and `SourceTrust`. | adapters |
+| Identity builder | Produce stable item ids and source fingerprints before local state attaches. | status model, attention generator |
 | Attention generator | Convert status into human-actionable `AttentionItem`s. | status model |
 | Operator state | Store local pause overlays for projects/items intentionally parked by the user. | user-local JSON |
 | Ranking engine | Apply hard bands, score within band, produce explanation. | ranking policy |
@@ -97,7 +98,9 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 | `SourceContractProbe` | source, contract id, detected version, compatibility, capabilities | derived; cached |
 | `SourceTrust` | source, state, checkedAt, confidence, summary, fixHint | derived; cached |
 | `ProjectStatus` | project, workStatus, docs, git, github, devCycle, validation, contracts, trust | derived; cached |
+| `StableIdentity` / `SourceFingerprint` | versioned id, source anchors, normalized evidence hash | derived; cached |
 | `OperatorPause` | scope, projectId, itemId, reason, resume triggers, source fingerprint | user-local JSON |
+| `UserIntentSnapshot` | instruction, expected outcome, capture source, identity/fingerprint attachment | user-local JSON |
 | `AttentionItem` | id, kind, rankingBand, severity, nextAction, sourceRefs, commands, handoff | derived; cached |
 | `RankingResult` | ordered items, score, band, explanation | derived |
 | `ScanCache` | projects, statuses, items, scannedAt, source versions | user-local JSON |
@@ -118,6 +121,8 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - Errors: source failures become `SourceTrust` entries; one failed repo/source does not stop the scan.
 - Contract drift: unsupported or partial source contracts become `SourceContractProbe` plus low-confidence `SourceTrust`; parser failures do not throw through scan orchestration.
 - Focus control: local operator pause removes intentionally parked work from the active feed without lowering project priority.
+- Identity: local state attaches to stable ids plus source fingerprints; timestamp/copy/rank changes do not change item identity.
+- Context recovery: show captured user intent only when DevDeck has a handoff/operator-note snapshot; do not invent chat history.
 - Determinism: ranking is pure for a fixed input fixture.
 - Timeouts: shell-outs need bounded execution so UI does not hang on `gh`.
 - Observability: MVP shows source freshness/confidence in UI; no telemetry.
@@ -137,6 +142,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - DEC-012: clipboard copy falls back to selectable text.
 - DEC-014: source contract probes and capability checks manage boilerplate/project drift.
 - DEC-015: operator pause is local user state that gates active-feed eligibility.
+- DEC-016: stable item identity is separate from source fingerprint.
 
 ## Open Questions
 
@@ -145,6 +151,8 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - Q-010: future defer/pin/snooze item state.
 - Q-012: final product name.
 - Q-018: operator pause semantics for high-judgment parked work.
+- Q-019: context recovery for prior user instructions.
+- Q-020: stable item id and source fingerprint design.
 
 ## Related Requirements
 
@@ -153,5 +161,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - REQ-006, NFR-004, NFR-006 -> Status builder and trust model.
 - REQ-007, REQ-008, REQ-010, NFR-003 -> Attention/ranking domain.
 - REQ-020, NFR-009 -> Operator pause state, ranking, and UI.
+- REQ-021, NFR-010 -> Stable identity and source fingerprint.
+- REQ-022 -> Intent snapshot and context recovery surfaces.
 - REQ-009, REQ-011, REQ-012, REQ-013 -> Ink UI, handoff, display copy.
 - REQ-014, REQ-015 -> Cache and rescan.

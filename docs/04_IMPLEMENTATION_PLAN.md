@@ -25,8 +25,8 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `P0-M1` | Project contract, docs, reviews, acceptance gates, and leaf roadmap are ready for implementation. | now | `accepted` | docs review | source docs + reviews + this ledger | No code yet. |
 | `P0-M2` | DevDeck can load config and produce local-only statuses for all dogfood repos. | next | `planned` | AC-001..AC-006, AC-021 | not started | Includes path resolver, source contract probes, and docs/git adapters. |
 | `P0-M3` | DevDeck can include GitHub PR/check/review state without blocking local scans. | after P0-M2 | `planned` | AC-007..AC-009, AC-017 | not started | `gh` adapter boundary. |
-| `P0-M4` | DevDeck can generate ranked attention feed and handoff prompts from fixtures. | after P0-M3 | `planned` | AC-010..AC-014 | not started | Domain-first before Ink polish. |
-| `P0-M5` | Dogfood TUI works on `actwyn`, `concluv`, and `../xeflabs/xef-scale`. | after P0-M4 | `planned` | AC-015..AC-018, AC-022, AC-023 + dogfood eval | not started | Top item quality and operator pause behavior are release gates. |
+| `P0-M4` | DevDeck can generate ranked attention feed and handoff prompts from fixtures. | after P0-M3 | `planned` | AC-010..AC-014, AC-024 | not started | Stable identity and domain-first before Ink polish. |
+| `P0-M5` | Dogfood TUI works on `actwyn`, `concluv`, and `../xeflabs/xef-scale`. | after P0-M4 | `planned` | AC-015..AC-018, AC-022, AC-023, AC-025 + dogfood eval | not started | Top item quality, operator pause, and context recovery behavior are release gates. |
 
 ## Tracks
 
@@ -70,17 +70,20 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `GH-1A.3` | `P0-M3` | `GH` | `GH-1A` | Implement current-branch PR and open PR summary adapter. | `GH-1A.2` | AC-007, TEST-007 | `defined` | `planned` | not started | Avoid single-PR domain assumption. |
 | `GH-1A.4` | `P0-M3` | `GH` | `GH-1A` | Implement checks, review decision, actionable count, and Codex pass/feedback best-effort adapter. | `GH-1A.3` | AC-007, AC-017, TEST-007 | `defined` | `planned` | not started | If Codex signal is weak, lower confidence. |
 | `GH-1A.5` | `P0-M3` | `GH` | `GH-1A` | Integrate GitHub adapter into scan orchestration with cache fallback and source trust. | `GH-1A.4`, `CORE-1A.6` | AC-007, AC-017, TEST-007, TEST-014 | `defined` | `planned` | not started | No `--watch` commands. |
-| `MODEL-1A.1` | `P0-M4` | `MODEL` | `MODEL-1A` | Define and export concrete TypeScript domain models matching specs. | `CORE-1A.2` | TEST-009 | `defined` | `planned` | not started | Keep raw adapter output separate. |
+| `MODEL-1A.0` | `P0-M4` | `MODEL` | `MODEL-1A` | Implement stable identity and source fingerprint canonicalization helpers with fixtures. | `CORE-1A.2` | AC-024, TEST-018 | `defined` | `planned` | not started | Do this before pause/cache/intent attachments. |
+| `MODEL-1A.1` | `P0-M4` | `MODEL` | `MODEL-1A` | Define and export concrete TypeScript domain models matching specs. | `MODEL-1A.0` | TEST-009 | `defined` | `planned` | not started | Keep raw adapter output separate. |
 | `MODEL-1A.2` | `P0-M4` | `MODEL` | `MODEL-1A` | Build source trust aggregation and project confidence rules. | `MODEL-1A.1`, `SRC-1A.3`, `SRC-1A.4` | AC-009, TEST-009 | `defined` | `planned` | not started | Trust is visible data. |
 | `MODEL-1A.3` | `P0-M4` | `MODEL` | `MODEL-1A` | Build `ProjectStatus` builder and derived work-status rules. | `MODEL-1A.2`, `SRC-1A.8`, `GH-1A.5` | AC-009, TEST-009 | `defined` | `planned` | not started | Evaluate status rule order. |
 | `MODEL-1B.1` | `P0-M4` | `MODEL` | `MODEL-1B` | Generate urgent blocker and ship-ready attention items from PR/check/review/dev-cycle states. | `MODEL-1A.3` | AC-010, TEST-010 | `defined` | `planned` | not started | Root-cause item first. |
 | `MODEL-1B.2` | `P0-M4` | `MODEL` | `MODEL-1B` | Generate resume, trust-repair, hygiene, and unknown-state items. | `MODEL-1A.3` | AC-010, TEST-010 | `defined` | `planned` | not started | No noisy duplicates. |
-| `MODEL-1B.3` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement deterministic item ids and suppression rules. | `MODEL-1B.1`, `MODEL-1B.2` | AC-010, TEST-010 | `defined` | `planned` | not started | Prevent feed flicker. |
+| `MODEL-1B.3` | `P0-M4` | `MODEL` | `MODEL-1B` | Apply stable identity/fingerprint helpers to attention items and suppression rules. | `MODEL-1A.0`, `MODEL-1B.1`, `MODEL-1B.2` | AC-010, AC-024, TEST-010, TEST-018 | `defined` | `planned` | not started | Prevent feed flicker and stale local state. |
 | `MODEL-1B.4` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement command suggestions as display-only data with prohibited execution coverage. | `MODEL-1B.3`, `DEC-011` | AC-013, TEST-013 | `defined` | `planned` | not started | `executesInMvp: false`. |
 | `MODEL-1B.5` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement handoff generator from attention items and known doc path fallbacks. | `MODEL-1B.4`, `SRC-1A.4` | AC-010, AC-016, TEST-010, TEST-015 | `defined` | `planned` | not started | Keep prompt under 2-minute resume target. |
-| `MODEL-1C.1` | `P0-M5` | `MODEL` | `MODEL-1C` | Define `OperatorPause`, pause reasons, resume triggers, and stable source fingerprint shape. | `CORE-1A.7`, `MODEL-1B.3` | AC-022, TEST-017 | `defined` | `planned` | not started | Model observed red-light workflow, not generic defer. |
+| `MODEL-1C.1` | `P0-M5` | `MODEL` | `MODEL-1C` | Define `OperatorPause`, pause reasons, resume triggers, and source fingerprint attachment. | `CORE-1A.7`, `MODEL-1A.0`, `MODEL-1B.3` | AC-022, AC-024, TEST-017, TEST-018 | `defined` | `planned` | not started | Model observed red-light workflow, not generic defer. |
 | `MODEL-1C.2` | `P0-M5` | `MODEL` | `MODEL-1C` | Apply pause overlays to projects/items and split generated items into active feed and paused queue. | `MODEL-1C.1` | AC-022, TEST-017 | `defined` | `planned` | not started | Pause beats priority for active-feed eligibility. |
 | `MODEL-1C.3` | `P0-M5` | `MODEL` | `MODEL-1C` | Generate `pause_review` items for due pauses, source changes, external-ready hints, and empty active feed. | `MODEL-1C.2` | AC-023, TEST-017 | `defined` | `planned` | not started | Review pause, do not mark original task done. |
+| `MODEL-1D.1` | `P0-M5` | `MODEL` | `MODEL-1D` | Define user intent snapshot model attached to stable identity/fingerprint. | `MODEL-1A.0`, `CORE-1A.7` | AC-025, TEST-019 | `defined` | `planned` | not started | Captures DevDeck handoff/operator note first; chat connectors future. |
+| `MODEL-1D.2` | `P0-M5` | `MODEL` | `MODEL-1D` | Include intent snapshot in detail/handoff generation when available. | `MODEL-1D.1`, `MODEL-1B.5` | AC-025, TEST-019 | `defined` | `planned` | not started | Label capture source; do not pretend to read unavailable chat history. |
 | `RANK-1A.1` | `P0-M4` | `RANK` | `RANK-1A` | Implement ranking band assignment and band-order sort. | `MODEL-1B.3` | AC-011, TEST-011 | `defined` | `planned` | not started | Blockers outrank hygiene. |
 | `RANK-1A.2` | `P0-M4` | `RANK` | `RANK-1A` | Implement score within band, trust/freshness/effort modifiers, and deterministic tie-breakers. | `RANK-1A.1` | AC-011, TEST-011 | `defined` | `planned` | not started | No tuning without eval. |
 | `RANK-1A.3` | `P0-M4` | `RANK` | `RANK-1A` | Implement diagnostic ranking explanation and nearby-item explanation fields for dogfood/evals. | `RANK-1A.2` | AC-011, TEST-011 | `defined` | `planned` | not started | Explanation names decisive factors but is not primary post-dogfood UI. |
@@ -113,6 +116,8 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 - Boilerplate/project contract drift may break parser assumptions unless probes and fixtures land first.
 - Ranking may feel wrong if hygiene/source-trust items outrank PR-loop blockers.
 - Pause may hide important work if count/review triggers are weak.
+- Unstable item identity may break pause, cache, suppression, and intent recovery.
+- User intent recovery may mislead if captured notes are presented as observed chat history.
 - TUI may hide evidence and lose user trust.
 
 ## Acceptance

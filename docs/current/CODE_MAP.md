@@ -29,9 +29,11 @@ Status: planned. No implementation files exist yet.
 |---|---|
 | `src/domain/status.ts` | Planned `ProjectStatus`, source trust, status builder types. |
 | `src/domain/attention.ts` | Planned `AttentionItem` and suppression logic. |
+| `src/domain/identity.ts` | Planned stable identity and source fingerprint helpers. |
 | `src/domain/ranking.ts` | Planned ranking bands, scoring, tie-breakers, explanations. |
 | `src/domain/handoff.ts` | Planned handoff prompt generation. |
 | `src/domain/operator-pause.ts` | Planned pause overlay and paused queue rules. |
+| `src/domain/intent.ts` | Planned optional user intent snapshots for context recovery. |
 
 ## Adapters
 
