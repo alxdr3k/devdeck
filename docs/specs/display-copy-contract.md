@@ -88,6 +88,8 @@ MVP keyboard actions:
 
 Every key that exposes a command must preserve the MVP safety boundary: DevDeck displays or copies commands, but does not execute them.
 
+If clipboard integration is unavailable, the UI should show selectable text and say it was not copied. Clipboard failure must not block handoff or command display.
+
 ## Raw-to-Copy Mapping
 
 | Raw state | Primary copy | Detail copy |
@@ -138,6 +140,10 @@ Preferred labels:
 - `Copy command`
 - `Copy handoff`
 - `Open target`
+
+Fallback label when clipboard is unavailable:
+
+- `Show text`
 
 ## Handoff Copy
 

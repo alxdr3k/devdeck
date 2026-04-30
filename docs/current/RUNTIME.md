@@ -41,6 +41,16 @@ LocatedProject
 | `.dev-cycle` missing | Lower confidence only where workflow expects it. |
 | Cache stale | Show stale cache as fallback, never as fresh source. |
 | Command action selected | Show/copy command text; do not execute. |
+| Clipboard unavailable | Show selectable text and report that copy was unavailable. |
+
+## Command Boundary
+
+Adapter scanner may run bounded read-only commands:
+
+- `git` reads such as status, branch, rev-parse, log
+- `gh` reads such as PR/check/review JSON queries
+
+Generated item commands are never executed by DevDeck in MVP.
 
 ## Debug Path
 

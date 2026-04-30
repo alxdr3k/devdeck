@@ -14,6 +14,7 @@ Status: planned. Code, tests, and generated references become authoritative afte
 | `RankingResult` | Ordered feed item plus band/score/explanation. | `docs/specs/ranking-policy.md` |
 | `CommandSuggestion` | Copyable command text with `executesInMvp: false`. | `docs/specs/attention-item-model.md` |
 | `ScanCache` | Last scan data and freshness metadata. | DEC-004 |
+| `ReadOnlyCommand` | Allowed scanner shell-out descriptor. | DEC-011 |
 
 ## Storage
 
@@ -31,6 +32,7 @@ Status: planned. Code, tests, and generated references become authoritative afte
 | `ProjectStatus.workStatus` | `ready_to_resume`, `waiting_for_human`, `agent_running`, `checks_pending`, `checks_failing`, `review_feedback`, `ready_to_merge`, `blocked`, `stale`, `unknown` | Derived in status builder. |
 | `AttentionItem.rankingBand` | `urgent_human_blocker`, `ship_ready`, `resume_work`, `trust_repair`, `hygiene`, `unknown` | Bands sort before score. |
 | `PullRequestStatus.state` | `open`, `closed`, `merged`, `draft`, `unknown` | Current branch PR is distinct from open PR summaries. |
+| `ReadOnlyCommand.kind` | `git_read`, `gh_read` | Workflow/mutation commands are not represented. |
 
 ## Needs Audit
 

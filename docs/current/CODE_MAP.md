@@ -15,7 +15,9 @@ Status: planned. No implementation files exist yet.
 | Path | Purpose |
 |---|---|
 | `src/config/` | Planned config loader, schema validation, defaults. |
+| `src/locator/` | Planned `ProjectLocator` and `LocatedProject` providers. |
 | `src/scan/` | Planned scan orchestration and source timeouts. |
+| `src/shell/` | Planned bounded read-only command wrapper for scanner adapters. |
 | `src/cache/` | Planned user-local JSON cache. |
 | `src/ui/` | Planned Ink feed, detail, handoff, command display. |
 
@@ -43,6 +45,8 @@ Status: planned. No implementation files exist yet.
 | Path | Purpose |
 |---|---|
 | `tests/config/` | Planned config and first-run behavior tests. |
+| `tests/shell/` | Planned read-only command boundary tests. |
+| `tests/scan/` | Planned scan orchestration and resilience tests. |
 | `tests/adapters/` | Planned filesystem/git/docs/github/dev-cycle fixtures. |
 | `tests/domain/` | Planned status, attention, ranking, handoff tests. |
 | `tests/ui/` | Planned display-copy and Ink smoke tests. |

@@ -135,3 +135,36 @@ The handoff path was corrected after inspecting the local workspace.
 - Proposed Answer: DevDeck is working name.
 - Blocks: release packaging only
 - Resolution: —
+
+---
+
+### Q-013: What initial dependency set should implementation use?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: resolved
+- Proposed Answer: Minimal Node 22/npm stack with Ink/React, TypeScript/TSX/Vitest, YAML, and Zod.
+- Blocks: `CORE-1A.1`
+- Resolution: DEC-010
+
+---
+
+### Q-014: Does read-only scanning violate "do not execute commands"?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: resolved
+- Proposed Answer: No. Bounded read-only `git`/`gh` scanner commands are allowed; generated workflow/mutation commands are not.
+- Blocks: REQ-003, REQ-004, REQ-012
+- Resolution: DEC-011
+
+---
+
+### Q-015: What happens if clipboard copy is unavailable?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: resolved
+- Proposed Answer: Show selectable text and report that copy was unavailable.
+- Blocks: REQ-011, REQ-012
+- Resolution: DEC-012

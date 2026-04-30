@@ -2,7 +2,7 @@
 
 Status: no implementation commands currently defined.
 
-Do not invent commands before package scripts exist. The planned command shape below becomes authoritative only after scaffold lands.
+Do not invent commands before package scripts exist. The planned command shape below becomes authoritative only after `CORE-1A.1` lands.
 
 ## Install
 
@@ -20,13 +20,19 @@ Planned after `CORE-1A.1`: `npm run typecheck`.
 
 No command currently defined.
 
-Planned after `CORE-1A.1`: `npm run lint` if lint tooling is added. Lint is not mandatory before the scaffold decision.
+No lint command is required for the first scaffold unless lint tooling is explicitly added.
 
 ## Unit Tests
 
 No command currently defined.
 
 Planned after `CORE-1A.1`: `npm test`.
+
+## Build
+
+No command currently defined.
+
+Planned after `CORE-1A.1`: `npm run build`.
 
 ## Integration Tests
 
