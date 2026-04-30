@@ -23,7 +23,7 @@ The handoff path was corrected after inspecting the local workspace.
 - Owner: project
 - Status: resolved
 - Proposed Answer: Use `gh` shell-out first, with an adapter boundary and JSON fixtures.
-- Blocks: REQ-004 / `SRC-1A.3`
+- Blocks: REQ-004 / `GH-1A.1` / `GH-1A.2`
 - Resolution: DEC-003
 
 ---
@@ -56,7 +56,7 @@ The handoff path was corrected after inspecting the local workspace.
 - Owner: project
 - Status: open
 - Proposed Answer: Known paths and headings first; expand only from fixture failures.
-- Blocks: REQ-002 / `SRC-1A.2`
+- Blocks: REQ-002 / `SRC-1A.5` / `SRC-1A.6` / `SRC-1A.7` / `SRC-1A.8`
 - Resolution: —
 
 ---
@@ -78,7 +78,7 @@ The handoff path was corrected after inspecting the local workspace.
 - Owner: project
 - Status: resolved
 - Proposed Answer: Emit source-level error and keep local docs/git statuses usable.
-- Blocks: REQ-013 / NFR-004 / `SRC-1A.3`
+- Blocks: REQ-013 / NFR-004 / `GH-1A.2`
 - Resolution: DEC-003
 
 ---
@@ -122,7 +122,7 @@ The handoff path was corrected after inspecting the local workspace.
 - Owner: project
 - Status: resolved
 - Proposed Answer: Known-path resolver with fallbacks.
-- Blocks: REQ-017 / `SRC-1A.2`
+- Blocks: REQ-017 / `SRC-1A.4`
 - Resolution: DEC-007
 
 ---
@@ -168,3 +168,14 @@ The handoff path was corrected after inspecting the local workspace.
 - Proposed Answer: Show selectable text and report that copy was unavailable.
 - Blocks: REQ-011, REQ-012
 - Resolution: DEC-012
+
+---
+
+### Q-016: How should DevDeck handle source contract drift?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: resolved
+- Proposed Answer: Treat boilerplate docs, `.dev-cycle`, git CLI, and `gh` output as versioned source contracts. Probe required capabilities before parsing, capture drift fixtures, and degrade to source trust plus repair guidance instead of crashing or silently trusting broken parse output.
+- Blocks: REQ-019, NFR-008, `SRC-1A.0`
+- Resolution: DEC-014

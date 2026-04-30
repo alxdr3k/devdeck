@@ -56,6 +56,16 @@ adapters:
 - Expected DevDeck behavior: missing project appears as a trust/action item; other projects still scan.
 - Related: AC-003, AC-004.
 
+## Source Format Changed
+
+- Detection: item trust says source format changed, `contract.unsupported_version`, or `contract.required_capability_missing`.
+- Triage:
+  - Inspect source contract probe evidence for the affected repo.
+  - Compare the repo files against current `../boilerplate` and existing parser fixtures.
+  - Add a minimized drift fixture before changing parser behavior.
+- Expected DevDeck behavior: other sources still scan, the affected source is low-confidence/unsupported, and repair guidance appears only when actionability is reduced.
+- Related: AC-021, TEST-016, DEC-014.
+
 ## Ranking Looks Wrong
 
 - Detection: top item contradicts manual repo review.

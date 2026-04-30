@@ -8,6 +8,7 @@ Status: planned. No runtime implementation exists yet.
 start DevDeck
   -> load config or show first-run config example
   -> resolve project paths
+  -> probe source contracts and capabilities
   -> scan sources with bounded adapter calls
   -> build ProjectStatus per configured repo
   -> generate AttentionItems
@@ -21,6 +22,7 @@ start DevDeck
 ```text
 LocatedProject
   -> filesystem state
+  -> source contract probes
   -> docs known-path resolver
   -> git read-only state
   -> gh GitHub state if available
@@ -36,6 +38,7 @@ LocatedProject
 | Missing repo path | Produce `repo.path_missing` status for that project; scan others. |
 | Path exists but is not git | Produce low-confidence local status; scan docs if useful. |
 | Missing docs path | Record candidates checked in source trust; lower confidence. |
+| Source contract unsupported | Mark source unsupported, keep other sources, and generate repair item only when actionability is reduced. |
 | `gh` missing/auth failure | Keep local docs/git status; show GitHub trust error and fix hint. |
 | `gh` timeout | Use cache if present; mark GitHub stale/error. |
 | `.dev-cycle` missing | Lower confidence only where workflow expects it. |
@@ -59,5 +62,6 @@ Planned debug steps:
 1. Inspect `devdeck.yml`.
 2. Run config loader tests.
 3. Inspect source trust for the affected project.
-4. Check adapter fixture for the failing source.
-5. Verify ranking fixture if top item feels wrong.
+4. Inspect source contract probe compatibility and missing capabilities.
+5. Check adapter fixture for the failing source.
+6. Verify ranking fixture if top item feels wrong.

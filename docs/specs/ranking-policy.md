@@ -36,7 +36,7 @@ Rank by hard band first, then score within the band. This prevents high-priority
 | `urgent_human_blocker` | `codex_feedback`, `changes_requested`, `checks_failing`, `blocked` | Human action is blocking review, checks, or workflow progress. |
 | `ship_ready` | `ready_to_merge` | Work can be shipped under current policy. |
 | `resume_work` | `resume_active_task` | No higher blocker; resume implementation. |
-| `trust_repair` | `github_auth`, `missing_source`, `unknown_state` | DevDeck cannot be trusted until the source is fixed. |
+| `trust_repair` | `github_auth`, `missing_source`, `source_contract_drift`, `unknown_state` | DevDeck cannot be trusted until the source is fixed. |
 | `hygiene` | `docs_stale` | Useful cleanup but usually not the top human unblock. |
 
 Band order:
@@ -69,6 +69,7 @@ urgent_human_blocker > ship_ready > resume_work > trust_repair > hygiene > unkno
 | `blocked` | 80 |
 | `github_auth` | 72 |
 | `missing_source` | 70 |
+| `source_contract_drift` | 68 |
 | `resume_active_task` | 62 |
 | `docs_stale` | 45 |
 | `unknown_state` | 25 |
@@ -113,7 +114,7 @@ Defaults:
 | trust penalty: unknown | 35 |
 | stale penalty: stale source | 15 |
 
-Exception: trust-failure items such as `github_auth` and `missing_source` should not be heavily penalized for their own missing source. They exist to tell the user trust is broken.
+Exception: trust-failure items such as `github_auth`, `missing_source`, and `source_contract_drift` should not be heavily penalized for their own missing source or unsupported contract. They exist to tell the user trust is broken.
 
 ## Tie Breakers
 
@@ -177,6 +178,7 @@ Fixture tests should verify:
 - top item is deterministic for identical inputs
 - trust failures do not crash ranking
 - missing repos still rank when actionable
+- unsupported source contracts rank as trust repair only when they reduce actionability
 - today focus changes rank in expected cases
 - stale low-confidence items do not outrank fresh high-confidence blockers
 - tie breakers prevent feed flicker

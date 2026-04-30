@@ -216,3 +216,27 @@ Ranking explanations are useful for trust calibration while the model is being t
 - Positive: main UI stays simple.
 - Positive: diagnostics and evals remain debuggable.
 - Follow-ups: keep explanation available in detail/debug/eval surfaces, not main feed chrome.
+
+---
+
+### DEC-014: Manage source drift with contract probes and capability checks
+
+- Date: 2026-04-30
+- Status: accepted
+- Resolves: Q-016
+- Impacts: REQ-002, REQ-005, REQ-019, NFR-004, NFR-008
+
+**Decision**
+
+Treat boilerplate docs, `.dev-cycle`, git CLI, and `gh` output as source contracts. Before parsing, DevDeck probes contract/version/capability support. Unsupported or partial contracts become `SourceContractProbe` and `SourceTrust` data and can generate a `source_contract_drift` repair item when actionability is reduced.
+
+**Rationale**
+
+The boilerplate repo and project repos will keep evolving. Filename fallbacks alone do not protect DevDeck from renamed headings, changed tables, new `.dev-cycle` brief shapes, or `gh` JSON drift. Capability probes let the scanner degrade safely and make parser upgrades fixture-driven.
+
+**Consequences**
+
+- Positive: one repo's schema drift does not crash or poison the whole priority feed.
+- Positive: parser support can be upgraded with fixtures instead of ad hoc runtime patches.
+- Trade-off: adapters need a small probe layer before parsing.
+- Follow-ups: implement `SRC-1A.0`, keep `docs/specs/source-contract-versioning.md` current, and add drift fixtures.

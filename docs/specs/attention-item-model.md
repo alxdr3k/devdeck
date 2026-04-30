@@ -30,6 +30,7 @@ type AttentionKind =
   | "resume_active_task"
   | "docs_stale"
   | "missing_source"
+  | "source_contract_drift"
   | "github_auth"
   | "blocked"
   | "unknown_state";
@@ -119,6 +120,7 @@ interface HandoffSeed {
 | `resume_active_task` | Active slice/current task with no higher blocker | medium | user | Resume implementation from handoff. |
 | `docs_stale` | Docs/current-state older than git/GitHub activity | medium | user | Refresh docs or verify stale signal. |
 | `missing_source` | Configured source path/doc missing | medium | user | Fix config or create missing source. |
+| `source_contract_drift` | Boilerplate, `.dev-cycle`, git, or `gh` source contract is unsupported or missing a required capability | medium | user | Update DevDeck parser support, adjust repo docs, or accept degraded local-only state. |
 | `github_auth` | `gh` unavailable/auth failed | medium | user | Authenticate or continue local-only. |
 | `blocked` | Source says blocked or required state unavailable | high | user | Resolve named blocker. |
 | `unknown_state` | Too little evidence for reliable status | low | user | Open repo and inspect manually. |
@@ -132,6 +134,7 @@ interface HandoffSeed {
 - Every item must include at least one `SourceRef`.
 - Every item must be explainable without showing raw enum values.
 - Missing/stale/error states generate items only when they affect trust or actionability.
+- Unsupported or partial source contracts generate `source_contract_drift` only when they reduce actionability; otherwise they remain detail trust metadata.
 - PR-loop blockers should be generated in `urgent_human_blocker` before resume/doc hygiene items.
 
 ## Suppression Examples
@@ -140,6 +143,7 @@ interface HandoffSeed {
 |---|---|---|
 | PR has Codex feedback and checks failing because feedback pushed broken code | `codex_feedback` plus failing checks in detail | duplicate `checks_failing` top-level item unless checks need separate action |
 | Repo path missing | `missing_source` | git/github/docs parse items |
+| Boilerplate docs contract unsupported, but GitHub has a clear failing-check blocker | `checks_failing` plus contract warning in detail | duplicate top-level `source_contract_drift` unless parser drift blocks the next action |
 | `gh` auth failed but local docs show active slice | `github_auth`, optionally lower-ranked `resume_active_task` | unknown state panic item |
 | Ready to merge with stale docs | `ready_to_merge` | `docs_stale` unless docs are required before merge |
 
@@ -185,6 +189,7 @@ Examples:
 - `actwyn:codex_feedback:pr-10`
 - `concluv:ready_to_merge:pr-14`
 - `xef-scale:missing_source:path`
+- `actwyn:source_contract_drift:boilerplate_docs`
 
 ## MVP Lifecycle
 

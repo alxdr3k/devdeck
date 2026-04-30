@@ -11,7 +11,7 @@ Technical assumptions that need a short experiment before they become implementa
 - Time-box: 0.5 day
 - Start / End: not started
 - Status: open
-- Blocks: `SRC-1A.3`, `SRC-1A.4`
+- Blocks: `GH-1A.1`, `GH-1A.2`, `GH-1A.3`, `GH-1A.4`, `GH-1A.5`
 
 **Experiment**
 
@@ -23,7 +23,7 @@ Not run yet.
 
 **Decision / Next Step**
 
-- Follow-up: `SRC-1A.3`.
+- Follow-up: `GH-1A.1`.
 - If `gh` cannot detect enough Codex review state, keep `gh` for PR/check state and scope Codex-specific signals down for MVP.
 
 ---
@@ -35,7 +35,7 @@ Not run yet.
 - Time-box: 0.5 day
 - Start / End: not started
 - Status: open
-- Blocks: `SRC-1A.2`
+- Blocks: `SRC-1A.4`, `SRC-1A.5`, `SRC-1A.6`, `SRC-1A.7`
 
 **Experiment**
 
@@ -48,7 +48,7 @@ Initial audit confirms path differences: `actwyn` has top-level `docs/TESTING.md
 **Decision / Next Step**
 
 - Decision recorded as DEC-007: use known-path resolver with fallbacks.
-- Follow-up: `SRC-1A.2`.
+- Follow-up: `SRC-1A.4`.
 
 ---
 
@@ -73,3 +73,27 @@ Not run yet.
 
 - Current decision: DEC-005 uses hard bands first.
 - Follow-up: adjust weights only after `docs/evals/dogfood-top-item-quality.md` produces evidence.
+
+---
+
+### SPIKE-004: Source Contract Drift Coverage
+
+- Hypothesis: A capability-based source contract probe can detect boilerplate/docs and `.dev-cycle` drift without becoming a broad markdown crawler.
+- Owner: project
+- Time-box: 0.5 day before parser implementation
+- Start / End: not started
+- Status: open
+- Blocks: `SRC-1A.0`, `SRC-1A.4`, `SRC-1A.8`
+
+**Experiment**
+
+Compare current `../boilerplate`, `actwyn`, `concluv`, and `../xeflabs/xef-scale` docs/workflow artifacts. Capture minimized fixtures for supported, missing capability, partial, and unsupported shapes.
+
+**Result**
+
+Not run yet.
+
+**Decision / Next Step**
+
+- Current decision: DEC-014 uses source contract probes and capability checks.
+- Follow-up: implement `SRC-1A.0` before parser slices and keep drift fixtures in `tests/contracts/`.

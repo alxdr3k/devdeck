@@ -45,6 +45,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - TypeScript/Node 22 + npm + Ink TUI.
 - `devdeck.yml` config with explicit dogfood repos: `actwyn`, `concluv`, `xef-scale`.
 - Pull-first scanners for boilerplate docs, git, GitHub through `gh`, and `.dev-cycle` state.
+- Source contract probes so evolving boilerplate/project repo shapes degrade safely instead of breaking scans.
 - `ProjectStatus` model with trust/freshness/confidence metadata.
 - `AttentionItem` generator, deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator.
 - MVP actions: open target, generate/copy handoff, display commands. DevDeck must not execute repo commands in MVP.
@@ -66,6 +67,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 ## Current risks / unknowns
 
 - `Q-005`: Parser depth for boilerplate docs and `.dev-cycle` briefs needs to be right-sized.
+- `Q-016`: Boilerplate/project contract drift needs fixture coverage before parser assumptions harden.
 - `Q-010`: Manual defer/pin/snooze remains undecided for post-MVP.
 - `Q-012`: Final product name remains open and does not block implementation.
 
@@ -79,6 +81,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Confirm GitHub access for dogfood repos.
 - Confirm `gh auth status` in the user's shell before implementing GitHub scans.
 - Inspect real `actwyn`, `concluv`, and `../xeflabs/xef-scale` boilerplate docs before locking parser fixtures.
+- Capture source contract fixtures for current and drifted boilerplate/doc shapes.
 - Verify whether `.dev-cycle` state is always present or must be missing-source tolerant.
 
 ## Links
@@ -90,6 +93,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Attention item model: `docs/specs/attention-item-model.md`
 - Ranking policy: `docs/specs/ranking-policy.md`
 - Display copy contract: `docs/specs/display-copy-contract.md`
+- Source contract versioning: `docs/specs/source-contract-versioning.md`
 - Dogfood eval: `docs/evals/dogfood-top-item-quality.md`
 - Reviews: `docs/reviews/`
 
