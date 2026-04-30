@@ -28,7 +28,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | AC-020 | REQ-011, REQ-012 | Given clipboard copy is unavailable, when handoff or command copy is requested, then DevDeck falls back to showing selectable text. | TEST-013 | defined |
 | AC-021 | REQ-019, NFR-004, NFR-008 | Given a repo has an unsupported or partial source contract, when scanning, then DevDeck records contract compatibility, keeps other sources usable, and generates repair guidance only when actionability is reduced. | TEST-016 | defined |
 | AC-022 | REQ-020, NFR-009 | Given a high-priority item is operator-paused and a lower-priority item is active, when ranking, then the paused item is excluded from the active feed and shown in the paused queue. | TEST-017 | defined |
-| AC-023 | REQ-020, NFR-009 | Given a paused item is due for review or changed since pause, when scanning, then DevDeck surfaces a pause review item or paused-queue warning without marking the original task complete. | TEST-017 | defined |
+| AC-023 | REQ-020, NFR-009 | Given a paused item is due for review, changed since pause, or the active feed is empty, when scanning, then DevDeck surfaces a pause review item or paused-queue warning without marking the original task complete. | TEST-017 | defined |
 
 ## Tests
 
