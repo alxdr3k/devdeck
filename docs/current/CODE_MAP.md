@@ -1,0 +1,56 @@
+# Code Map
+
+Status: planned. No implementation files exist yet.
+
+## Entry Points
+
+| Path | Purpose |
+|---|---|
+| `src/cli.ts` | Planned CLI entrypoint. |
+| `src/ui/App.tsx` | Planned Ink root component. |
+| `devdeck.yml` | Planned local config file for dogfood repos. |
+
+## Runtime / App
+
+| Path | Purpose |
+|---|---|
+| `src/config/` | Planned config loader, schema validation, defaults. |
+| `src/scan/` | Planned scan orchestration and source timeouts. |
+| `src/cache/` | Planned user-local JSON cache. |
+| `src/ui/` | Planned Ink feed, detail, handoff, command display. |
+
+## Domain / Services
+
+| Path | Purpose |
+|---|---|
+| `src/domain/status.ts` | Planned `ProjectStatus`, source trust, status builder types. |
+| `src/domain/attention.ts` | Planned `AttentionItem` and suppression logic. |
+| `src/domain/ranking.ts` | Planned ranking bands, scoring, tie-breakers, explanations. |
+| `src/domain/handoff.ts` | Planned handoff prompt generation. |
+
+## Adapters
+
+| Path | Purpose |
+|---|---|
+| `src/adapters/filesystem.ts` | Planned path existence and metadata adapter. |
+| `src/adapters/git.ts` | Planned read-only git adapter. |
+| `src/adapters/github-gh.ts` | Planned `gh` JSON adapter. |
+| `src/adapters/docs.ts` | Planned boilerplate docs known-path resolver and parser. |
+| `src/adapters/dev-cycle.ts` | Planned `.dev-cycle` brief parser. |
+
+## Tests
+
+| Path | Purpose |
+|---|---|
+| `tests/config/` | Planned config and first-run behavior tests. |
+| `tests/adapters/` | Planned filesystem/git/docs/github/dev-cycle fixtures. |
+| `tests/domain/` | Planned status, attention, ranking, handoff tests. |
+| `tests/ui/` | Planned display-copy and Ink smoke tests. |
+| `tests/evals/` | Planned dogfood top-item quality eval fixtures. |
+
+## Needs Audit
+
+| Path | Reason |
+|---|---|
+| `src/adapters/github-gh.ts` | Exact `gh` JSON shape must be captured in SPIKE-001. |
+| `src/adapters/docs.ts` | Parser depth remains open in Q-005. |
