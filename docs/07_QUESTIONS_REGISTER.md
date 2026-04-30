@@ -217,7 +217,7 @@ The user currently types `!` in high-judgment repo chat tabs to create a red vis
 - Opened: 2026-04-30
 - Owner: project
 - Status: open
-- Proposed Answer: Add an optional user intent snapshot attached to a stable item identity. MVP can capture DevDeck-generated handoff text and operator notes; future chat connectors may capture exact sent prompts if explicitly supported. Detail/handoff views should show "You asked" or "Operator intent" when known.
+- Proposed Answer: Defer user intent snapshots to dogfood v2. Dogfood v1 must not persist DevDeck-generated handoff text, operator notes, or chat-derived prompts as context recovery state.
 - Blocks: REQ-022, future context recovery UI
 - Resolution: —
 
@@ -253,7 +253,7 @@ Implementation scope clarification: dogfood v1 only needs the boilerplate profil
 - Opened: 2026-04-30
 - Owner: project
 - Status: open
-- Proposed Answer: Current MVP sources cannot track arbitrary Claude Code/Codex/Gemini/opencode chat history. DevDeck can only use handoffs, operator notes, repo docs, `.dev-cycle`, git, and GitHub evidence unless an explicit conversation source or session-capture design is added. Transcript connectors are deferred toward dogfood v2.
+- Proposed Answer: Current MVP sources cannot track arbitrary Claude Code/Codex/Gemini/opencode chat history. Dogfood v1 uses repo docs, `.dev-cycle`, git, GitHub evidence, and local pause state only. Handoff/operator-note capture and transcript connectors are deferred toward dogfood v2.
 - Blocks: Q-019, Q-020, REQ-022, future conversation source design
 - Resolution: —
 

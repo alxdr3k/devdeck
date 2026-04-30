@@ -33,6 +33,7 @@ projects:
     priority: 70
 workflow:
   contract: dev-cycle
+  identity_profile: boilerplate_v1
 adapters:
   github: gh
 ```

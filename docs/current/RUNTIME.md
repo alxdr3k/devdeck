@@ -13,7 +13,7 @@ start DevDeck
   -> load local operator pause state
   -> build ProjectStatus per configured repo
   -> generate AttentionItems
-  -> attach accepted stable ids/source fingerprints after Q-020 closure
+  -> attach dogfood v1 stable ids/source fingerprints
   -> split active feed and paused queue
   -> rank by band and score
   -> render Ink feed/paused/detail
@@ -29,7 +29,7 @@ LocatedProject
   -> docs known-path resolver
   -> git read-only state
   -> gh GitHub state if available
-  -> .dev-cycle latest brief if present
+  -> .dev-cycle latest JSONL cycle if present
   -> SourceTrust[]
 ```
 
@@ -48,8 +48,8 @@ LocatedProject
 | Cache stale | Show stale cache as fallback, never as fresh source. |
 | Operator-paused item | Keep it out of the active feed; show it in paused queue with reason and review trigger. |
 | Paused item changed | Generate a pause review item or paused-queue warning. |
-| Local state fingerprint mismatch | After Q-020 closure, keep the local state but mark it stale/needs review. |
-| User intent snapshot unavailable | Omit the "You asked" block; do not invent prior chat context. |
+| Local state fingerprint mismatch | Keep the local state but mark it stale/needs review. |
+| User asks "what did I ask the agent?" | Dogfood v1 has no prior-instruction recovery. Omit the block and do not invent prior chat context. |
 | Command action selected | Show/copy command text; do not execute. |
 | Clipboard unavailable | Show selectable text and report that copy was unavailable. |
 

@@ -33,7 +33,6 @@ Status: planned. No implementation files exist yet.
 | `src/domain/ranking.ts` | Planned ranking bands, scoring, tie-breakers, explanations. |
 | `src/domain/handoff.ts` | Planned handoff prompt generation. |
 | `src/domain/operator-pause.ts` | Planned pause overlay and paused queue rules. |
-| `src/domain/intent.ts` | Planned optional user intent snapshots for context recovery. |
 
 ## Adapters
 
@@ -43,8 +42,7 @@ Status: planned. No implementation files exist yet.
 | `src/adapters/git.ts` | Planned read-only git adapter. |
 | `src/adapters/github-gh.ts` | Planned `gh` JSON adapter. |
 | `src/adapters/docs.ts` | Planned boilerplate docs known-path resolver and parser. |
-| `src/adapters/dev-cycle.ts` | Planned `.dev-cycle` brief parser. |
-| `src/adapters/agent-conversation.ts` | Dogfood v2 draft adapter for explicit conversation sources after Q-021. |
+| `src/adapters/dev-cycle.ts` | Planned `.dev-cycle` JSONL latest-cycle parser with Markdown fallback/display evidence. |
 
 ## Tests
 
@@ -59,6 +57,13 @@ Status: planned. No implementation files exist yet.
 | `tests/domain/` | Planned status, attention, ranking, handoff tests. |
 | `tests/ui/` | Planned display-copy and Ink smoke tests. |
 | `tests/evals/` | Planned dogfood top-item quality eval fixtures. |
+
+## Deferred Dogfood V2
+
+| Path | Purpose |
+|---|---|
+| `src/adapters/agent-conversation.ts` | Future explicit conversation source adapter after Q-021. Do not scaffold for v1 unless the scope is reopened. |
+| `src/domain/intent.ts` | Future user intent snapshot model after Q-019/Q-021. Do not scaffold for v1 unless the scope is reopened. |
 
 ## Needs Audit
 

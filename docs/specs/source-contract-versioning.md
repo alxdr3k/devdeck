@@ -30,17 +30,19 @@ The goal is resilience:
 
 | Contract | Owner | Examples | MVP handling |
 |---|---|---|---|
-| `devdeck_config` | DevDeck | `devdeck.yml` fields and workflow settings | Strict Zod validation with clear first-run errors. |
-| `boilerplate_docs` | boilerplate/projects | current state, implementation plan, testing/runtime docs | Probe capabilities, then parse known versions/path variants. |
-| `dev_cycle` | dev-cycle/codex-loop workflow | `.dev-cycle/dev-cycle-run-id`, briefs | Probe presence and expected brief shape. Missing is tolerated unless workflow requires it. |
+| `devdeck_config` | DevDeck | `devdeck.yml` fields, workflow contract, identity profile, adapter settings | Strict Zod validation with clear first-run errors. |
+| `filesystem_path` | local provider | configured repo path, directory/readability state | Normalize missing/not-directory/unreadable state without aborting other projects. |
+| `boilerplate_docs` | boilerplate/projects | current state, implementation plan, testing/runtime docs, ops/support fixture shape | Probe capabilities, then parse known versions/path variants. |
+| `dev_cycle` | dev-cycle/codex-loop workflow | `.dev-cycle/dev-cycle-run-id`, `.dev-cycle/dev-cycle-briefs.jsonl`, legacy/display Markdown briefs | Probe presence and expected JSONL shape. Missing is tolerated unless workflow requires it. |
 | `git_cli` | local Git | branch/status/log output | Bounded read-only commands with parser fixtures. |
-| `github_gh` | GitHub CLI/GitHub API | `gh --json` fields and error output | Versionless fixture contract plus adapter error mapping. |
+| `github_gh` | GitHub CLI/GitHub API | `gh --json` fields, PR activity, Codex signal evidence, and error output | Versionless fixture contract plus adapter error mapping. |
 
 ## Core Type
 
 ```ts
 type SourceContractId =
   | "devdeck_config"
+  | "filesystem_path"
   | "boilerplate_docs"
   | "dev_cycle"
   | "git_cli"
@@ -83,14 +85,15 @@ interface ContractEvidenceRef {
 
 | Source | Required capability | Degrade behavior if missing |
 |---|---|---|
-| config | project id, path, priority | first-run/config error; no scan for invalid project row |
+| config | project id, path, priority, workflow contract, identity profile | first-run/config error; no scan for invalid project row |
 | filesystem | repo path exists or missing state is known | project-level blocked status |
 | boilerplate docs | current-state source or explicit missing marker | lower docs trust; generate repair item if no task can be inferred |
 | boilerplate docs | implementation-plan active slice or roadmap table | current task becomes unknown; handoff uses fallback read order |
 | boilerplate docs | testing/validation command source or explicit unknown | commands are omitted rather than invented |
+| boilerplate docs | ops/support fixture shape when captured for parser tests | fixture gap only; do not crawl arbitrary ops files as live state |
 | git | branch, dirty state, recent commit | local git trust error; docs/GitHub can still scan |
-| dev-cycle | latest brief shape when workflow expects `dev-cycle` | dev-cycle trust error; other sources remain usable |
-| GitHub | PR/check/review fields when `gh` is available | GitHub trust error; local scan remains usable |
+| dev-cycle | canonical JSONL latest cycle shape when workflow expects `dev-cycle`; Markdown only as fallback/display evidence | dev-cycle trust error; other sources remain usable |
+| GitHub | PR/check/review fields and Codex signal evidence when `gh` is available | GitHub trust error; local scan remains usable |
 
 Capabilities are more important than filenames. The known-path resolver finds likely files; the probe decides whether the needed capability is actually present.
 
@@ -134,7 +137,7 @@ Every parser contract change needs fixture coverage:
 - unsupported version fixture when a formal version exists
 - cache fallback fixture when live source cannot be trusted
 
-When `../boilerplate` or a dogfood repo changes its docs/workflow shape, capture the changed files as minimized fixtures before changing ranking or UI behavior.
+When `../boilerplate` or a dogfood repo changes its docs/workflow shape, capture the changed files as minimized fixtures before changing ranking or UI behavior. The dogfood fixture baseline includes boilerplate docs plus ops/support artifacts such as `docs/ops/**`, `ops/**`, `.claude/commands/**`, and `.agents/scripts/**` when those files define workflow behavior. Fixture capture must be minimized and redacted; live MVP parsing still starts from declared capabilities, not arbitrary repository crawling.
 
 ## Upgrade Workflow
 

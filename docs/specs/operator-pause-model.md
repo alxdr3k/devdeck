@@ -60,6 +60,7 @@ interface OperatorPause {
   scope: PauseScope;
   projectId: ProjectId;
   itemId?: string;
+  identityId?: string; // required when scope === "attention_item"
   reason: PauseReason;
   note?: string;
   resumeTriggers: PauseResumeTrigger[];
@@ -70,7 +71,9 @@ interface OperatorPause {
 }
 ```
 
-Stable id and fingerprint semantics are draft review material in `docs/specs/stable-identity-fingerprint.md` and are tracked by Q-020. The pause model should not depend on final identity/fingerprint behavior until Q-020 is accepted.
+Dogfood v1 pause semantics depend on the accepted boilerplate workflow identity profile in `docs/specs/stable-identity-fingerprint.md`. Generic non-boilerplate identity behavior remains deferred. If DevDeck cannot derive a stable identity for an item, it may show the item but must not create an item-scoped pause for it.
+
+For `attention_item` scope, `identityId` and `sourceFingerprint` are required and form the durable attachment. `itemId` is display/debug context only because generated item ids may change more often than stable identities.
 
 ## Pause Reasons
 
@@ -120,7 +123,7 @@ Do not let pause become a silent black hole.
 An active-feed item may be generated for paused work only when the item is about the pause itself, not the original task:
 
 - pause review is due
-- source changed since the pause fingerprint, after Q-020 defines accepted fingerprint semantics
+- source changed since the pause fingerprint under the dogfood v1 identity/fingerprint rules
 - external dependency may now be ready
 - active feed is empty and paused work is the next best review surface
 
@@ -135,7 +138,7 @@ DEVDECK_STATE_PATH
   or default user-local app state path
 ```
 
-The state should include pause records and, after Q-020 is accepted, enough item/source fingerprint data to detect when a pause may be stale. DevDeck must not write pause state into the dogfood repos in MVP.
+The state should include pause records plus enough identity/source fingerprint data to detect when a pause may be stale. DevDeck must not write pause state into the dogfood repos in MVP.
 
 ## UI Contract
 
@@ -170,8 +173,8 @@ Closed
 |---|---|
 | Important high-priority work disappears. | Always show paused count and stale/review triggers. |
 | Pause becomes a vague dumping ground. | Require a reason; require note for `other`. |
-| Repo-level pause hides an unrelated urgent PR/check event. | Track accepted fingerprint/source-change evidence and show "paused repo changed" review item. |
-| Item IDs change and pause attaches to the wrong work. | Close Q-020 with reviewed identity/fingerprint fixtures before item-scoped pause implementation. |
+| Repo-level pause hides an unrelated urgent PR/check event. | Track fingerprint/source-change evidence and show "paused repo changed" review item. |
+| Item IDs change and pause attaches to the wrong work. | Use the dogfood v1 identity fixtures before item-scoped pause implementation; mark local state stale/orphaned when identity confidence is low. |
 | User confuses pause with external waiting or done. | Copy and queue naming must say paused/review, not complete. |
 | Future hosted service has multiple users. | Treat pause as user-specific state, not project truth. |
 

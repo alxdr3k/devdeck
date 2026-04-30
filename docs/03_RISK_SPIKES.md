@@ -87,7 +87,7 @@ Not run yet.
 
 **Experiment**
 
-Compare current `../boilerplate`, `actwyn`, `concluv`, and `../xeflabs/xef-scale` docs/workflow artifacts. Capture minimized fixtures for supported, missing capability, partial, and unsupported shapes.
+Compare current `../boilerplate`, `actwyn`, `concluv`, and `../xeflabs/xef-scale` docs/workflow artifacts, including `.dev-cycle` JSONL and workflow support files that define parser behavior. Capture minimized fixtures for supported, missing capability, partial, and unsupported shapes.
 
 **Result**
 

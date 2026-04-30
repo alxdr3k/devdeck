@@ -17,6 +17,8 @@ ai_include: true
 
 Status: discussion record. This file captures user direction and open questions. It is not an accepted design.
 
+Current consolidation: dogfood v1 implements the boilerplate workflow identity profile in `docs/specs/stable-identity-fingerprint.md`. Automatic agent transcript/orphan-conversation identity remains dogfood v2. Dogfood v1 also excludes DevDeck handoff capture and operator-note capture as context recovery state.
+
 ## Product Frame
 
 DevDeck is a focus and context-switching reducer for one developer working across multiple AI conversational coding agents.
@@ -50,21 +52,19 @@ This means DevDeck is not only a repo-state reader. Repo state is necessary evid
 
 Current MVP sources do not fully solve AI conversation tracking.
 
-Existing planned sources:
+Dogfood v1 planned sources:
 
 - boilerplate docs
 - local git
 - GitHub PR/check/review state
 - `.dev-cycle` and `codex-loop` state
-- DevDeck-generated handoff text
-- local operator notes
 
-These sources can infer some work state after it reaches repo docs, git, GitHub, or DevDeck handoff flow. They cannot reliably reconstruct arbitrary prior chat messages from Claude Code/Codex sessions unless DevDeck has an explicit conversation source.
+These sources can infer some work state after it reaches repo docs, git, or GitHub. They cannot reliably reconstruct arbitrary prior chat messages from Claude Code/Codex sessions unless DevDeck has an explicit conversation source.
 
 Therefore, exact answers to "what did I ask the agent?" require one of:
 
-- DevDeck-mediated prompt creation, where DevDeck stores the handoff or instruction it generated.
-- A local operator note attached by the user.
+- DevDeck-mediated prompt creation, where DevDeck stores the handoff or instruction it generated. This is deferred to dogfood v2.
+- A local operator note attached by the user. This is deferred to dogfood v2 when used for context recovery.
 - An explicit future connector that can read supported Claude Code, Codex CLI, Gemini CLI, and opencode conversation logs with user consent.
 - A future mode where agent sessions are launched or proxied through DevDeck so prompts and responses are captured at creation time.
 
@@ -80,7 +80,7 @@ The emerging candidate model distinguishes work units from attention items, but 
 |---|---|---|
 | Work unit | Is this the same body of work? | anchor chosen by workflow profile: leaf/slice for dogfood boilerplate, PR for PR-centric workflows, local orphan id when neither exists |
 | Attention item | Why should the user look now? | work unit plus item kind plus current evidence anchor |
-| Source fingerprint | Did the evidence change? | normalized repo/chat/source facts |
+| Source fingerprint | Did the evidence change? | normalized repo/source facts; chat facts only after a future connector |
 
 For the dogfood boilerplate workflow, leaf/slice currently appears to be the best work-unit anchor. For a generic workflow, PR may be the best available anchor, but only if the PR scope is coherent enough. DevDeck cannot assume a PR is always the right work unit because users can create very large PRs.
 

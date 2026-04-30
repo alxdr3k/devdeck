@@ -21,7 +21,7 @@ This repo is now the current truth for DevDeck. The second-brain ideation handof
 
 ## Product / Project
 
-DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Code/Codex projects and agent sessions. It is not a generic Kanban board. The MVP reads boilerplate docs, local git, GitHub PR/check/review state, and `.dev-cycle` / `codex-loop` state, then turns that evidence into a ranked priority feed and 2-minute handoff prompts.
+DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Code/Codex projects and agent sessions. It is not a generic Kanban board. The MVP reads boilerplate docs, local git, GitHub PR/check/review state, and `.dev-cycle` / `codex-loop` state, then turns that evidence into a ranked priority feed and on-demand 2-minute handoff prompts.
 
 ## Current roadmap position
 
@@ -47,10 +47,9 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Pull-first scanners for boilerplate docs, git, GitHub through `gh`, and `.dev-cycle` state.
 - Source contract probes so evolving boilerplate/project repo shapes degrade safely instead of breaking scans.
 - `ProjectStatus` model with trust/freshness/confidence metadata.
-- `AttentionItem` generator with deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator. Stable identity/fingerprint behavior is a draft under Q-020 review.
+- `AttentionItem` generator with deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator. Stable identity/fingerprint behavior is implementable for dogfood v1 under the boilerplate workflow profile.
 - Operator pause state so high-judgment/external-dependency/milestone-review work can be parked outside the active feed without being forgotten.
-- Optional user intent snapshots so context switching can recover "what did I ask the agent?" when DevDeck captured the prompt or operator note.
-- Draft agent conversation source design for dogfood v2, because arbitrary Claude Code/Codex/Gemini/opencode chat tracking is not covered by current repo-state sources.
+- Draft user intent and agent conversation source design for dogfood v2. Dogfood v1 does not persist handoff text, operator notes, or local transcripts as context recovery state.
 - MVP actions: open target, generate/copy handoff, display commands, and local pause/unpause state. DevDeck must not execute repo commands in MVP.
 
 ## Explicit non-goals
@@ -74,7 +73,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - `Q-016`: Boilerplate/project contract drift needs fixture coverage before parser assumptions harden.
 - `Q-010`: Generic defer/pin/snooze remains future; dogfood operator pause is accepted as Q-018 / DEC-015.
 - `Q-012`: Final product name remains open and does not block implementation.
-- `Q-019`: Context recovery for prior user instructions remains open where exact chat-log access is needed.
+- `Q-019`: Context recovery for prior user instructions is deferred to dogfood v2, including handoff/operator-note capture.
 - `Q-020`: Stable item id/source fingerprint design is decided only for dogfood v1: boilerplate workflow profile, leaf/slice primary anchor, PR/branch as evidence links. Generic identity is deferred.
 - `Q-021`: AI agent conversation tracking remains open and is moved toward dogfood v2. Current sources cannot reconstruct arbitrary chat history.
 - `Q-022`: Work versus non-work conversation classification remains open.
@@ -88,12 +87,12 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 
 - Confirm GitHub access for dogfood repos.
 - Confirm `gh auth status` in the user's shell before implementing GitHub scans.
-- Use boilerplate docs/ops layout as the source fixture baseline, then inspect real `actwyn`, `concluv`, and `../xeflabs/xef-scale` as concrete instances before locking parser fixtures.
+- Use boilerplate docs/ops layout as the source fixture baseline, including `.dev-cycle` JSONL and workflow support artifacts when they define parser behavior. Then inspect real `actwyn`, `concluv`, and `../xeflabs/xef-scale` as concrete instances before locking parser fixtures.
 - Capture source contract fixtures for current and drifted boilerplate docs/ops shapes.
 - Capture a dogfood pause scenario with one high-priority paused repo and one lower-priority active repo.
-- Implement only the dogfood v1 identity profile before pause/cache/intent attachments; reopen generic identity later.
+- Implement only the dogfood v1 identity profile before pause/cache attachments; reopen generic identity later.
 - Use local Codex conversation history as reference material for GitHub/Codex flow fixtures when helpful, but do not record personal tokens or secrets.
-- Treat DevDeck-generated handoffs/operator notes as enough for dogfood v1 unless Q-021 is reopened as implementation-blocking.
+- Do not treat DevDeck-generated handoffs/operator notes as dogfood v1 context recovery state. Reopen Q-019/Q-021 for dogfood v2 before adding this behavior.
 - Verify whether `.dev-cycle` state is always present or must be missing-source tolerant.
 
 ## Links

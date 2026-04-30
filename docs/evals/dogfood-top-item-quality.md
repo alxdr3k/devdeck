@@ -40,9 +40,8 @@ Each eval run captures:
 - source contract probe JSON for each repo
 - derived `ProjectStatus[]`
 - generated `AttentionItem[]`
-- stable identity and source fingerprint output if Q-020 has been accepted, otherwise draft-candidate output for review only
+- dogfood v1 stable identity and source fingerprint output for the boilerplate workflow profile
 - operator pause state, when testing pause scenarios
-- user intent snapshot state, when testing context recovery
 - ranked feed
 - paused queue
 - top item explanation
@@ -59,8 +58,7 @@ Do not require live GitHub in deterministic CI fixtures. Keep live dogfood runs 
 4. Compare top item against manual human review of docs, git, GitHub, `.dev-cycle`, and source contract probes.
 5. Paste the generated handoff into a fresh Claude/Codex session and measure whether it is enough to resume.
 6. For pause scenarios, mark one high-priority repo paused and verify a lower-priority active item can become top item while the paused repo remains visible.
-7. For context recovery scenarios, attach an intent snapshot and verify detail/handoff copy shows the captured instruction with source labeling.
-8. Record false positives, false negatives, stale-source surprises, pause surprises, identity/fingerprint surprises, intent-copy surprises, and copy issues.
+7. Record false positives, false negatives, stale-source surprises, pause surprises, identity/fingerprint surprises, and copy issues.
 
 ## Rubric
 
@@ -75,15 +73,15 @@ Score each category 0-3.
 | Handoff quality | Cannot resume. | Resume requires manual repo sweep. | Resume works with one extra lookup. | Resume works within 2 minutes. |
 | Safety | Suggests executing risky commands. | Command boundary unclear. | Commands are display-only. | Display-only boundary is explicit and helpful. |
 | Focus control | Paused work disappears or still dominates active feed. | Paused state is visible but confusing. | Active/paused split works with minor caveat. | Active feed matches focus intent and paused work remains reviewable. |
-| Context recovery | User cannot recover what they asked. | Intent appears but source is unclear. | Captured intent is visible with minor caveat. | Intent is clear, source-labeled, and does not imply unavailable chat access. |
+| Context recovery honesty | UI implies unavailable chat memory. | UI hints at missing intent without recovery. | UI clearly omits prior-instruction recovery. | UI clearly omits recovery and points to dogfood v2/future scope only in diagnostics. |
 
 ## Passing Bar
 
 MVP dogfood pass:
 
-- Total score at least 18 of 24 when pause and context-recovery scenarios are included.
-- Total score at least 16 of 21 when pause scenarios are included but context recovery is not.
-- Total score at least 14 of 18 when neither pause nor context recovery is included.
+- Total score at least 18 of 24 when pause and context-recovery-honesty scenarios are included.
+- Total score at least 16 of 21 when pause scenarios are included but context recovery honesty is not.
+- Total score at least 14 of 18 when neither pause nor context recovery honesty is included.
 - No category below 2.
 - No command execution ambiguity.
 - No silent source failure.
@@ -99,8 +97,8 @@ MVP dogfood pass:
 | Stale source trusted too much | Increase stale/trust penalty and copy freshness. |
 | Paused high-priority item still dominates active feed | Fix operator pause overlay before ranking weights. |
 | Paused item gets forgotten | Fix paused count, paused queue, or pause review trigger. |
-| Pause attaches to wrong item | Reopen or finish Q-020 before changing pause logic. |
-| User intent stale or misleading | Fix accepted stale marker behavior or source labeling. |
+| Pause attaches to wrong item | Fix dogfood v1 identity/fingerprint fixtures before changing pause logic; reopen generic identity only if the failure is outside the boilerplate profile. |
+| UI suggests remembered user intent | Remove "You asked" style copy from dogfood v1 and defer intent source design to dogfood v2. |
 | Handoff too long | Tighten handoff template. |
 | Handoff missing context | Add read-first anchors or current-task extraction. |
 
@@ -114,7 +112,6 @@ tests/fixtures/dogfood/
   concluv/
   xef-scale/
   operator-pause.state.json
-  intent-snapshots.state.json
   ranked-feed.expected.json
   paused-queue.expected.json
   handoff.expected.txt

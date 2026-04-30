@@ -188,16 +188,7 @@ Commands:
 
 Handoff may keep "why this is next" because it is context for another coding session, not default feed chrome.
 
-When an intent snapshot exists, detail and handoff views should include it with explicit source labeling:
-
-```text
-You asked:
-<captured instruction>
-
-Captured from: DevDeck handoff
-```
-
-Do not show this block when DevDeck has no captured instruction. Do not imply DevDeck read chat history unless a future explicit connector provides it.
+Dogfood v1 does not show a `You asked` block. Prior-instruction recovery, including DevDeck handoff capture and operator-note capture, is dogfood v2 scope. Do not imply DevDeck read chat history unless a future explicit connector provides it.
 
 ## Error and Empty States
 
@@ -233,6 +224,7 @@ projects:
     priority: 70
 workflow:
   contract: dev-cycle
+  identity_profile: boilerplate_v1
 adapters:
   github: gh
 ```

@@ -63,7 +63,7 @@ Planned after `EVAL-1A.1`: dogfood top-item quality eval using `docs/evals/dogfo
 | install | No command currently defined. | none | no | Becomes required after scaffold. |
 | typecheck | No command currently defined. | none | no | Planned. |
 | unit tests | No command currently defined. | none | no | Planned. |
-| integration fixtures | No command currently defined. | none | no | Planned; use boilerplate docs/ops layout as fixture baseline and redact any token/secret from local Codex conversation examples. |
+| integration fixtures | No command currently defined. | none | no | Planned; use boilerplate docs/ops layout as fixture baseline. Local Codex history is private reference material only for v1; redact any token/secret from minimized notes. |
 | dogfood eval | No command currently defined. | none | no | Manual/product gate first. |
 
 ## Before Opening A PR

@@ -13,7 +13,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | AC-005 | REQ-003 | Given a git repo, when scanned, then branch, dirty state, ahead/behind, and recent commit are normalized. | TEST-004 | defined |
 | AC-006 | REQ-002, REQ-017 | Given dogfood docs with different testing doc paths, when scanning, then the known-path resolver finds the best available testing doc or records candidates checked. | TEST-006 | defined |
 | AC-007 | REQ-004, REQ-018 | Given `gh` is available, when scanning a repo with PRs, then current-branch PR and open PR summaries are distinct. | TEST-007 | defined |
-| AC-008 | REQ-005 | Given `.dev-cycle/dev-cycle-briefs.md`, when scanning, then latest cycle result and summary are captured. | TEST-008 | defined |
+| AC-008 | REQ-005 | Given `.dev-cycle/dev-cycle-briefs.jsonl`, when scanning, then the latest cycle result, summary, actions, verification, review/ship, and risk are captured; Markdown brief log is a legacy/display fallback only. | TEST-008 | defined |
 | AC-009 | REQ-006, NFR-006 | Given mixed source states, when building `ProjectStatus`, then every status includes source trust, freshness, and confidence. | TEST-009 | defined |
 | AC-010 | REQ-007 | Given a `ProjectStatus`, when generating items, then each item has source refs, one next action, trust, commands, and handoff seed. | TEST-010 | defined |
 | AC-011 | REQ-008, REQ-010, NFR-003 | Given fixed attention fixtures, when ranking, then hard bands rank blockers above resume/hygiene, ties are deterministic, and diagnostic explanation names the decisive factors. | TEST-011 | defined |
@@ -29,8 +29,8 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | AC-021 | REQ-019, NFR-004, NFR-008 | Given a repo has an unsupported or partial source contract, when scanning, then DevDeck records contract compatibility, keeps other sources usable, and generates repair guidance only when actionability is reduced. | TEST-016 | defined |
 | AC-022 | REQ-020, NFR-009 | Given a high-priority item is operator-paused and a lower-priority item is active, when ranking, then the paused item is excluded from the active feed and shown in the paused queue. | TEST-017 | defined |
 | AC-023 | REQ-020, NFR-009 | Given a paused item is due for review, changed since pause, or the active feed is empty, when scanning, then DevDeck surfaces a pause review item or paused-queue warning without marking the original task complete. | TEST-017 | defined |
-| AC-024 | REQ-021, NFR-010 | After Q-020 is accepted, given repeated scans with only timestamps/copy/score changed, when items are generated, then stable ids remain unchanged and fingerprints remain unchanged. Given relevant source evidence changes, fingerprints change according to the accepted staleness rules. | TEST-018 | draft |
-| AC-025 | REQ-022 | Given DevDeck has a handoff-created or operator-note intent snapshot attached to an item, when detail or handoff is shown, then the user's last instruction/operator intent is visible and labeled by capture source. | TEST-019 | defined |
+| AC-024 | REQ-021, NFR-010 | Given dogfood v1 boilerplate-profile fixtures, when repeated scans change only timestamps/copy/score, then stable ids and fingerprints remain unchanged. Given relevant source evidence changes, fingerprints change while stable ids remain attached to the same work unit. | TEST-018 | defined |
+| AC-025 | REQ-022 | Dogfood v2 only: given DevDeck has an accepted explicit intent source, when detail or handoff is shown, then the user's last instruction/operator intent is visible and labeled by capture source. | TEST-019 | deferred |
 
 ## Tests
 
@@ -43,7 +43,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | TEST-005 | Scan orchestration resilience | `tests/scan/scan-orchestrator.test.ts` | AC-004, AC-014 |
 | TEST-006 | Known-path docs resolver | `tests/adapters/docs-resolver.test.ts` | AC-006 |
 | TEST-007 | GitHub adapter fixtures | `tests/adapters/github-adapter.test.ts` | AC-007, AC-017 |
-| TEST-008 | Dev-cycle brief parser | `tests/adapters/dev-cycle-adapter.test.ts` | AC-008 |
+| TEST-008 | Dev-cycle JSONL parser | `tests/adapters/dev-cycle-adapter.test.ts` | AC-008 |
 | TEST-009 | ProjectStatus builder | `tests/domain/project-status.test.ts` | AC-009 |
 | TEST-010 | Attention item generator | `tests/domain/attention-items.test.ts` | AC-010 |
 | TEST-011 | Ranking policy | `tests/domain/ranking.test.ts` | AC-011 |
@@ -53,14 +53,14 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | TEST-015 | Dogfood top item quality eval | `tests/evals/dogfood-top-item-quality.test.ts` or manual eval packet | AC-015, AC-016 |
 | TEST-016 | Source contract probe and drift fixtures | `tests/contracts/source-contracts.test.ts` | AC-021 |
 | TEST-017 | Operator pause state and ranking fixtures | `tests/state/operator-pause.test.ts`, `tests/domain/operator-pause.test.ts` | AC-022, AC-023 |
-| TEST-018 | Stable identity and source fingerprint fixtures | `tests/domain/stable-identity.test.ts` | AC-024 after Q-020 closure |
-| TEST-019 | User intent snapshot display fixtures | `tests/domain/intent-snapshot.test.ts`, `tests/ui/display-copy.test.ts` | AC-025 |
+| TEST-018 | Stable identity and source fingerprint fixtures | `tests/domain/stable-identity.test.ts` | AC-024 dogfood v1 boilerplate profile |
+| TEST-019 | User intent snapshot display fixtures | `tests/domain/intent-snapshot.test.ts`, `tests/ui/display-copy.test.ts` | AC-025 dogfood v2 |
 
 ## CI/CD Gates
 
 | Gate | Environment | Verified by | Required? | Notes |
 |---|---|---|---|---|
-| PR validation | local/CI once configured | TEST-001..TEST-014, TEST-016..TEST-019 | yes after scaffold | No CI workflow is active yet. |
+| PR validation | local/CI once configured | TEST-001..TEST-014, TEST-016..TEST-018 | yes after scaffold | No CI workflow is active yet; TEST-019 is dogfood v2. |
 | MVP dogfood | local realistic environment | TEST-015 + manual dogfood rubric | yes for MVP | Uses real `actwyn`, `concluv`, `../xeflabs/xef-scale`. |
 | Command-safety review | local/CI | TEST-003 + TEST-013 + code review | yes | Scanner may run read-only `git`/`gh`; workflow commands must not execute. |
 

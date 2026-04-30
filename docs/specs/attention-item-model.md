@@ -115,7 +115,7 @@ interface HandoffSeed {
 ```
 
 `OperatorPause` is defined in `docs/specs/operator-pause-model.md`.
-`StableIdentity` and `SourceFingerprint` are draft fields under Q-020 review in `docs/specs/stable-identity-fingerprint.md`. Do not make pause/cache/intent behavior depend on them until Q-020 is accepted.
+`StableIdentity` and `SourceFingerprint` are defined for dogfood v1 in `docs/specs/stable-identity-fingerprint.md`. Pause/cache state may depend on that boilerplate workflow profile. Items without a stable identity can still be displayed, but DevDeck must not attach durable local state to them.
 
 ## Item Kinds
 
@@ -141,6 +141,7 @@ interface HandoffSeed {
 - If a higher-priority root cause explains lower-level symptoms, suppress duplicates.
 - Every item must include a concrete `nextAction`.
 - Every item must include at least one `SourceRef`.
+- Every persisted or pauseable item must include `StableIdentity` and `SourceFingerprint` from the dogfood v1 identity profile.
 - Every item must be explainable without showing raw enum values.
 - Missing/stale/error states generate items only when they affect trust or actionability.
 - Unsupported or partial source contracts generate `source_contract_drift` only when they reduce actionability; otherwise they remain detail trust metadata.
@@ -203,7 +204,7 @@ Examples:
 - `v1:attention_item:actwyn:source_contract_drift:source_contract:boilerplate_docs`
 - `v1:attention_item:actwyn:pause_review:project:actwyn`
 
-The id identifies the conceptual item. `sourceFingerprint` detects whether the evidence changed since a pause, handoff, cache entry, or intent snapshot was created.
+For dogfood v1, `AttentionItem.id` should equal `StableIdentity.id` when `identity` is present. The id identifies the conceptual item. `sourceFingerprint` detects whether the evidence changed since a pause or cache entry was created.
 
 ## MVP Lifecycle
 

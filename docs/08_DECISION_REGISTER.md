@@ -272,28 +272,30 @@ The user's current split-tab workflow already uses `!` as a practical red-light 
 ### DEC-016: Separate stable item identity from source fingerprint
 
 - Date: 2026-04-30
-- Status: proposed
+- Status: accepted_for_dogfood_v1_generic_deferred
 - Related question: Q-020
-- Impacts: REQ-021, NFR-010, operator pause, cache, handoff, context recovery
+- Impacts: REQ-021, NFR-010, operator pause, cache, handoff, future context recovery
 
-**Candidate Decision**
+**Decision**
 
-Pending user review, use versioned stable identities for conceptual attention items and separate source fingerprints for evidence changes. Stable ids answer "is this the same item?" Fingerprints answer "did the evidence behind this item change?"
+For dogfood v1, use versioned stable identities for conceptual attention items and separate source fingerprints for evidence changes. Stable ids answer "is this the same item?" Fingerprints answer "did the evidence behind this item change?"
 
-Candidate rule: local state such as operator pause, cache references, and future user intent snapshots attaches to both id and fingerprint.
+Dogfood v1 uses the boilerplate workflow profile: leaf/slice is the primary work-unit anchor, while PR and branch are evidence links unless no leaf/slice is available. Generic identity for non-boilerplate workflows is deferred.
 
-**Rationale To Review**
+Dogfood v1 local state such as operator pause and cache references attaches to both id and fingerprint when the item has a stable identity. User intent snapshots are dogfood v2 and must not be created from handoffs or operator notes in v1.
+
+**Rationale**
 
 If identity changes too often, pause and suppression become useless. If identity never changes and no fingerprint exists, DevDeck cannot tell whether paused or cached state is stale. The two-value model keeps feed order stable while still detecting meaningful source changes.
 
-**Open Review Points**
+**Deferred Generic Review Points**
 
 - Which anchors are stable enough across PR, branch, roadmap, and chat-only workflows?
 - Which source changes should invalidate local state versus only refresh display data?
 - How should local path privacy and future service migration affect id shape?
 - What migration path is acceptable after dogfood state exists?
 
-**Expected Consequences If Accepted**
+**Consequences**
 
 - Positive: pause, cache, suppression, and future intent recovery have a stable attachment point.
 - Positive: source changes can trigger review without losing local state.

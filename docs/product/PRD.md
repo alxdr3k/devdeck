@@ -17,7 +17,7 @@ ai_include: true
 
 ## Summary
 
-DevDeck helps one developer operate 3-5 simultaneous Claude Code/Codex projects without carrying each repo's or agent session's state in working memory. The MVP is a local TypeScript/Node + Ink TUI that reads project evidence, ranks the next human-attention item, and generates a 2-minute handoff prompt.
+DevDeck helps one developer operate 3-5 simultaneous Claude Code/Codex projects without carrying each repo's state in working memory. The MVP is a local TypeScript/Node + Ink TUI that reads project evidence, ranks the next human-attention item, and generates a 2-minute handoff prompt on demand.
 
 ## Problem
 
@@ -67,8 +67,8 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Source contract probing for evolving boilerplate docs, `.dev-cycle`, GitHub CLI output, and parser compatibility.
 - Attention item model for human-actionable work.
 - Local operator pause state for intentionally parked, high-judgment, external-dependency, or milestone-review work during dogfood.
-- Review and finalize stable item identity and source fingerprint behavior before pause, cache, suppression, handoff, or future context recovery depends on it.
-- Conversation tracking problem framing for multiple AI agent sessions. MVP can only use captured handoffs/operator notes unless an explicit conversation source is designed; local transcript connectors are deferred toward dogfood v2.
+- Dogfood v1 stable item identity and source fingerprint behavior using the boilerplate workflow profile; generic workflow identity remains deferred.
+- Conversation tracking problem framing for multiple AI agent sessions. Dogfood v1 does not persist handoffs, operator notes, or transcript-derived intent snapshots as product state; local transcript connectors for Claude Code, Codex CLI, Gemini CLI, and opencode on macOS/Linux are deferred toward dogfood v2.
 - Deterministic ranking policy with dogfood/diagnostic explanation. Post-dogfood default UI should keep the feed simple and avoid exposing "why this is #1" as primary copy.
 - Ink TUI priority feed with a strong top item and short top 5 queue.
 - Secondary project table as a map, not the primary action UI.
@@ -87,16 +87,17 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Team workflow, assignment, notifications, or cross-user collaboration.
 - GitHub-less non-developer workflow.
 - Generic task-manager defer/pin/snooze beyond the operator pause workflow.
+- Prior-instruction recovery, user intent snapshots, operator-note context, and AI-agent transcript/session connectors in dogfood v1.
 
 ## Functional Requirements
 
 | ID | Requirement | Priority | Notes |
 |---|---|---|---|
-| REQ-001 | Load an explicit project config with repo id, path, priority, and optional `today_focus`. | must | Missing path is a project state, not a process crash. |
+| REQ-001 | Load an explicit project config with repo id, path, priority, optional `today_focus`, workflow contract, identity profile, and adapter settings. | must | Missing path is a project state, not a process crash. |
 | REQ-002 | Scan boilerplate docs for current state, implementation plan, testing guidance, and stale/missing docs. | must | Parser starts with known files and headings. |
 | REQ-003 | Scan local git state for branch, dirtiness, upstream relation, recent commits, and open PR branch hints. | must | Read-only. |
 | REQ-004 | Read GitHub PR/check/review state through `gh` JSON output. | must | Adapter boundary hides `gh` JSON shape from domain models. |
-| REQ-005 | Read `.dev-cycle` and `codex-loop` state when present. | must | Missing state lowers confidence but does not fail the scan. |
+| REQ-005 | Read `.dev-cycle` and `codex-loop` state when present. | must | Canonical source is `.dev-cycle/dev-cycle-briefs.jsonl`; Markdown brief log is fallback/display evidence. Missing state lowers confidence but does not fail the scan. |
 | REQ-006 | Produce a `ProjectStatus` for every configured repo. | must | Includes trust metadata per source. |
 | REQ-007 | Generate `AttentionItem`s that describe concrete human actions. | must | Items are not raw machine states. |
 | REQ-008 | Rank items using severity, project priority, today focus, age, trust, freshness, and estimated effort. | must | Deterministic ties. |
@@ -112,9 +113,9 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | REQ-018 | Represent current-branch PR state separately from other open PRs and default-branch sync state. | should | Prevents single-PR assumptions from hiding blockers. |
 | REQ-019 | Probe source contract compatibility before parsing docs, `.dev-cycle`, git, or `gh` output. | must | Unsupported or partial contracts become trust data and repair items, not scan crashes. |
 | REQ-020 | Support local operator pause for work the user intentionally parks because it needs high judgment, external setup, milestone review, or leaf promotion. | should | Paused work leaves the active feed by default but remains visible in a paused queue. |
-| REQ-021 | Define, review, and validate stable item identities and source fingerprints before local state attachments depend on them. | must | Dogfood v1 uses the boilerplate workflow profile with leaf/slice as primary anchor; generic identity is deferred. |
-| REQ-022 | Preserve or display the user's last instruction/operator intent when available. | should | MVP can capture DevDeck handoff text or operator notes; future connectors may read chat logs if explicitly supported. |
-| REQ-023 | Define whether and how DevDeck can track AI agent conversation state. | should | Current repo-state sources are insufficient for arbitrary chat recovery; Q-021 remains open and transcript connectors are dogfood v2 scope. |
+| REQ-021 | Implement and validate dogfood v1 stable item identities and source fingerprints before durable local state attachments depend on them. | must | Dogfood v1 uses the boilerplate workflow profile with leaf/slice as primary anchor; generic identity is deferred. |
+| REQ-022 | Preserve or display the user's last instruction/operator intent when available. | deferred | Dogfood v1 does not store handoff text, operator notes, or transcript-derived intent snapshots as context recovery state. |
+| REQ-023 | Define whether and how DevDeck can track AI agent conversation state. | deferred | Current repo-state sources are insufficient for arbitrary chat recovery; Q-021 remains open and transcript connectors are dogfood v2 scope. |
 
 ## Non-functional Requirements
 
@@ -129,7 +130,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | NFR-007 | Testability | Domain models, ranking, and handoff generation are pure or easily fixture-driven. | Unit test coverage before TUI polish. |
 | NFR-008 | Contract evolution | Boilerplate/project workflow drift must be managed with versioned probes, capability checks, and fixtures. | Source contract tests and dogfood evals. |
 | NFR-009 | Focus control | User-declared pause state must not be overridden by project priority in the active feed, and must not silently hide work forever. | Pause/ranking/display fixtures. |
-| NFR-010 | Identity stability | Once Q-020 is accepted, scan timestamp, display copy, and rank score changes must not change item identity; relevant evidence changes must update fingerprints. | Identity/fingerprint fixtures after review. |
+| NFR-010 | Identity stability | Under the dogfood v1 profile, scan timestamp, display copy, and rank score changes must not change item identity; relevant evidence changes must update fingerprints. | Identity/fingerprint fixtures. |
 
 ## Implementation Stack
 
@@ -137,6 +138,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Language: TypeScript.
 - Package manager: npm.
 - TUI: Ink.
+- Supported local OS targets: macOS and Linux.
 - Config: YAML parsed and validated into typed config.
 - GitHub adapter: `gh` shell-out with JSON output.
 - Local adapters: filesystem and git read-only commands.

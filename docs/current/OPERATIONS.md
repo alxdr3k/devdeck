@@ -58,7 +58,7 @@ No deployment pipeline currently defined.
 | GitHub unavailable | Run `gh auth status`; DevDeck should still show local status. |
 | Source format changed | Inspect source contract probe evidence and add/update drift fixture before changing parser behavior. |
 | Important repo disappeared from active feed | Check paused queue and operator pause reason/review trigger. |
-| Pause or intent note attached to wrong item | Check Q-020 status and accepted identity/fingerprint fixtures before changing ranking. |
-| User asks "what did I ask the agent?" | Check whether an intent snapshot exists; otherwise DevDeck should omit that block. |
+| Pause attached to wrong item | Check dogfood v1 identity/fingerprint fixtures before changing ranking; reopen generic Q-020 only if the failure is outside the boilerplate profile. |
+| User asks "what did I ask the agent?" | Dogfood v1 does not support prior-instruction recovery. Omit that block; do not infer from handoff/operator notes or chat history. |
 | Top item feels wrong | Inspect ranking explanation and source trust; compare dogfood eval notes. |
 | Command ran unexpectedly | Critical bug; MVP must only display/copy commands. |

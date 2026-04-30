@@ -31,11 +31,11 @@ The dogfood v2 hypothesis is local-first: because DevDeck runs on the user's mac
 
 DevDeck cannot currently track arbitrary AI agent conversations with the planned repo-state MVP source set.
 
-MVP can only show prior user intent when DevDeck has its own captured evidence:
+Dogfood v1 cannot show prior user intent. It only uses repo-state evidence such as:
 
-- a DevDeck-generated handoff prompt
-- an operator note
 - `.dev-cycle` or repo docs that explicitly record the task
+
+Capturing DevDeck-generated handoff prompts or operator notes as prior-instruction recovery is also deferred to dogfood v2.
 
 Exact chat-history recovery requires an explicit source contract. Without that, DevDeck must omit the claim rather than infer or invent it.
 
@@ -45,8 +45,8 @@ Agent CLI transcript discovery is deferred to dogfood v2. That spike should veri
 
 | Mode | Description | Pros | Risks |
 |---|---|---|---|
-| DevDeck-generated handoff | DevDeck creates and stores the prompt the user pastes into an agent. | Simple, controllable, MVP-compatible. | Does not capture edits after paste or later conversation. |
-| Operator note | User adds a local note to an item or work unit. | Honest and user-controlled. | Manual burden. |
+| DevDeck-generated handoff | DevDeck creates and stores the prompt the user pastes into an agent. | Simple and controllable. | Deferred to dogfood v2; does not capture edits after paste or later conversation. |
+| Operator note | User adds a local note to an item or work unit. | Honest and user-controlled. | Deferred to dogfood v2 for context recovery; manual burden. |
 | Local transcript connector | DevDeck reads supported Claude Code, Codex CLI, Gemini CLI, or opencode transcript files. | Can answer "what did I ask?" more directly. | Needs stable log paths/schema, privacy review, and per-tool adapters. Deferred to dogfood v2. |
 | Session launcher/proxy | DevDeck starts or wraps agent sessions and captures prompts/responses as they happen. | Most complete future model. | Larger product surface and higher trust/safety bar. |
 | Agent-written brief | Agent writes a short structured state file after work. | Avoids raw chat capture. | Requires agent compliance and may miss the actual user instruction. |
@@ -138,7 +138,7 @@ Candidate classification:
 
 - Which target agent tools expose stable, supported transcript locations or APIs on macOS and Linux?
 - For each target CLI, what exact local paths and record formats should DevDeck read in dogfood v2?
-- Is dogfood v1 willing to use DevDeck-generated handoffs/operator notes as the only conversation capture?
+- Should dogfood v2 use DevDeck-generated handoffs/operator notes as an explicit conversation capture source?
 - Does branchless orphan work need a visible inbox, or should it appear only when active feed is empty?
 - How should the user dismiss a non-work conversation so it does not reappear?
 - Should classification be rule-based first, model-assisted later, or always user-confirmed?

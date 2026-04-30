@@ -47,6 +47,7 @@ type Confidence = "high" | "medium" | "low" | "unknown";
 
 type SourceContractId =
   | "devdeck_config"
+  | "filesystem_path"
   | "boilerplate_docs"
   | "dev_cycle"
   | "git_cli"
@@ -61,11 +62,14 @@ type ContractCompatibility =
 
 type AttentionOwner = "user" | "agent" | "github" | "none" | "unknown";
 
+type WorkflowContract = "dev-cycle";
+type IdentityProfile = "boilerplate_v1";
+type GitHubAdapterKind = "gh";
+
 type WorkStatus =
   | "ready_to_resume"
   | "waiting_for_human"
   | "operator_paused"
-  | "agent_running"
   | "checks_pending"
   | "checks_failing"
   | "review_feedback"
@@ -78,6 +82,21 @@ type WorkStatus =
 ## Project Config
 
 ```ts
+interface DevDeckConfig {
+  projects: ProjectConfig[];
+  workflow: WorkflowConfig;
+  adapters?: AdapterConfig;
+}
+
+interface WorkflowConfig {
+  contract: WorkflowContract;
+  identityProfile: IdentityProfile;
+}
+
+interface AdapterConfig {
+  github?: GitHubAdapterKind;
+}
+
 interface ProjectConfig {
   id: ProjectId;
   path: string;
@@ -112,6 +131,7 @@ projects:
     priority: 70
 workflow:
   contract: dev-cycle
+  identity_profile: boilerplate_v1
 adapters:
   github: gh
 ```
@@ -162,7 +182,7 @@ Trust examples:
 | boilerplate_docs | stale | Current-state doc is older than git/GitHub activity. |
 | boilerplate_docs | unsupported | Required boilerplate capability moved or changed shape. |
 | dev_cycle | missing | No `.dev-cycle` state was found. |
-| dev_cycle | unsupported | `.dev-cycle` exists but latest brief cannot be interpreted under supported contracts. |
+| dev_cycle | unsupported | `.dev-cycle` exists but latest JSONL cycle cannot be interpreted under supported contracts. |
 | cache | stale | Showing last scan because live source failed. |
 
 ## Project Status
@@ -262,18 +282,64 @@ interface ReviewStatus {
   actionableCount?: number;
 }
 
+type CodexReviewSignalKind =
+  | "pass_reaction"
+  | "issue_comment"
+  | "review_submission"
+  | "inline_review_comment"
+  | "eyes_ack"
+  | "none";
+
+interface CodexReviewBaseline {
+  source: "push_event" | "pr_timeline" | "commit_date" | "unknown";
+  at?: string;
+  sourceRef?: string;
+}
+
+interface CodexReviewSignal {
+  kind: CodexReviewSignalKind;
+  actor?: string;
+  occurredAt?: string;
+  url?: string;
+  afterBaseline?: boolean;
+  summary?: string;
+}
+
 interface CodexReviewStatus {
   state: "waiting" | "feedback" | "pass" | "timeout" | "api_error" | "unknown";
+  baseline?: CodexReviewBaseline;
+  latestSignal?: CodexReviewSignal;
+  passActor?: string;
+  feedbackCount?: number;
+  feedbackSignals?: CodexReviewSignal[];
+  acknowledged?: boolean;
   lastActor?: string;
   lastCheckedAt?: string;
 }
 
+type DevCycleResult =
+  | "shipped"
+  | "blocked"
+  | "all_clear"
+  | "doc_fix_needed"
+  | "legacy_next_task"
+  | "legacy_doc_fix_needed"
+  | "legacy_all_clear"
+  | "unknown";
+
 interface DevCycleStatus {
   present: boolean;
   runId?: string;
+  canonicalJsonlPath?: string;
+  markdownLogPath?: string;
   lastBrief?: string;
-  lastResult?: "NEXT TASK" | "DOC FIX" | "ALL CLEAR" | "shipped" | "blocked" | "unknown";
+  lastResult?: DevCycleResult;
   lastCycle?: number;
+  lastSummary?: string;
+  lastActions?: string[];
+  lastVerification?: string[];
+  lastReviewShip?: string[];
+  lastRisks?: string[];
   lastUpdatedAt?: string;
 }
 
@@ -305,6 +371,7 @@ interface OperatorPause {
   scope: PauseScope;
   projectId: ProjectId;
   itemId?: string;
+  identityId?: string; // required when scope === "attention_item"
   reason: PauseReason;
   note?: string;
   resumeTriggers: PauseResumeTrigger[];
@@ -331,6 +398,8 @@ Evaluate in this order:
 10. Docs older than git/GitHub activity -> `stale`, owner `user`.
 11. No useful evidence -> `unknown`, owner `unknown`.
 
+`waiting_for_human` is a normalized intermediate state for docs or dev-cycle evidence that says work needs a human decision/setup but does not map to a specific PR/check/review blocker. The attention generator normally turns it into a `blocked` item with a concrete next action. DevDeck v1 does not emit an `agent_running` status because arbitrary agent-session state is not an accepted MVP source.
+
 ## Operator Pause Boundary
 
 Operator pause is local user state applied after source scanning and before active-feed ranking. It is not source truth from a repo, and it must not be written into dogfood repos.
@@ -341,8 +410,10 @@ Operator pause is local user state applied after source scanning and before acti
 | `AttentionItem.operatorPause` | Item-level pause if only one generated item is parked. |
 | `sourceFingerprint` | Stable summary of the item/source state when paused, used to detect stale pauses. |
 
+For `attention_item` scope, `identityId` and `sourceFingerprint` are required. `itemId` is allowed as a display/debug reference, but it must not be the durable attachment key.
+
 Detailed semantics live in `docs/specs/operator-pause-model.md`.
-Stable id and source fingerprint rules are draft review material in `docs/specs/stable-identity-fingerprint.md` until Q-020 is accepted.
+Dogfood v1 stable id and source fingerprint rules live in `docs/specs/stable-identity-fingerprint.md`. Generic non-boilerplate identity rules remain deferred.
 
 ## Known Path Resolver
 
@@ -360,17 +431,20 @@ Dogfood repos share boilerplate conventions but are not byte-identical. Resolve 
 
 The resolver records all candidates it checked in source trust when a file is missing.
 
+Fixture capture may also include boilerplate `docs/ops/**`, `ops/**`, `.claude/commands/**`, and `.agents/scripts/**` files as minimized test evidence. These paths are fixture/support inputs, not broad live-parser roots unless a specific capability is declared.
+
 ## Source Contract Probe
 
 Before parsing a source, DevDeck probes the source contract and required capabilities. This is the guardrail for evolving boilerplate and project repos.
 
 | Source | Contract id | Required MVP capabilities |
 |---|---|---|
-| config | `devdeck_config` | project id, path, priority, workflow settings |
-| boilerplate docs | `boilerplate_docs` | current-state evidence, implementation-plan position, testing/validation command source or explicit unknown |
-| dev-cycle | `dev_cycle` | latest run id and latest brief shape when workflow expects dev-cycle |
+| config | `devdeck_config` | project id, path, priority, workflow contract, identity profile, adapter settings |
+| filesystem | `filesystem_path` | configured path existence, directory state, readable metadata |
+| boilerplate docs | `boilerplate_docs` | current-state evidence, implementation-plan position, testing/validation command source or explicit unknown; ops/support fixture shape for contract tests |
+| dev-cycle | `dev_cycle` | latest run id and canonical JSONL latest cycle when workflow expects dev-cycle; Markdown brief log only as legacy/display fallback |
 | git | `git_cli` | branch, dirty state, recent commit |
-| GitHub | `github_gh` | PR, check, review fields when `gh` is available |
+| GitHub | `github_gh` | PR, check, review fields and best-effort Codex pass/feedback signals when `gh` is available |
 
 Probe results are cached with scan output. Unsupported or partial contracts lower source confidence and can generate `source_contract_drift` attention items. They do not throw through scan orchestration.
 
@@ -404,6 +478,8 @@ MVP must at least support:
 - Codex pass/feedback state when detectable from GitHub activity
 
 If current branch PR detection fails, the adapter should still return open PR summaries and a trust warning instead of collapsing GitHub state to `unknown`.
+
+Codex signal mapping follows the existing boilerplate `wait-codex-review.sh` behavior for dogfood fixtures: establish a baseline from push event, PR timeline, or commit date; treat configured pass reactions from the expected actor as pass; treat issue comments, review submissions, and inline review comments after the baseline as feedback; preserve acknowledgement-only signals such as eyes reactions without marking work passed. Weak or ambiguous signals lower GitHub source confidence instead of inventing review state.
 
 ## MVP Error Codes
 
