@@ -29,7 +29,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | AC-021 | REQ-019, NFR-004, NFR-008 | Given a repo has an unsupported or partial source contract, when scanning, then DevDeck records contract compatibility, keeps other sources usable, and generates repair guidance only when actionability is reduced. | TEST-016 | defined |
 | AC-022 | REQ-020, NFR-009 | Given a high-priority item is operator-paused and a lower-priority item is active, when ranking, then the paused item is excluded from the active feed and shown in the paused queue. | TEST-017 | defined |
 | AC-023 | REQ-020, NFR-009 | Given a paused item is due for review, changed since pause, or the active feed is empty, when scanning, then DevDeck surfaces a pause review item or paused-queue warning without marking the original task complete. | TEST-017 | defined |
-| AC-024 | REQ-021, NFR-010 | Given repeated scans with only timestamps/copy/score changed, when items are generated, then stable ids remain unchanged and fingerprints remain unchanged. Given relevant source evidence changes, fingerprints change while stable ids remain when the conceptual item is the same. | TEST-018 | defined |
+| AC-024 | REQ-021, NFR-010 | After Q-020 is accepted, given repeated scans with only timestamps/copy/score changed, when items are generated, then stable ids remain unchanged and fingerprints remain unchanged. Given relevant source evidence changes, fingerprints change according to the accepted staleness rules. | TEST-018 | draft |
 | AC-025 | REQ-022 | Given DevDeck has a handoff-created or operator-note intent snapshot attached to an item, when detail or handoff is shown, then the user's last instruction/operator intent is visible and labeled by capture source. | TEST-019 | defined |
 
 ## Tests
@@ -53,7 +53,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | TEST-015 | Dogfood top item quality eval | `tests/evals/dogfood-top-item-quality.test.ts` or manual eval packet | AC-015, AC-016 |
 | TEST-016 | Source contract probe and drift fixtures | `tests/contracts/source-contracts.test.ts` | AC-021 |
 | TEST-017 | Operator pause state and ranking fixtures | `tests/state/operator-pause.test.ts`, `tests/domain/operator-pause.test.ts` | AC-022, AC-023 |
-| TEST-018 | Stable identity and source fingerprint fixtures | `tests/domain/stable-identity.test.ts` | AC-024 |
+| TEST-018 | Stable identity and source fingerprint fixtures | `tests/domain/stable-identity.test.ts` | AC-024 after Q-020 closure |
 | TEST-019 | User intent snapshot display fixtures | `tests/domain/intent-snapshot.test.ts`, `tests/ui/display-copy.test.ts` | AC-025 |
 
 ## CI/CD Gates

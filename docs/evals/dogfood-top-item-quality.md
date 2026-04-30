@@ -40,7 +40,7 @@ Each eval run captures:
 - source contract probe JSON for each repo
 - derived `ProjectStatus[]`
 - generated `AttentionItem[]`
-- stable identity and source fingerprint output
+- stable identity and source fingerprint output if Q-020 has been accepted, otherwise draft-candidate output for review only
 - operator pause state, when testing pause scenarios
 - user intent snapshot state, when testing context recovery
 - ranked feed
@@ -99,8 +99,8 @@ MVP dogfood pass:
 | Stale source trusted too much | Increase stale/trust penalty and copy freshness. |
 | Paused high-priority item still dominates active feed | Fix operator pause overlay before ranking weights. |
 | Paused item gets forgotten | Fix paused count, paused queue, or pause review trigger. |
-| Pause attaches to wrong item | Fix stable identity/fingerprint before pause logic. |
-| User intent stale or misleading | Fix fingerprint stale marker or source labeling. |
+| Pause attaches to wrong item | Reopen or finish Q-020 before changing pause logic. |
+| User intent stale or misleading | Fix accepted stale marker behavior or source labeling. |
 | Handoff too long | Tighten handoff template. |
 | Handoff missing context | Add read-first anchors or current-task extraction. |
 

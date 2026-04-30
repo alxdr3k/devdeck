@@ -11,9 +11,9 @@ Status: planned. Code, tests, and generated references become authoritative afte
 | `SourceContractProbe` | Per-source contract id, detected version, compatibility, capabilities, and missing required capabilities. | `docs/specs/status-model.md` / `docs/specs/source-contract-versioning.md` |
 | `SourceTrust` | Per-source state, checked time, confidence, summary, and fix hint. | `docs/specs/status-model.md` |
 | `OperatorPause` | Local user pause overlay for intentionally parked project/item work. | `docs/specs/operator-pause-model.md` |
-| `StableIdentity` | Versioned identity for conceptual attention items and local state attachments. | `docs/specs/stable-identity-fingerprint.md` |
-| `SourceFingerprint` | Versioned hash of normalized evidence used to detect stale local state. | `docs/specs/stable-identity-fingerprint.md` |
-| `UserIntentSnapshot` | Optional local/user-declared instruction context attached to a stable identity. | `docs/specs/stable-identity-fingerprint.md` |
+| `StableIdentity` | Draft versioned identity for conceptual attention items and local state attachments. | `docs/specs/stable-identity-fingerprint.md` / Q-020 |
+| `SourceFingerprint` | Draft versioned hash of normalized evidence used to detect stale local state. | `docs/specs/stable-identity-fingerprint.md` / Q-020 |
+| `UserIntentSnapshot` | Optional local/user-declared instruction context attached to an identity after Q-020 is accepted. | `docs/specs/stable-identity-fingerprint.md` / Q-019 / Q-020 |
 | `ProjectStatus` | Normalized repo status consumed by attention/ranking/UI. | `docs/specs/status-model.md` |
 | `AttentionItem` | Human-actionable item with source refs, next action, ranking band, commands, handoff seed. | `docs/specs/attention-item-model.md` |
 | `RankingResult` | Ordered feed item plus band/score/explanation. | `docs/specs/ranking-policy.md` |
@@ -27,7 +27,7 @@ Status: planned. Code, tests, and generated references become authoritative afte
 |---|---|---|
 | `devdeck.yml` | Project config. | PRD / HLD |
 | user-local JSON cache | Last scan fallback and freshness metadata. | DEC-004 |
-| user-local JSON state | Operator pause overlays, source fingerprints, and optional intent snapshots. | DEC-015 / DEC-016 |
+| user-local JSON state | Operator pause overlays now; source fingerprints and optional intent snapshots after Q-020 review. | DEC-015 / DEC-016 proposed |
 | dogfood repos | Read-only source state. | ADR-0001 |
 
 ## Observed Vs Local State

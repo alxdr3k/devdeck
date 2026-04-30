@@ -51,8 +51,8 @@ type RankingBand =
 
 interface AttentionItem {
   id: string;
-  identity: StableIdentity;
-  sourceFingerprint: SourceFingerprint;
+  identity?: StableIdentity;
+  sourceFingerprint?: SourceFingerprint;
   projectId: ProjectId;
   kind: AttentionKind;
   severity: Severity;
@@ -115,7 +115,7 @@ interface HandoffSeed {
 ```
 
 `OperatorPause` is defined in `docs/specs/operator-pause-model.md`.
-`StableIdentity` and `SourceFingerprint` are defined in `docs/specs/stable-identity-fingerprint.md`.
+`StableIdentity` and `SourceFingerprint` are draft fields under Q-020 review in `docs/specs/stable-identity-fingerprint.md`. Do not make pause/cache/intent behavior depend on them until Q-020 is accepted.
 
 ## Item Kinds
 

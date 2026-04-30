@@ -67,7 +67,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Source contract probing for evolving boilerplate docs, `.dev-cycle`, GitHub CLI output, and parser compatibility.
 - Attention item model for human-actionable work.
 - Local operator pause state for intentionally parked, high-judgment, external-dependency, or milestone-review work during dogfood.
-- Stable item identity and source fingerprints for pause, cache, suppression, handoff, and future context recovery.
+- Review and finalize stable item identity and source fingerprint behavior before pause, cache, suppression, handoff, or future context recovery depends on it.
 - Deterministic ranking policy with dogfood/diagnostic explanation. Post-dogfood default UI should keep the feed simple and avoid exposing "why this is #1" as primary copy.
 - Ink TUI priority feed with a strong top item and short top 5 queue.
 - Secondary project table as a map, not the primary action UI.
@@ -111,7 +111,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | REQ-018 | Represent current-branch PR state separately from other open PRs and default-branch sync state. | should | Prevents single-PR assumptions from hiding blockers. |
 | REQ-019 | Probe source contract compatibility before parsing docs, `.dev-cycle`, git, or `gh` output. | must | Unsupported or partial contracts become trust data and repair items, not scan crashes. |
 | REQ-020 | Support local operator pause for work the user intentionally parks because it needs high judgment, external setup, milestone review, or leaf promotion. | should | Paused work leaves the active feed by default but remains visible in a paused queue. |
-| REQ-021 | Generate stable item identities and source fingerprints for attention items and local state attachments. | must | IDs prevent feed flicker; fingerprints detect stale pause/cache/intent state. |
+| REQ-021 | Define, review, and validate stable item identities and source fingerprints before local state attachments depend on them. | must | Q-020 remains open; implementation cannot treat the current draft rules as accepted. |
 | REQ-022 | Preserve or display the user's last instruction/operator intent when available. | should | MVP can capture DevDeck handoff text or operator notes; future connectors may read chat logs if explicitly supported. |
 
 ## Non-functional Requirements
@@ -127,7 +127,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | NFR-007 | Testability | Domain models, ranking, and handoff generation are pure or easily fixture-driven. | Unit test coverage before TUI polish. |
 | NFR-008 | Contract evolution | Boilerplate/project workflow drift must be managed with versioned probes, capability checks, and fixtures. | Source contract tests and dogfood evals. |
 | NFR-009 | Focus control | User-declared pause state must not be overridden by project priority in the active feed, and must not silently hide work forever. | Pause/ranking/display fixtures. |
-| NFR-010 | Identity stability | Scan timestamp, display copy, and rank score changes must not change item identity; relevant evidence changes must update fingerprints. | Identity/fingerprint fixtures. |
+| NFR-010 | Identity stability | Once Q-020 is accepted, scan timestamp, display copy, and rank score changes must not change item identity; relevant evidence changes must update fingerprints. | Identity/fingerprint fixtures after review. |
 
 ## Implementation Stack
 
