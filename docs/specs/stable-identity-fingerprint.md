@@ -35,9 +35,27 @@ The intended split is: stable ids prevent feed flicker; fingerprints detect stal
 - What should count as the same conceptual item when a PR is rebased, retitled, closed/reopened, or superseded?
 - Which evidence changes should make pause/cache/intent state stale, and which changes should be ignored as noise?
 - How should DevDeck identify work that exists only in an agent chat or operator note before there is a PR, branch, or roadmap slice?
+- How should branchless orphan work get a temporary identity and later attach to a leaf/slice?
+- How should non-work conversation be excluded from item identity?
 - How much local path information can appear in ids without making later service migration painful?
 - What should happen when a paused high-priority item and a newly urgent unpaused item share the same repo or branch?
 - What migration behavior is acceptable if the identity scheme changes after dogfood usage has created local state?
+
+## Current Discussion Notes
+
+The current user direction is that real work should be identified first by the project leaf/slice when available. Branch and PR state are usually evidence links for that work, not the center of the work identity.
+
+This suggests a two-layer model:
+
+| Layer | Question | Candidate anchor |
+|---|---|---|
+| Work unit | Is this the same body of work? | project id plus leaf/slice id when available |
+| Attention item | Why should the user look now? | work unit plus item kind plus current evidence anchor |
+| Source fingerprint | Did the evidence change? | normalized repo/chat/source facts |
+
+Branchless orphan work is possible. DevDeck may need a temporary local work-unit identity for user-agent interactions that have not produced a branch, PR, roadmap update, or repo mutation yet.
+
+Non-work conversation is also possible. A simple question or casual message should not automatically create a work unit or attention item.
 
 ## Principles
 
@@ -59,6 +77,7 @@ type StableAnchorKind =
   | "github_pr"
   | "git_branch"
   | "roadmap_slice"
+  | "orphan_conversation"
   | "doc_purpose"
   | "source_contract"
   | "repo_path"
@@ -112,6 +131,7 @@ Examples:
 | Codex feedback on PR 10 | `v1:attention_item:actwyn:codex_feedback:github_pr:10` |
 | Ready-to-merge PR 14 | `v1:attention_item:concluv:ready_to_merge:github_pr:14` |
 | Resume active slice `CORE-1A.1` | `v1:attention_item:devdeck:resume_active_task:roadmap_slice:CORE-1A.1` |
+| Branchless orphan conversation | `v1:attention_item:devdeck:resume_active_task:orphan_conversation:<local_id>` |
 | Missing configured path | `v1:attention_item:xef-scale:missing_source:repo_path:configured` |
 | Source contract drift | `v1:attention_item:actwyn:source_contract_drift:source_contract:boilerplate_docs` |
 | Project-level pause review | `v1:attention_item:actwyn:pause_review:project:actwyn` |
@@ -122,13 +142,14 @@ If an anchor value can contain unsafe characters, normalize to lowercase where a
 
 Choose the highest-quality anchor available:
 
-1. GitHub PR number for PR-loop items.
-2. Active roadmap slice id for resume work.
+1. Leaf/slice id for real work when available.
+2. GitHub PR number for PR-loop items without a known leaf/slice.
 3. Source contract id for contract drift.
 4. Source purpose plus error code for missing docs/config/source issues.
 5. Branch name only when no PR or slice anchor exists.
-6. Project id for project-level pause/review items.
-7. Fallback hash of normalized root-cause fields, with low confidence.
+6. Temporary local conversation id for branchless orphan work, with low confidence until attached.
+7. Project id for project-level pause/review items.
+8. Fallback hash of normalized root-cause fields, with low confidence.
 
 Do not use commit SHA as the primary stable id anchor for human-attention items. Commit SHA belongs in the fingerprint because it changes as work progresses.
 

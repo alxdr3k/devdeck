@@ -21,7 +21,7 @@ This repo is now the current truth for DevDeck. The second-brain ideation handof
 
 ## Product / Project
 
-DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Code/Codex projects. It is not a generic Kanban board. The MVP reads boilerplate docs, local git, GitHub PR/check/review state, and `.dev-cycle` / `codex-loop` state, then turns that evidence into a ranked priority feed and 2-minute handoff prompts.
+DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Code/Codex projects and agent sessions. It is not a generic Kanban board. The MVP reads boilerplate docs, local git, GitHub PR/check/review state, and `.dev-cycle` / `codex-loop` state, then turns that evidence into a ranked priority feed and 2-minute handoff prompts.
 
 ## Current roadmap position
 
@@ -50,6 +50,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - `AttentionItem` generator with deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator. Stable identity/fingerprint behavior is a draft under Q-020 review.
 - Operator pause state so high-judgment/external-dependency/milestone-review work can be parked outside the active feed without being forgotten.
 - Optional user intent snapshots so context switching can recover "what did I ask the agent?" when DevDeck captured the prompt or operator note.
+- Draft agent conversation source design, because arbitrary Claude Code/Codex chat tracking is not covered by current repo-state sources.
 - MVP actions: open target, generate/copy handoff, display commands, and local pause/unpause state. DevDeck must not execute repo commands in MVP.
 
 ## Explicit non-goals
@@ -74,6 +75,9 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - `Q-010`: Generic defer/pin/snooze remains future; dogfood operator pause is accepted as Q-018 / DEC-015.
 - `Q-012`: Final product name remains open and does not block implementation.
 - `Q-019`: Context recovery for prior user instructions remains open where exact chat-log access is needed.
+- `Q-020`: Stable item id/source fingerprint design remains open pending joint review.
+- `Q-021`: AI agent conversation tracking remains open. Current sources cannot reconstruct arbitrary chat history.
+- `Q-022`: Work versus non-work conversation classification remains open.
 
 ## Current validation
 
@@ -88,6 +92,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Capture source contract fixtures for current and drifted boilerplate/doc shapes.
 - Capture a dogfood pause scenario with one high-priority paused repo and one lower-priority active repo.
 - Jointly review and accept stable identity/fingerprint rules before implementing pause/cache/intent attachments.
+- Decide whether MVP needs an explicit conversation source, or whether DevDeck-generated handoffs/operator notes are enough for dogfood.
 - Verify whether `.dev-cycle` state is always present or must be missing-source tolerant.
 
 ## Links
@@ -102,6 +107,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Source contract versioning: `docs/specs/source-contract-versioning.md`
 - Operator pause model: `docs/specs/operator-pause-model.md`
 - Stable identity/fingerprint: `docs/specs/stable-identity-fingerprint.md`
+- Agent conversation source: `docs/specs/agent-conversation-source.md`
 - Dogfood eval: `docs/evals/dogfood-top-item-quality.md`
 - Reviews: `docs/reviews/`
 

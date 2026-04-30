@@ -235,3 +235,39 @@ During context switching, the user often sees an agent response and needs to rec
 - Proposed Answer: Candidate direction is to separate conceptual item identity from source evidence fingerprints, but this is not accepted yet. Review must validate anchors, staleness rules, local-path privacy, pre-PR/chat-only work, and migration behavior.
 - Blocks: REQ-021, NFR-010, `MODEL-1A.0`, `MODEL-1B.3`, `MODEL-1C.1`
 - Resolution: —
+
+**Discussion Notes**
+
+The user agrees with the rough distinction, but clarified that the core work-unit anchor should be the project leaf/slice when the conversation represents real work. Branch and PR should usually be evidence links, not the primary identity, when a leaf/slice exists.
+
+Branchless orphan work can exist. A user-agent exchange may describe real work before any branch, PR, or repo mutation exists.
+
+---
+
+### Q-021: Can DevDeck track AI agent conversations?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: open
+- Proposed Answer: Current MVP sources cannot track arbitrary Claude Code/Codex chat history. DevDeck can only use handoffs, operator notes, repo docs, `.dev-cycle`, git, and GitHub evidence unless an explicit conversation source or session-capture design is added.
+- Blocks: Q-019, Q-020, REQ-022, future conversation source design
+- Resolution: —
+
+**Context**
+
+DevDeck's core product job is to merge interactions across multiple AI conversational coding agents into one priority queue so the user can reduce context switching and focus on the single next item. This requires a conversation-state story, not only repo-state reading.
+
+---
+
+### Q-022: How should DevDeck distinguish work from non-work conversation?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: open
+- Proposed Answer: Do not promote every user-agent message into the queue. Candidate classifications include work, branchless orphan work, question-only, casual/noise, blocked work, completed work, and unknown.
+- Blocks: Q-021, Q-020, ranking policy, display copy
+- Resolution: —
+
+**Context**
+
+The user may ask simple questions or make non-work comments in an AI agent session. DevDeck should avoid turning those messages into task cards or priority items unless they imply a concrete human action.
