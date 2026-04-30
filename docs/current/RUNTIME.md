@@ -12,11 +12,11 @@ start DevDeck
   -> scan sources with bounded adapter calls
   -> load local operator pause state
   -> build ProjectStatus per configured repo
-  -> generate AttentionItems
+  -> generate AttentionItems with next-action cues
   -> attach accepted stable ids/source fingerprints after Q-020 closure
   -> split active feed and paused queue
   -> rank by band and score
-  -> render Ink feed/paused/detail
+  -> render Ink feed/paused/detail/cue
   -> on user action, display/copy handoff or command text only
 ```
 
@@ -50,6 +50,7 @@ LocatedProject
 | Paused item changed | Generate a pause review item or paused-queue warning. |
 | Local state fingerprint mismatch | After Q-020 closure, keep the local state but mark it stale/needs review. |
 | User intent snapshot unavailable | Omit the "You asked" block; do not invent prior chat context. |
+| Cue source incomplete | Generate an inspect-first cue from the best available source reference; do not invent the missing working context. |
 | Command action selected | Show/copy command text; do not execute. |
 | Clipboard unavailable | Show selectable text and report that copy was unavailable. |
 

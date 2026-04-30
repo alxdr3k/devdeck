@@ -35,6 +35,7 @@ Each item shows:
 ```text
 <repo>  <plain title>
 Next: <one action>
+Cue: <short context needed to take that action>
 Trust: <confidence> · <freshness> · <important missing source if any>
 ```
 
@@ -43,6 +44,7 @@ Example:
 ```text
 actwyn  Codex feedback needs your response
 Next: open the review comments, patch, push, then wait for Codex again.
+Cue: PR #10 review comments are the source of truth; stop when the branch is pushed.
 Trust: High · checked 4m ago · GitHub and git agree
 ```
 
@@ -173,6 +175,9 @@ Why this is next:
 Next:
 <one concrete next action>
 
+Cue:
+<working context to restore + first step + stop condition>
+
 Trust:
 <sources checked, freshness, confidence, missing source if any>
 
@@ -187,6 +192,8 @@ Commands:
 ```
 
 Handoff may keep "why this is next" because it is context for another coding session, not default feed chrome.
+
+The cue is required because the handoff is often read immediately after a context switch. It should help a human or a fresh coding agent recover the actionable state without scanning all project docs first.
 
 When an intent snapshot exists, detail and handoff views should include it with explicit source labeling:
 
@@ -243,6 +250,7 @@ Display tests should assert:
 
 - no raw enum strings appear in primary feed
 - every item has a next action
+- top item and handoff include a next-action cue
 - trust line includes confidence and freshness
 - command display never says it executed
 - missing source copy includes the path/config fix

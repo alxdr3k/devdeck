@@ -2,7 +2,7 @@
 
 ## Overview
 
-DevDeck is a local TypeScript/Node CLI/TUI. It loads explicit repo config, scans read-only project sources, normalizes them into `ProjectStatus`, derives `AttentionItem`s, ranks them with transparent policy, and renders an Ink priority feed plus handoff/command display.
+DevDeck is a local TypeScript/Node CLI/TUI. It loads explicit repo config, scans read-only project sources, normalizes them into `ProjectStatus`, derives `AttentionItem`s with interruption-recovery cues, ranks them with transparent policy, and renders an Ink priority feed plus handoff/command display.
 
 ## Architecture Diagram
 
@@ -53,11 +53,11 @@ Source contract probes
 | Agent conversation source | Draft future source for DevDeck-generated handoffs, operator notes, local transcripts, or session capture. | Q-021, explicit connector design |
 | Status builder | Combine source outputs into `ProjectStatus` and `SourceTrust`. | adapters |
 | Identity builder | Produce reviewed stable item ids and source fingerprints after Q-020 closes. | status model, attention generator |
-| Attention generator | Convert status into human-actionable `AttentionItem`s. | status model |
+| Attention generator | Convert status into human-actionable `AttentionItem`s with source-backed next-action cues. | status model |
 | Operator state | Store local pause overlays for projects/items intentionally parked by the user. | user-local JSON |
 | Ranking engine | Apply hard bands, score within band, produce explanation. | ranking policy |
-| Handoff generator | Produce copyable Claude/Codex resume prompt. | attention item |
-| Ink UI | Render top item, top 5 queue, project table, detail, handoff/command panes. | domain outputs |
+| Handoff generator | Produce copyable Claude/Codex resume prompt with the item's next-action cue. | attention item |
+| Ink UI | Render top item, top 5 queue, project table, detail, cue, handoff/command panes. | domain outputs |
 | Cache | Store last scan summaries and freshness metadata outside dogfood repos. | user-local JSON |
 
 ## Repo State Source Inventory
@@ -103,7 +103,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 | `StableIdentity` / `SourceFingerprint` | draft versioned id, source anchors, normalized evidence hash pending Q-020 | derived; cached |
 | `OperatorPause` | scope, projectId, itemId, reason, resume triggers, accepted source-change evidence | user-local JSON |
 | `UserIntentSnapshot` | instruction, expected outcome, capture source, identity/fingerprint attachment after Q-020 | user-local JSON |
-| `AttentionItem` | id, kind, rankingBand, severity, nextAction, sourceRefs, commands, handoff | derived; cached |
+| `AttentionItem` | id, kind, rankingBand, severity, nextAction, nextActionCue, sourceRefs, commands, handoff | derived; cached |
 | `RankingResult` | ordered items, score, band, explanation | derived |
 | `ScanCache` | projects, statuses, items, scannedAt, source versions | user-local JSON |
 
@@ -112,7 +112,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - CLI/TUI entrypoint: planned `npm run dev` for local development, later `devdeck`.
 - Config input: `devdeck.yml`.
 - Adapter inputs: repo filesystem, `git`, `gh`, `.dev-cycle`.
-- UI outputs: active priority feed, paused queue, project table, detail pane, handoff text, command display.
+- UI outputs: active priority feed, paused queue, project table, detail pane, next-action cue, handoff text, command display.
 - External integrations: GitHub through installed/authenticated `gh`; no direct API client in MVP.
 
 ## Cross-cutting
@@ -124,6 +124,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - Contract drift: unsupported or partial source contracts become `SourceContractProbe` plus low-confidence `SourceTrust`; parser failures do not throw through scan orchestration.
 - Focus control: local operator pause removes intentionally parked work from the active feed without lowering project priority.
 - Identity: Q-020 must close before local state depends on stable ids/source fingerprints. Candidate rule is local state attaches to both identity and fingerprint.
+- Interruption recovery: top items and handoffs include a short source-backed next-action cue so the user can restore context and take the first step without sweeping every repo.
 - Context recovery: show captured user intent only when DevDeck has a handoff/operator-note snapshot; do not invent chat history.
 - Conversation tracking: current repo-state sources cannot reconstruct arbitrary agent chats. Q-021 must define an explicit source or capture mode before DevDeck claims conversation awareness.
 - Determinism: ranking is pure for a fixed input fixture.
@@ -146,6 +147,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - DEC-014: source contract probes and capability checks manage boilerplate/project drift.
 - DEC-015: operator pause is local user state that gates active-feed eligibility.
 - DEC-016 proposed: stable item identity is separate from source fingerprint.
+- DEC-017: next-action cues are part of `AttentionItem` and handoff output.
 
 ## Open Questions
 
@@ -164,10 +166,10 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - REQ-001, REQ-016, REQ-017 -> Config loader and path resolver.
 - REQ-002, REQ-003, REQ-004, REQ-005, REQ-018, REQ-019 -> Source adapters and source contract probes.
 - REQ-006, NFR-004, NFR-006 -> Status builder and trust model.
-- REQ-007, REQ-008, REQ-010, NFR-003 -> Attention/ranking domain.
+- REQ-007, REQ-008, REQ-010, NFR-003, NFR-011 -> Attention/ranking domain and next-action cue contract.
 - REQ-020, NFR-009 -> Operator pause state, ranking, and UI.
 - REQ-021, NFR-010 -> Stable identity and source fingerprint review/finalization.
 - REQ-022 -> Intent snapshot and context recovery surfaces.
 - REQ-023 -> Agent conversation source feasibility and design.
-- REQ-009, REQ-011, REQ-012, REQ-013 -> Ink UI, handoff, display copy.
+- REQ-009, REQ-011, REQ-012, REQ-013 -> Ink UI, next-action cue, handoff, display copy.
 - REQ-014, REQ-015 -> Cache and rescan.

@@ -59,6 +59,7 @@ interface AttentionItem {
   title: string;
   summary: string;
   nextAction: string;
+  nextActionCue: NextActionCue;
   owner: AttentionOwner;
   effort: Effort;
   sourceRefs: SourceRef[];
@@ -104,10 +105,18 @@ interface CommandSuggestion {
   executesInMvp: false;
 }
 
+interface NextActionCue {
+  restoreContext: string;
+  firstStep: string;
+  target?: string;
+  doneWhen?: string;
+}
+
 interface HandoffSeed {
   currentTask: string;
   whyNext: string;
   next: string;
+  cue: NextActionCue;
   trust: string;
   readFirst: string[];
   commands: CommandSuggestion[];
@@ -140,6 +149,7 @@ interface HandoffSeed {
 - Prefer one high-quality item over many overlapping items for the same root cause.
 - If a higher-priority root cause explains lower-level symptoms, suppress duplicates.
 - Every item must include a concrete `nextAction`.
+- Every item must include a `nextActionCue` that helps the user recover after an interruption. The cue is not a ranking explanation; it is the smallest context needed to start acting again.
 - Every item must include at least one `SourceRef`.
 - Every item must be explainable without showing raw enum values.
 - Missing/stale/error states generate items only when they affect trust or actionability.
@@ -186,6 +196,28 @@ Read first:
 Commands:
 <copyable commands, not automatically executed in MVP>
 ```
+
+## Next-action Cue Contract
+
+DevDeck is an interruption-recovery tool, not just a priority sorter. A top item must restore enough context for the user to act without reopening every repo.
+
+`nextAction` is the command-like action sentence. `nextActionCue` is the resumption aid around that action:
+
+| Field | Meaning | Example |
+|---|---|---|
+| `restoreContext` | The working context to reload first. | `PR #10 has Codex feedback on the auth slice.` |
+| `firstStep` | The first concrete move after switching attention. | `Open the review comments and patch the requested change.` |
+| `target` | File, doc anchor, PR, branch, or command surface to open. | `https://github.com/alxdr3k/actwyn/pull/10` |
+| `doneWhen` | The local stop condition for this item. | `Feedback is addressed and the branch is pushed.` |
+
+Generation rules:
+
+- Prefer source-backed cue text over generic advice.
+- Keep the cue short enough to fit the top-item detail and handoff.
+- If the next action is a command display, the cue must still describe the human decision or review that command supports.
+- If evidence is missing, say what to inspect first instead of inventing context.
+- For `resume_active_task`, include the active slice or doc anchor whenever available.
+- For PR/check/review items, include the PR/check/review target and the stop condition.
 
 ## ID Format
 

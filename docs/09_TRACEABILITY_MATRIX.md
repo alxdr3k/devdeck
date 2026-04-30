@@ -12,11 +12,11 @@ Question / Decision / Requirement / Gate / Slice links for DevDeck MVP.
 | TRACE-004 | Q-004 | DEC-005 | REQ-008, REQ-010 | AC-011 / TEST-011 | P0-M4 | RANK | RANK-1A | RANK-1A.1 | Ranking bands before score. |
 | TRACE-005 | Q-005, Q-011 | DEC-007 | REQ-002, REQ-017 | AC-006 / TEST-006 | P0-M2 | SRC | SRC-1A | SRC-1A.4..SRC-1A.7 | Known-path resolver and docs parsing. |
 | TRACE-006 | Q-008, Q-009, Q-014 | DEC-006, DEC-011 | REQ-011, REQ-012, NFR-001 | AC-013, AC-019 / TEST-003, TEST-013 | P0-M5 | MODEL/UI | MODEL-1B/UI-1A | MODEL-1B.4, UI-1A.6 | Display-only command safety. |
-| TRACE-007 | none | ADR-0001 | REQ-006, REQ-007, NFR-006 | AC-009, AC-010 / TEST-009, TEST-010 | P0-M4 | MODEL | MODEL-1A | MODEL-1A.1, MODEL-1A.2 | Workflow contract to status/items. |
+| TRACE-007 | Q-023 | ADR-0001, DEC-017 | REQ-006, REQ-007, NFR-006, NFR-011 | AC-009, AC-010 / TEST-009, TEST-010 | P0-M4 | MODEL | MODEL-1A/MODEL-1B | MODEL-1A.1, MODEL-1A.2, MODEL-1B.1, MODEL-1B.2 | Workflow contract to status/items, including next-action cues. |
 | TRACE-008 | none | DEC-002 | NFR-007 | AC-001 / TEST-001 | P0-M2 | CORE | CORE-1A | CORE-1A.1 | TypeScript/Node/Ink scaffold. |
-| TRACE-009 | none | DEC-005 | Success metric | AC-015, AC-016 / TEST-015 | P0-M5 | EVAL | EVAL-1A | EVAL-1A.1 | Dogfood top item quality. |
+| TRACE-009 | Q-023 | DEC-005, DEC-017 | Success metric, NFR-011 | AC-015, AC-016 / TEST-015 | P0-M5 | EVAL | EVAL-1A | EVAL-1A.1 | Dogfood top item quality and interruption-recovery cue quality. |
 | TRACE-010 | none | ADR-0001 | REQ-003, REQ-005 | AC-005, AC-008 / TEST-004, TEST-008 | P0-M2/P0-M3 | SRC | SRC-1A | SRC-1A.3, SRC-1A.8 | Git and dev-cycle source ingestion. |
-| TRACE-011 | none | DEC-006, DEC-012 | REQ-009, REQ-011, REQ-012 | AC-012, AC-013, AC-020 / TEST-012, TEST-013 | P0-M5 | UI | UI-1A | UI-1A.2..UI-1A.7 | Feed, handoff, command display, copy fallback. |
+| TRACE-011 | Q-023 | DEC-006, DEC-012, DEC-017 | REQ-009, REQ-011, REQ-012, NFR-011 | AC-012, AC-013, AC-016, AC-020 / TEST-012, TEST-013, TEST-015 | P0-M5 | UI | UI-1A | UI-1A.2..UI-1A.7 | Feed, next-action cue, handoff, command display, copy fallback. |
 | TRACE-012 | none | DEC-009 | REQ-001, REQ-017 | AC-002, AC-003 / TEST-002 | P0-M2 | CORE | CORE-1A | CORE-1A.2, CORE-1A.4 | Local paths behind `ProjectLocator`. |
 | TRACE-013 | Q-013 | DEC-010 | NFR-007 | AC-001 / TEST-001 | P0-M2 | CORE | CORE-1A | CORE-1A.1, CORE-1A.2 | Initial npm/TypeScript/Vitest/Ink scaffold. |
 | TRACE-014 | none | DEC-013 | REQ-010 | AC-011 / TEST-011 | P0-M4/P0-M5 | RANK/UI | RANK-1A/UI-1A | RANK-1A.3, UI-1A.4 | Ranking explanation is diagnostic after dogfood. |

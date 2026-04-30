@@ -16,7 +16,7 @@ Status: planned. Code, tests, and generated references become authoritative afte
 | `UserIntentSnapshot` | Optional local/user-declared instruction context attached to an identity after Q-020 is accepted. | `docs/specs/stable-identity-fingerprint.md` / Q-019 / Q-020 |
 | `AgentInteractionSummary` | Draft summary of a user-agent conversation when an explicit conversation source exists. | `docs/specs/agent-conversation-source.md` / Q-021 / Q-022 |
 | `ProjectStatus` | Normalized repo status consumed by attention/ranking/UI. | `docs/specs/status-model.md` |
-| `AttentionItem` | Human-actionable item with source refs, next action, ranking band, commands, handoff seed. | `docs/specs/attention-item-model.md` |
+| `AttentionItem` | Human-actionable item with source refs, next action, interruption-recovery cue, ranking band, commands, handoff seed. | `docs/specs/attention-item-model.md` |
 | `RankingResult` | Ordered feed item plus band/score/explanation. | `docs/specs/ranking-policy.md` |
 | `CommandSuggestion` | Copyable command text with `executesInMvp: false`. | `docs/specs/attention-item-model.md` |
 | `ScanCache` | Last scan data and freshness metadata. | DEC-004 |
@@ -50,6 +50,7 @@ User-declared state can guide ranking and display, but it must be labeled as use
 | `SourceContractProbe.compatibility` | `supported`, `compatible_legacy`, `partial`, `unsupported`, `unknown` | Contract drift is detected before parsing. |
 | `ProjectStatus.workStatus` | `ready_to_resume`, `waiting_for_human`, `operator_paused`, `agent_running`, `checks_pending`, `checks_failing`, `review_feedback`, `ready_to_merge`, `blocked`, `stale`, `unknown` | Derived in status builder. |
 | `AttentionItem.rankingBand` | `urgent_human_blocker`, `ship_ready`, `resume_work`, `operator_review`, `trust_repair`, `hygiene`, `unknown` | Bands sort before score. |
+| `AttentionItem.nextActionCue` | `restoreContext`, `firstStep`, optional `target`, optional `doneWhen` | Restores enough context to act after switching back into the repo. |
 | `OperatorPause.reason` | `milestone_review`, `decision_required`, `external_dependency`, `leaf_promotion`, `energy_heavy`, `waiting_for_user_window`, `other` | Pause gates active-feed eligibility. |
 | `PullRequestStatus.state` | `open`, `closed`, `merged`, `draft`, `unknown` | Current branch PR is distinct from open PR summaries. |
 | `ReadOnlyCommand.kind` | `git_read`, `gh_read` | Workflow/mutation commands are not represented. |
@@ -58,3 +59,4 @@ User-declared state can guide ranking and display, but it must be labeled as use
 
 - Exact `ScanCache` JSON shape after first implementation.
 - Whether `CodexReviewStatus` needs a richer activity model after SPIKE-001.
+- Whether dogfood evals need tighter `nextActionCue` length and copy constraints after first UI implementation.

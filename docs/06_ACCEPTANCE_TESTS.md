@@ -15,13 +15,13 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | AC-007 | REQ-004, REQ-018 | Given `gh` is available, when scanning a repo with PRs, then current-branch PR and open PR summaries are distinct. | TEST-007 | defined |
 | AC-008 | REQ-005 | Given `.dev-cycle/dev-cycle-briefs.md`, when scanning, then latest cycle result and summary are captured. | TEST-008 | defined |
 | AC-009 | REQ-006, NFR-006 | Given mixed source states, when building `ProjectStatus`, then every status includes source trust, freshness, and confidence. | TEST-009 | defined |
-| AC-010 | REQ-007 | Given a `ProjectStatus`, when generating items, then each item has source refs, one next action, trust, commands, and handoff seed. | TEST-010 | defined |
+| AC-010 | REQ-007 | Given a `ProjectStatus`, when generating items, then each item has source refs, one next action, a next-action cue, trust, commands, and handoff seed. | TEST-010 | defined |
 | AC-011 | REQ-008, REQ-010, NFR-003 | Given fixed attention fixtures, when ranking, then hard bands rank blockers above resume/hygiene, ties are deterministic, and diagnostic explanation names the decisive factors. | TEST-011 | defined |
 | AC-012 | REQ-009, REQ-013 | Given ranked feed output, when rendered, then top 1, top 5 queue, project table, error/empty states, and trust copy are visible in plain language. | TEST-012 | defined |
 | AC-013 | REQ-011, REQ-012, NFR-001 | Given selected item has commands, when command/handoff actions are used, then DevDeck displays or copies text but executes no repo command. | TEST-013 | defined |
 | AC-014 | REQ-014, REQ-015 | Given cache exists and live source fails, when scanning, then cache is shown as stale fallback and manual rescan can refresh it. | TEST-014 | defined |
 | AC-015 | Success metric | Given real dogfood repos, when DevDeck starts, then user can identify top human-attention item within 30 seconds. | TEST-015 / manual dogfood | defined |
-| AC-016 | Success metric | Given generated handoff, when pasted into a fresh Claude/Codex session, then work can resume in under 2 minutes. | TEST-015 / manual dogfood | defined |
+| AC-016 | Success metric | Given generated handoff and next-action cue, when pasted into a fresh Claude/Codex session, then work can resume in under 2 minutes. | TEST-015 / manual dogfood | defined |
 | AC-017 | NFR-004 | Given `gh` auth fails, when scanning, then local docs/git statuses remain available and GitHub trust shows a fix hint. | TEST-007 | defined |
 | AC-018 | NFR-006 | Given any top item, when detail is opened, then source freshness, confidence, missing source, and checked time are visible. | TEST-012 | defined |
 | AC-019 | REQ-003, REQ-004, REQ-012, NFR-001 | Given scanner adapters run, when collecting state, then only bounded read-only `git`/`gh` commands are invoked and no generated workflow command can execute. | TEST-003, TEST-013 | defined |
@@ -45,7 +45,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | TEST-007 | GitHub adapter fixtures | `tests/adapters/github-adapter.test.ts` | AC-007, AC-017 |
 | TEST-008 | Dev-cycle brief parser | `tests/adapters/dev-cycle-adapter.test.ts` | AC-008 |
 | TEST-009 | ProjectStatus builder | `tests/domain/project-status.test.ts` | AC-009 |
-| TEST-010 | Attention item generator | `tests/domain/attention-items.test.ts` | AC-010 |
+| TEST-010 | Attention item generator and cue contract | `tests/domain/attention-items.test.ts` | AC-010 |
 | TEST-011 | Ranking policy | `tests/domain/ranking.test.ts` | AC-011 |
 | TEST-012 | Display copy and Ink render smoke | `tests/ui/display-copy.test.ts` | AC-012, AC-018 |
 | TEST-013 | Command safety and copy fallback | `tests/domain/command-suggestions.test.ts` | AC-013, AC-019, AC-020 |

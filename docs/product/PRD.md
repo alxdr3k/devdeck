@@ -17,7 +17,7 @@ ai_include: true
 
 ## Summary
 
-DevDeck helps one developer operate 3-5 simultaneous Claude Code/Codex projects without carrying each repo's or agent session's state in working memory. The MVP is a local TypeScript/Node + Ink TUI that reads project evidence, ranks the next human-attention item, and generates a 2-minute handoff prompt.
+DevDeck helps one developer operate 3-5 simultaneous Claude Code/Codex projects without carrying each repo's or agent session's state in working memory. The MVP is a local TypeScript/Node + Ink TUI that reads project evidence, ranks the next human-attention item, packages the next-action cue needed to recover after interruption, and generates a 2-minute handoff prompt.
 
 ## Problem
 
@@ -49,7 +49,7 @@ The right MVP is a read-mostly, local-first developer cockpit:
 boilerplate docs + git + GitHub + dev-cycle/codex-loop
   -> ProjectStatus
   -> AttentionItem
-  -> ranked priority feed
+  -> ranked priority feed with next-action cues
   -> handoff prompt / open target / command display
 ```
 
@@ -65,7 +65,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - GitHub PR, checks, review, and Codex review state through `gh`.
 - Project-level status model with source, freshness, confidence, and missing-source handling.
 - Source contract probing for evolving boilerplate docs, `.dev-cycle`, GitHub CLI output, and parser compatibility.
-- Attention item model for human-actionable work.
+- Attention item model for human-actionable work, including next-action cues that restore the working context after interruption.
 - Local operator pause state for intentionally parked, high-judgment, external-dependency, or milestone-review work during dogfood.
 - Review and finalize stable item identity and source fingerprint behavior before pause, cache, suppression, handoff, or future context recovery depends on it.
 - Conversation tracking problem framing for multiple AI agent sessions. MVP can only use captured handoffs/operator notes unless an explicit conversation source is designed.
@@ -98,11 +98,11 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | REQ-004 | Read GitHub PR/check/review state through `gh` JSON output. | must | Adapter boundary hides `gh` JSON shape from domain models. |
 | REQ-005 | Read `.dev-cycle` and `codex-loop` state when present. | must | Missing state lowers confidence but does not fail the scan. |
 | REQ-006 | Produce a `ProjectStatus` for every configured repo. | must | Includes trust metadata per source. |
-| REQ-007 | Generate `AttentionItem`s that describe concrete human actions. | must | Items are not raw machine states. |
+| REQ-007 | Generate `AttentionItem`s that describe concrete human actions and include a next-action cue. | must | Items are not raw machine states; the cue restores the context needed to act. |
 | REQ-008 | Rank items using severity, project priority, today focus, age, trust, freshness, and estimated effort. | must | Deterministic ties. |
 | REQ-009 | Show top 1 item and top 5 queue in the default TUI view. | must | Strong top 1 emphasis. |
 | REQ-010 | Preserve ranking explanation for dogfood, diagnostics, and evals. | must | Do not require "why this is #1" as primary end-user copy after dogfood. |
-| REQ-011 | Generate a 2-minute handoff prompt with current task, why next, next action, trust, read order, and commands. | must | Copyable output. |
+| REQ-011 | Generate a 2-minute handoff prompt with current task, why next, next action, next-action cue, trust, read order, and commands. | must | Copyable output. |
 | REQ-012 | Display open targets and commands without executing repo commands. | must | MVP action safety boundary. |
 | REQ-013 | Surface stale, missing, auth, and parse errors in plain language. | must | No silent failures. |
 | REQ-014 | Cache scan results locally and mark freshness. | should | JSON cache is sufficient for MVP. |
@@ -130,6 +130,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | NFR-008 | Contract evolution | Boilerplate/project workflow drift must be managed with versioned probes, capability checks, and fixtures. | Source contract tests and dogfood evals. |
 | NFR-009 | Focus control | User-declared pause state must not be overridden by project priority in the active feed, and must not silently hide work forever. | Pause/ranking/display fixtures. |
 | NFR-010 | Identity stability | Once Q-020 is accepted, scan timestamp, display copy, and rank score changes must not change item identity; relevant evidence changes must update fingerprints. | Identity/fingerprint fixtures after review. |
+| NFR-011 | Interruption recovery | Top item copy and handoff must restore enough context for the user to take the first step without sweeping every repo. | Dogfood eval measures cue usefulness and 2-minute resume. |
 
 ## Implementation Stack
 
@@ -169,7 +170,7 @@ Hosted production contract operations are intentionally deferred. Before service
 ## Success Metrics
 
 - User can identify the top human-attention item within 30 seconds of opening DevDeck.
-- Generated handoff lets the user resume the target repo in under 2 minutes.
+- Generated handoff and next-action cue let the user resume the target repo in under 2 minutes.
 - Dogfood scan works across 3 configured repos, including one stale/error source without crashing the whole TUI.
 - Top item quality eval passes against real `actwyn`, `concluv`, and `../xeflabs/xef-scale` fixtures.
 - User does not need to open all repos manually to know where to start.

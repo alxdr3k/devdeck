@@ -47,7 +47,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Pull-first scanners for boilerplate docs, git, GitHub through `gh`, and `.dev-cycle` state.
 - Source contract probes so evolving boilerplate/project repo shapes degrade safely instead of breaking scans.
 - `ProjectStatus` model with trust/freshness/confidence metadata.
-- `AttentionItem` generator with deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator. Stable identity/fingerprint behavior is a draft under Q-020 review.
+- `AttentionItem` generator with deterministic ranking policy, next-action cues for interruption recovery, top 1/top 5 feed, detail pane, and handoff prompt generator. Stable identity/fingerprint behavior is a draft under Q-020 review.
 - Operator pause state so high-judgment/external-dependency/milestone-review work can be parked outside the active feed without being forgotten.
 - Optional user intent snapshots so context switching can recover "what did I ask the agent?" when DevDeck captured the prompt or operator note.
 - Draft agent conversation source design, because arbitrary Claude Code/Codex chat tracking is not covered by current repo-state sources.
@@ -78,6 +78,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - `Q-020`: Stable item id/source fingerprint design remains open pending joint review.
 - `Q-021`: AI agent conversation tracking remains open. Current sources cannot reconstruct arbitrary chat history.
 - `Q-022`: Work versus non-work conversation classification remains open.
+- `Q-023`: Next-action cue shape is accepted for implementation as part of `AttentionItem`; exact copy will be tuned through dogfood eval.
 
 ## Current validation
 

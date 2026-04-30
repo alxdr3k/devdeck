@@ -299,3 +299,27 @@ If identity changes too often, pause and suppression become useless. If identity
 - Positive: source changes can trigger review without losing local state.
 - Trade-off: item generation needs canonicalization fixtures before ranking polish.
 - Follow-ups: implement `MODEL-1A.0`, update `MODEL-1B.3`, and add TEST-018 fixtures.
+
+---
+
+### DEC-017: Make next-action cues part of attention items
+
+- Date: 2026-04-30
+- Status: accepted
+- Resolves: Q-023
+- Impacts: REQ-007, REQ-011, NFR-011, attention item model, display copy, dogfood eval
+
+**Decision**
+
+Every `AttentionItem` includes a `nextActionCue` with the context to restore, first step, optional target, and optional stop condition. Handoff output includes the same cue.
+
+**Rationale**
+
+DevDeck's feed is consumed after context switches. Ranking the right item is necessary but not sufficient; the item must also help the user recover the working state quickly enough to act without sweeping repo docs, GitHub, and prior agent messages.
+
+**Consequences**
+
+- Positive: top-item quality can be judged by whether the user can resume work, not only whether the ranking is plausible.
+- Positive: the same cue can serve the TUI detail view and Claude/Codex handoff prompt.
+- Trade-off: item generation must prefer source-backed cue text and fall back to inspect-first cues when evidence is incomplete.
+- Follow-ups: implement `nextActionCue` generation, add fixture tests, and tune copy through dogfood evals.

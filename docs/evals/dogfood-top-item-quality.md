@@ -47,6 +47,7 @@ Each eval run captures:
 - paused queue
 - top item explanation
 - generated handoff prompt
+- generated next-action cue
 - evaluator notes
 
 Do not require live GitHub in deterministic CI fixtures. Keep live dogfood runs separate from fixture tests.
@@ -70,6 +71,7 @@ Score each category 0-3.
 |---|---|---|---|---|
 | Correctness | Top item is wrong or misleading. | Plausible but misses a higher blocker. | Good top item with minor caveat. | Clearly best next human action. |
 | Actionability | No concrete next action. | Action is vague. | Action is concrete but missing context. | Action is exact and immediately usable. |
+| Recovery cue | No cue for resuming after context switch. | Cue repeats the title or ranking reason. | Cue names the target or first step but misses the stop condition. | Cue restores context, names the first step, and gives a clear stop condition. |
 | Trust | Sources hidden or misleading. | Some source info but missing freshness. | Sources and freshness shown. | Trust explains confidence and missing sources clearly. |
 | Ranking explanation | No why. | Explains only score/enum. | Explains main factors. | Explains why this beats nearby alternatives. |
 | Handoff quality | Cannot resume. | Resume requires manual repo sweep. | Resume works with one extra lookup. | Resume works within 2 minutes. |
@@ -81,9 +83,9 @@ Score each category 0-3.
 
 MVP dogfood pass:
 
-- Total score at least 18 of 24 when pause and context-recovery scenarios are included.
-- Total score at least 16 of 21 when pause scenarios are included but context recovery is not.
-- Total score at least 14 of 18 when neither pause nor context recovery is included.
+- Total score at least 20 of 27 when pause and context-recovery scenarios are included.
+- Total score at least 18 of 24 when pause scenarios are included but context recovery is not.
+- Total score at least 16 of 21 when neither pause nor context recovery is included.
 - No category below 2.
 - No command execution ambiguity.
 - No silent source failure.
@@ -103,6 +105,7 @@ MVP dogfood pass:
 | User intent stale or misleading | Fix accepted stale marker behavior or source labeling. |
 | Handoff too long | Tighten handoff template. |
 | Handoff missing context | Add read-first anchors or current-task extraction. |
+| Cue does not help resume | Add source-backed target, first step, or stop condition to `nextActionCue`. |
 
 ## Eval Artifacts
 

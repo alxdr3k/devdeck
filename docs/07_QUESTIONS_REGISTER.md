@@ -271,3 +271,18 @@ DevDeck's core product job is to merge interactions across multiple AI conversat
 **Context**
 
 The user may ask simple questions or make non-work comments in an AI agent session. DevDeck should avoid turning those messages into task cards or priority items unless they imply a concrete human action.
+
+---
+
+### Q-023: What should each top-item next-action cue contain?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: accepted
+- Proposed Answer: Include the context to restore, first step, optional target, and optional stop condition. The cue must be source-backed and short enough for the top item and handoff.
+- Blocks: REQ-007, REQ-011, NFR-011, `MODEL-1B.1`, `MODEL-1B.5`, `UI-1A.2`
+- Resolution: Accepted as the `nextActionCue` contract in `docs/specs/attention-item-model.md`.
+
+**Context**
+
+The priority feed is used after interruptions. A title or generic next action is not enough; the item needs a compact cue that helps the user or a fresh coding agent reload the working context and take the first concrete step.
