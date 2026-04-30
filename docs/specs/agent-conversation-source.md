@@ -25,6 +25,8 @@ This source family covers supported ways to capture or read user-agent conversat
 
 Supported OS targets for local dogfood are macOS and Linux. Candidate agent CLIs are Claude Code, Codex CLI, Gemini CLI, and opencode.
 
+The dogfood v2 hypothesis is local-first: because DevDeck runs on the user's machine, it can discover each supported tool's local conversation-history path and read those records through a per-tool source adapter, subject to consent, stability, and privacy checks.
+
 ## Current Answer
 
 DevDeck cannot currently track arbitrary AI agent conversations with the planned repo-state MVP source set.
@@ -37,7 +39,7 @@ MVP can only show prior user intent when DevDeck has its own captured evidence:
 
 Exact chat-history recovery requires an explicit source contract. Without that, DevDeck must omit the claim rather than infer or invent it.
 
-Agent CLI transcript discovery is deferred to dogfood v2. That spike should verify, for each supported CLI and OS, whether local transcript paths exist, whether their schema is stable enough, and whether DevDeck can read them without depending on private implementation details that break silently.
+Agent CLI transcript discovery is deferred to dogfood v2. That spike should verify, for each supported CLI and OS, where local transcript paths live, whether their schema is stable enough, whether records can be mapped to project/work-unit context, and whether DevDeck can read them without depending on private implementation details that break silently.
 
 ## Candidate Source Modes
 
@@ -135,6 +137,7 @@ Candidate classification:
 ## Open Questions
 
 - Which target agent tools expose stable, supported transcript locations or APIs on macOS and Linux?
+- For each target CLI, what exact local paths and record formats should DevDeck read in dogfood v2?
 - Is dogfood v1 willing to use DevDeck-generated handoffs/operator notes as the only conversation capture?
 - Does branchless orphan work need a visible inbox, or should it appear only when active feed is empty?
 - How should the user dismiss a non-work conversation so it does not reappear?

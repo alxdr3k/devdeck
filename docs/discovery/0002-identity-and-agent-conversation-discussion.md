@@ -43,6 +43,7 @@ This means DevDeck is not only a repo-state reader. Repo state is necessary evid
 - The system should reduce context switching across multiple AI agents by merging their interaction state into one queue.
 - Official local dogfood OS targets are macOS and Linux.
 - Target agent CLIs for future conversation source work are Claude Code, Codex CLI, Gemini CLI, and opencode.
+- Since dogfood runs locally, the candidate approach is to discover where each supported tool stores conversation history on disk and read those local records as explicit conversation sources.
 - AI agent transcript integration should move later, closer to dogfood v2, rather than block the repo-state MVP.
 
 ## Current Capability Assessment
@@ -69,7 +70,7 @@ Therefore, exact answers to "what did I ask the agent?" require one of:
 
 Until such a connector exists, DevDeck must not pretend it read chat history.
 
-The proposed sequencing is: do not make transcript connectors part of the initial repo-state MVP. Add a dogfood v2 spike to verify whether each target CLI leaves stable local transcript/session files on macOS and Linux, what schema they use, and whether those paths are supported enough to depend on.
+The proposed sequencing is: do not make transcript connectors part of the initial repo-state MVP. Add a dogfood v2 spike to verify where each target CLI leaves local transcript/session files on macOS and Linux, what schema they use, whether DevDeck can map those records back to a project/work unit, and whether those paths are supported enough to depend on.
 
 ## Identity Discussion
 
