@@ -64,6 +64,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Local git status, branch, ahead/behind, changed files, and recent commits.
 - GitHub PR, checks, review, and Codex review state through `gh`.
 - Project-level status model with source, freshness, confidence, and missing-source handling.
+- Source contract probing for evolving boilerplate docs, `.dev-cycle`, GitHub CLI output, and parser compatibility.
 - Attention item model for human-actionable work.
 - Deterministic ranking policy with dogfood/diagnostic explanation. Post-dogfood default UI should keep the feed simple and avoid exposing "why this is #1" as primary copy.
 - Ink TUI priority feed with a strong top item and short top 5 queue.
@@ -105,6 +106,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | REQ-016 | Provide useful first-run output for missing config, missing repo path, and `gh` auth failure. | must | First run should not collapse into a stack trace. |
 | REQ-017 | Resolve repo-specific boilerplate doc paths through a known-path resolver with fallbacks. | must | Dogfood repos are similar but not identical. |
 | REQ-018 | Represent current-branch PR state separately from other open PRs and default-branch sync state. | should | Prevents single-PR assumptions from hiding blockers. |
+| REQ-019 | Probe source contract compatibility before parsing docs, `.dev-cycle`, git, or `gh` output. | must | Unsupported or partial contracts become trust data and repair items, not scan crashes. |
 
 ## Non-functional Requirements
 
@@ -117,6 +119,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | NFR-005 | Speed | Local-only scan across 3 configured repos should feel interactive. | Target under 2 seconds without GitHub. |
 | NFR-006 | Trust | Every item shows source, freshness, confidence, and missing source. | Display contract checks. |
 | NFR-007 | Testability | Domain models, ranking, and handoff generation are pure or easily fixture-driven. | Unit test coverage before TUI polish. |
+| NFR-008 | Contract evolution | Boilerplate/project workflow drift must be managed with versioned probes, capability checks, and fixtures. | Source contract tests and dogfood evals. |
 
 ## Implementation Stack
 
@@ -148,6 +151,8 @@ ProjectConfig -> ProjectLocator -> LocatedProject -> source adapters
 ```
 
 The first provider is local filesystem. A later service could add hosted connectors, repo snapshots, remote agents, or explicit uploads without changing `ProjectStatus`, `AttentionItem`, ranking, or display contracts.
+
+Source contract versioning is part of this boundary. Local paths can remain dogfood-only, but each provider still has to report which `boilerplate_docs`, `dev_cycle`, `git_cli`, and `github_gh` capabilities it can satisfy before DevDeck trusts parsed state.
 
 ## Success Metrics
 

@@ -23,7 +23,7 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | Milestone | Product / user gate | Target | Status | Gate | Evidence | Notes |
 |---|---|---|---|---|---|---|
 | `P0-M1` | Project contract, docs, reviews, acceptance gates, and leaf roadmap are ready for implementation. | now | `accepted` | docs review | source docs + reviews + this ledger | No code yet. |
-| `P0-M2` | DevDeck can load config and produce local-only statuses for all dogfood repos. | next | `planned` | AC-001..AC-006 | not started | Includes path resolver and docs/git/dev-cycle adapters. |
+| `P0-M2` | DevDeck can load config and produce local-only statuses for all dogfood repos. | next | `planned` | AC-001..AC-006, AC-021 | not started | Includes path resolver, source contract probes, and docs/git adapters. |
 | `P0-M3` | DevDeck can include GitHub PR/check/review state without blocking local scans. | after P0-M2 | `planned` | AC-007..AC-009, AC-017 | not started | `gh` adapter boundary. |
 | `P0-M4` | DevDeck can generate ranked attention feed and handoff prompts from fixtures. | after P0-M3 | `planned` | AC-010..AC-014 | not started | Domain-first before Ink polish. |
 | `P0-M5` | Dogfood TUI works on `actwyn`, `concluv`, and `../xeflabs/xef-scale`. | after P0-M4 | `planned` | AC-015..AC-018 + dogfood eval | not started | Top item quality is release gate. |
@@ -34,7 +34,7 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 |---|---|---|---|---|
 | `DOC` | Source-of-truth docs, reviews, traceability | `DOC-1A` | `accepted` | Current phase complete. |
 | `CORE` | TypeScript project, config, cache, CLI shell | `CORE-1A` | `ready` | First code track. |
-| `SRC` | Source adapters for docs/git/GitHub/dev-cycle | `SRC-1A` | `planned` | Fixture-heavy. |
+| `SRC` | Source adapters for docs/git/GitHub/dev-cycle | `SRC-1A` | `planned` | Fixture-heavy, with source contract probes before parsers. |
 | `GH` | GitHub adapter details and `gh` fixture coverage | `GH-1A` | `planned` | Split from local source adapters because failure modes differ. |
 | `MODEL` | ProjectStatus and AttentionItem domain | `MODEL-1A` | `planned` | Pure functions first. |
 | `RANK` | Ranking bands, scoring, explanations | `RANK-1A` | `planned` | Dogfood-calibrated. |
@@ -48,13 +48,15 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `DOC-1A.1` | `P0-M1` | `DOC` | `DOC-1A` | Create source-of-truth docs from second-brain handoff. | handoff | docs review | `passing` | `accepted` | `docs/product/PRD.md`, specs, eval | Complete. |
 | `DOC-1A.2` | `P0-M1` | `DOC` | `DOC-1A` | Run CEO, Design, DevEx, Engineering reviews and backfill findings. | `DOC-1A.1` | review backfill | `passing` | `accepted` | `docs/reviews/`, this ledger | Complete. |
 | `DOC-1A.3` | `P0-M1` | `DOC` | `DOC-1A` | Run implementation readiness review, close implementation-blocking decisions, and decompose roadmap to leaf slices. | `DOC-1A.2` | readiness review | `passing` | `accepted` | `docs/reviews/0005-implementation-readiness-review.md`, DEC-010..DEC-012 | Complete. |
-| `CORE-1A.1` | `P0-M2` | `CORE` | `CORE-1A` | Scaffold `package.json`, Node 22/npm scripts, TypeScript strict config, TSX dev entrypoint, Vitest. | `DOC-1A.3` | AC-001, TEST-001 | `defined` | `ready` | not started | Start here. |
+| `DOC-1A.4` | `P0-M1` | `DOC` | `DOC-1A` | Define source contract versioning and drift handling for evolving boilerplate/project repos. | `DOC-1A.3` | docs review | `passing` | `accepted` | `docs/specs/source-contract-versioning.md`, DEC-014 | Complete. |
+| `CORE-1A.1` | `P0-M2` | `CORE` | `CORE-1A` | Scaffold `package.json`, Node 22/npm scripts, TypeScript strict config, TSX dev entrypoint, Vitest. | `DOC-1A.4` | AC-001, TEST-001 | `defined` | `ready` | not started | Start here. |
 | `CORE-1A.2` | `P0-M2` | `CORE` | `CORE-1A` | Create source/test directory skeleton and export domain placeholder types without behavior. | `CORE-1A.1` | TEST-001 | `defined` | `planned` | not started | Keep compile green. |
 | `CORE-1A.3` | `P0-M2` | `CORE` | `CORE-1A` | Implement config schema, YAML loader, snake_case to camelCase mapping, and no-config first-run output. | `CORE-1A.2` | AC-002, TEST-002 | `defined` | `planned` | not started | Include dogfood example. |
 | `CORE-1A.4` | `P0-M2` | `CORE` | `CORE-1A` | Implement `ProjectLocator` local_path provider and path validation for dogfood repos. | `CORE-1A.3` | AC-003, TEST-002 | `defined` | `planned` | not started | Do not leak raw path into domain beyond `LocatedProject`. |
 | `CORE-1A.5` | `P0-M2` | `CORE` | `CORE-1A` | Implement scan orchestration shell with per-project result collection and non-fatal source errors. | `CORE-1A.4` | AC-004, TEST-004 | `defined` | `planned` | not started | Local sources can be stubbed initially. |
 | `CORE-1A.6` | `P0-M2` | `CORE` | `CORE-1A` | Implement user-local JSON cache path resolution, read/write, stale marker, and `DEVDECK_CACHE_PATH`. | `CORE-1A.5` | AC-014, TEST-014 | `defined` | `planned` | not started | Do not write into dogfood repos. |
-| `SRC-1A.1` | `P0-M2` | `SRC` | `SRC-1A` | Add adapter result/test fixture conventions shared by filesystem, git, docs, dev-cycle, GitHub. | `CORE-1A.2` | TEST-004 | `defined` | `planned` | not started | Keeps adapters consistent. |
+| `SRC-1A.0` | `P0-M2` | `SRC` | `SRC-1A` | Implement source contract probe types, support matrix, capability result shape, and drift fixture harness. | `CORE-1A.2` | AC-021, TEST-016 | `defined` | `planned` | not started | Probe before parsing; no broad markdown crawl. |
+| `SRC-1A.1` | `P0-M2` | `SRC` | `SRC-1A` | Add adapter result/test fixture conventions shared by filesystem, git, docs, dev-cycle, GitHub. | `CORE-1A.2`, `SRC-1A.0` | TEST-004, TEST-016 | `defined` | `planned` | not started | Keeps adapters consistent. |
 | `SRC-1A.2` | `P0-M2` | `SRC` | `SRC-1A` | Implement filesystem adapter for exists/not-directory/missing state and mtimes. | `SRC-1A.1`, `CORE-1A.4` | AC-004, TEST-004 | `defined` | `planned` | not started | Missing project does not abort scan. |
 | `SRC-1A.3` | `P0-M2` | `SRC` | `SRC-1A` | Implement read-only git adapter for repo root, branch, default branch, dirty files, ahead/behind, recent commit. | `SRC-1A.1`, `CORE-1A.5` | AC-005, TEST-004 | `defined` | `planned` | not started | Use bounded shell wrapper. |
 | `SRC-1A.4` | `P0-M2` | `SRC` | `SRC-1A` | Implement known-path docs resolver for current/testing/runtime/data/code/operations docs. | `SRC-1A.2`, `SPIKE-002` | AC-006, TEST-006 | `defined` | `planned` | not started | Include `docs/TESTING.md` fallback. |
@@ -100,6 +102,7 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 
 - `gh` output may not expose Codex review state cleanly.
 - Boilerplate docs differ enough to break hard-coded paths.
+- Boilerplate/project contract drift may break parser assumptions unless probes and fixtures land first.
 - Ranking may feel wrong if hygiene/source-trust items outrank PR-loop blockers.
 - TUI may hide evidence and lose user trust.
 

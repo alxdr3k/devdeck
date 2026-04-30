@@ -41,9 +41,23 @@ type SourceName =
   | "dev_cycle"
   | "cache";
 
-type SourceState = "ok" | "missing" | "stale" | "error" | "not_checked";
+type SourceState = "ok" | "missing" | "stale" | "error" | "unsupported" | "not_checked";
 
 type Confidence = "high" | "medium" | "low" | "unknown";
+
+type SourceContractId =
+  | "devdeck_config"
+  | "boilerplate_docs"
+  | "dev_cycle"
+  | "git_cli"
+  | "github_gh";
+
+type ContractCompatibility =
+  | "supported"
+  | "compatible_legacy"
+  | "partial"
+  | "unsupported"
+  | "unknown";
 
 type AttentionOwner = "user" | "agent" | "github" | "none" | "unknown";
 
@@ -104,6 +118,27 @@ adapters:
 ## Trust Metadata
 
 ```ts
+interface SourceContractProbe {
+  source: SourceName;
+  contractId: SourceContractId;
+  detectedVersion?: string;
+  supportedVersions: string[];
+  compatibility: ContractCompatibility;
+  capabilities: string[];
+  missingRequiredCapabilities: string[];
+  evidence: ContractEvidenceRef[];
+  checkedAt: string; // ISO timestamp
+  errorCode?: string;
+  fixHint?: string;
+}
+
+interface ContractEvidenceRef {
+  label: string;
+  path?: string;
+  anchor?: string;
+  checkedAt: string;
+}
+
 interface SourceTrust {
   source: SourceName;
   state: SourceState;
@@ -111,6 +146,7 @@ interface SourceTrust {
   observedAt?: string; // source event timestamp when available
   confidence: Confidence;
   summary: string;
+  contract?: SourceContractProbe;
   errorCode?: string;
   fixHint?: string;
 }
@@ -123,7 +159,9 @@ Trust examples:
 | filesystem | missing | Configured repo path does not exist. |
 | github | error | `gh` failed or auth is unavailable. |
 | boilerplate_docs | stale | Current-state doc is older than git/GitHub activity. |
+| boilerplate_docs | unsupported | Required boilerplate capability moved or changed shape. |
 | dev_cycle | missing | No `.dev-cycle` state was found. |
+| dev_cycle | unsupported | `.dev-cycle` exists but latest brief cannot be interpreted under supported contracts. |
 | cache | stale | Showing last scan because live source failed. |
 
 ## Project Status
@@ -140,6 +178,7 @@ interface ProjectStatus {
   github: GitHubStatus;
   devCycle: DevCycleStatus;
   validation: ValidationStatus;
+  contracts: SourceContractProbe[];
   trust: SourceTrust[];
   confidence: Confidence;
   scannedAt: string;
@@ -254,8 +293,9 @@ Evaluate in this order:
 5. Pending checks/review -> `checks_pending`, owner `github`.
 6. Mergeable PR with passing checks and approval/pass reaction -> `ready_to_merge`, owner `user`.
 7. Active slice or current task with no PR blocker -> `ready_to_resume`, owner `user`.
-8. Docs older than git/GitHub activity -> `stale`, owner `user`.
-9. No useful evidence -> `unknown`, owner `unknown`.
+8. Required source contract unsupported and actionability reduced -> `blocked`, owner `user`, confidence lowered.
+9. Docs older than git/GitHub activity -> `stale`, owner `user`.
+10. No useful evidence -> `unknown`, owner `unknown`.
 
 ## Known Path Resolver
 
@@ -272,6 +312,22 @@ Dogfood repos share boilerplate conventions but are not byte-identical. Resolve 
 | operations | `docs/current/OPERATIONS.md`, then `docs/OPERATIONS.md`, then `docs/operations.md` |
 
 The resolver records all candidates it checked in source trust when a file is missing.
+
+## Source Contract Probe
+
+Before parsing a source, DevDeck probes the source contract and required capabilities. This is the guardrail for evolving boilerplate and project repos.
+
+| Source | Contract id | Required MVP capabilities |
+|---|---|---|
+| config | `devdeck_config` | project id, path, priority, workflow settings |
+| boilerplate docs | `boilerplate_docs` | current-state evidence, implementation-plan position, testing/validation command source or explicit unknown |
+| dev-cycle | `dev_cycle` | latest run id and latest brief shape when workflow expects dev-cycle |
+| git | `git_cli` | branch, dirty state, recent commit |
+| GitHub | `github_gh` | PR, check, review fields when `gh` is available |
+
+Probe results are cached with scan output. Unsupported or partial contracts lower source confidence and can generate `source_contract_drift` attention items. They do not throw through scan orchestration.
+
+Detailed compatibility rules live in `docs/specs/source-contract-versioning.md`.
 
 ## Project Locator Boundary
 
@@ -311,6 +367,10 @@ If current branch PR detection fails, the adapter should still return open PR su
 | `github.gh_missing` | `gh` binary unavailable. | Show local-only status and install/auth hint. |
 | `github.auth_failed` | `gh` cannot access repo. | Show auth fix hint. |
 | `github.rate_limited` | GitHub API rate limit or secondary limit. | Use cache if present and mark stale. |
+| `contract.unsupported_version` | Source declares an unsupported contract version. | Mark source unsupported and show parser/workflow update hint. |
+| `contract.required_capability_missing` | Probe cannot find a required capability. | Lower confidence and show missing capability evidence. |
+| `contract.probe_failed` | Source could not be safely probed. | Keep other source statuses and stale cache fallback if available. |
+| `contract.ambiguous` | Multiple candidates conflict for the same capability. | Use safest candidate, lower confidence, link evidence. |
 | `docs.missing_current_state` | Boilerplate current state missing. | Lower confidence and suggest read order fallback. |
 | `docs.parse_failed` | Expected heading/table cannot be parsed. | Preserve raw anchor and lower confidence. |
 | `dev_cycle.missing` | `.dev-cycle` state absent. | Lower confidence only if workflow expects it. |
@@ -324,5 +384,6 @@ Each fixture should include:
 - git sample result
 - `gh` JSON sample or error
 - `.dev-cycle` sample or missing marker
+- source contract probe sample
 - expected `ProjectStatus`
 - expected trust metadata

@@ -37,6 +37,7 @@ Each eval run captures:
 
 - `devdeck.yml`
 - source scan JSON for each repo
+- source contract probe JSON for each repo
 - derived `ProjectStatus[]`
 - generated `AttentionItem[]`
 - ranked feed
@@ -51,7 +52,7 @@ Do not require live GitHub in deterministic CI fixtures. Keep live dogfood runs 
 1. Run a scan across the dogfood repos.
 2. Save raw adapter summaries and normalized statuses as a fixture.
 3. Generate attention items and ranked feed.
-4. Compare top item against manual human review of docs, git, GitHub, and `.dev-cycle`.
+4. Compare top item against manual human review of docs, git, GitHub, `.dev-cycle`, and source contract probes.
 5. Paste the generated handoff into a fresh Claude/Codex session and measure whether it is enough to resume.
 6. Record false positives, false negatives, stale-source surprises, and copy issues.
 
@@ -84,6 +85,7 @@ MVP dogfood pass:
 | Wrong top item | Adjust item generation before weight tuning. |
 | Correct item but bad explanation | Fix display copy contract. |
 | Missing blocker | Add source adapter/parser coverage. |
+| Source format changed | Add or update contract probe/parser fixture before changing ranking. |
 | Stale source trusted too much | Increase stale/trust penalty and copy freshness. |
 | Handoff too long | Tighten handoff template. |
 | Handoff missing context | Add read-first anchors or current-task extraction. |

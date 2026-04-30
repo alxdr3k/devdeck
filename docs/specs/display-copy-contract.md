@@ -101,6 +101,7 @@ If clipboard integration is unavailable, the UI should show selectable text and 
 | `resume_active_task` | Ready to resume active work | The repo has an active task and no higher-priority blocker. |
 | `docs_stale` | Project docs look stale | Docs are older than repo activity and may mislead handoff. |
 | `missing_source` | Configured repo is missing | The configured path does not exist on disk. |
+| `source_contract_drift` | Source format changed | DevDeck found a source shape it does not fully support. |
 | `github_auth` | GitHub state unavailable | `gh` could not read PR/check/review state. |
 | `blocked` | Blocker needs a decision | The workflow reports a blocker that needs human action. |
 | `unknown_state` | State is unclear | DevDeck does not have enough evidence to rank this confidently. |
@@ -120,6 +121,7 @@ Source note examples:
 - `using stale cache from 21m ago`
 - `repo path missing`
 - `.dev-cycle state not found`
+- `source format changed`
 
 ## Command Display
 
@@ -184,6 +186,7 @@ Handoff may keep "why this is next" because it is context for another coding ses
 | All repos clear | No human-attention items found. Review the project table or rescan. |
 | One repo missing | `<repo>` path is missing. Check `devdeck.yml` path. |
 | GitHub unavailable | GitHub state unavailable. Local docs and git were still scanned. |
+| Source contract unsupported | Source format changed. Other sources were still scanned. |
 | Parser failed | DevDeck could not read the expected section. The raw file is still linked. |
 | Scan in progress | Scanning configured repos. |
 | Cache shown | Showing cached state because live scan failed. |
@@ -219,3 +222,4 @@ Display tests should assert:
 - trust line includes confidence and freshness
 - command display never says it executed
 - missing source copy includes the path/config fix
+- source contract drift copy stays plain-language and points to the source

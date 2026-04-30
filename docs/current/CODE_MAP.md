@@ -16,6 +16,7 @@ Status: planned. No implementation files exist yet.
 |---|---|
 | `src/config/` | Planned config loader, schema validation, defaults. |
 | `src/locator/` | Planned `ProjectLocator` and `LocatedProject` providers. |
+| `src/contracts/` | Planned source contract probe registry, capability detection, and support matrix. |
 | `src/scan/` | Planned scan orchestration and source timeouts. |
 | `src/shell/` | Planned bounded read-only command wrapper for scanner adapters. |
 | `src/cache/` | Planned user-local JSON cache. |
@@ -48,6 +49,7 @@ Status: planned. No implementation files exist yet.
 | `tests/shell/` | Planned read-only command boundary tests. |
 | `tests/scan/` | Planned scan orchestration and resilience tests. |
 | `tests/adapters/` | Planned filesystem/git/docs/github/dev-cycle fixtures. |
+| `tests/contracts/` | Planned source contract probe and drift fixtures. |
 | `tests/domain/` | Planned status, attention, ranking, handoff tests. |
 | `tests/ui/` | Planned display-copy and Ink smoke tests. |
 | `tests/evals/` | Planned dogfood top-item quality eval fixtures. |
@@ -58,3 +60,4 @@ Status: planned. No implementation files exist yet.
 |---|---|
 | `src/adapters/github-gh.ts` | Exact `gh` JSON shape must be captured in SPIKE-001. |
 | `src/adapters/docs.ts` | Parser depth remains open in Q-005. |
+| `src/contracts/` | Contract probe scope must stay capability-based and not become a broad markdown crawler. |

@@ -44,6 +44,7 @@ DevDeck will read these sources into typed project status, derive human-actionab
 | Ranking contract | items rank by severity, project priority, today focus, age, trust, freshness, and effort |
 | Display contract | raw technical state becomes user-action language |
 | Trust contract | every item shows source, freshness, confidence, and last checked |
+| Contract evolution | source contracts are probed for version/capability support before parsing |
 | Handoff contract | generated Claude/Codex resume prompt includes task, why next, next action, checks, read order, and commands |
 
 ## Data Flow
@@ -62,7 +63,7 @@ configured projects
           \              |              |                 /
            \             |              |                /
             v            v              v               v
-                    ProjectStatus + source trust
+                    ProjectStatus + source contract probes + source trust
                               |
                               v
                        AttentionItems
@@ -95,7 +96,9 @@ configured projects
 - Positive: ranking and handoff quality are testable from fixtures.
 - Trade-off: product is intentionally narrow until the developer workflow works.
 - Trade-off: missing GitHub auth or missing repo paths must be modeled visibly.
+- Trade-off: source contract probing adds a small adapter layer, but prevents silent parser drift as boilerplate and project repos evolve.
 - Follow-up: source models, attention items, ranking policy, display copy, dogfood evals, acceptance tests, and implementation ledger are now backfilled.
+- Follow-up: source contract versioning and drift handling are specified in `docs/specs/source-contract-versioning.md`.
 
 ## References
 
@@ -104,4 +107,5 @@ configured projects
 - Status model: `docs/specs/status-model.md`
 - Attention item model: `docs/specs/attention-item-model.md`
 - Ranking policy: `docs/specs/ranking-policy.md`
+- Source contract versioning: `docs/specs/source-contract-versioning.md`
 - Decision register: `docs/08_DECISION_REGISTER.md`

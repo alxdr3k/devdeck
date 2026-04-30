@@ -53,5 +53,6 @@ No deployment pipeline currently defined.
 | No projects shown | Check `devdeck.yml` path and YAML shape. |
 | `xef-scale` missing | Confirm path is `../xeflabs/xef-scale`. |
 | GitHub unavailable | Run `gh auth status`; DevDeck should still show local status. |
+| Source format changed | Inspect source contract probe evidence and add/update drift fixture before changing parser behavior. |
 | Top item feels wrong | Inspect ranking explanation and source trust; compare dogfood eval notes. |
 | Command ran unexpectedly | Critical bug; MVP must only display/copy commands. |

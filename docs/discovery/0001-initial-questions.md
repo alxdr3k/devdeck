@@ -33,6 +33,7 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 | Q-012 | What is the final product/repo name? | DevDeck is accepted as working name. Final name can change later. | open | user |
 | Q-013 | How should differing boilerplate doc paths be resolved? | Use a known-path resolver: prefer `docs/current/*`, fall back to legacy top-level docs such as `docs/TESTING.md`. | accepted | project |
 | Q-014 | Should ranking be pure score or banded? | Use hard bands first, then score within a band. PR-loop blockers outrank resume/doc hygiene. | accepted | project |
+| Q-016 | How should DevDeck handle boilerplate/project repo schema or workflow drift? | Treat repo shapes as versioned source contracts. Probe required capabilities before parsing, add fixtures for drift, and degrade to trust-repair items instead of crashing or silently trusting broken parse output. | accepted | project |
 
 ## Immediate Decisions
 
@@ -43,3 +44,4 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 - Treat missing sources as first-class trust states.
 - Use `../xeflabs/xef-scale` as the dogfood path for `xef-scale`.
 - Use ranking bands before numeric weights.
+- Use source contract probes and fixtures to manage boilerplate/project drift.
