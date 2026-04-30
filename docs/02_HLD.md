@@ -50,6 +50,7 @@ Source contract probes
 | Git adapter | Read branch, worktree dirtiness, upstream/ahead/behind, recent commits. | `git` read-only commands |
 | GitHub adapter | Read current branch PR, open PR summaries, checks, reviews, Codex feedback/pass state. | `gh --json`, timeouts |
 | Dev-cycle adapter | Read `.dev-cycle/dev-cycle-run-id` and brief log latest cycle. | filesystem |
+| Agent conversation source | Draft future source for DevDeck-generated handoffs, operator notes, local transcripts, or session capture. | Q-021, explicit connector design |
 | Status builder | Combine source outputs into `ProjectStatus` and `SourceTrust`. | adapters |
 | Identity builder | Produce reviewed stable item ids and source fingerprints after Q-020 closes. | status model, attention generator |
 | Attention generator | Convert status into human-actionable `AttentionItem`s. | status model |
@@ -71,6 +72,7 @@ DevDeck reads repo state from explicit, read-only sources. Each source is probed
 | Git | repo `.git` via read-only `git` commands | `git_cli` | git adapter | `GitStatus` | Branch, default branch, dirty files, ahead/behind, recent commit. |
 | GitHub | GitHub CLI JSON/API reads | `github_gh` | `gh` adapter | `GitHubStatus` | Current branch PR, open PR summaries, checks, review decision, best-effort Codex signals. |
 | Dev-cycle state | `.dev-cycle/dev-cycle-run-id`, `.dev-cycle/dev-cycle-briefs.md` | `dev_cycle` | dev-cycle adapter | `DevCycleStatus` | Latest cycle result, work, verification, review/ship, risk. |
+| Agent conversation | DevDeck handoffs, operator notes, or future transcript/session connectors | `agent_conversation` | draft source | `AgentInteractionSummary` | Needed for exact "what did I ask?" and branchless orphan work. Not currently an accepted MVP parser. |
 | Cache | user-local JSON cache | cache schema | cache module | stale fallback scan state | Never written into dogfood repos. |
 
 Adapters produce source-specific data plus `SourceContractProbe` and `SourceTrust`. The status builder is the only layer that combines them into `ProjectStatus`.
@@ -123,6 +125,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - Focus control: local operator pause removes intentionally parked work from the active feed without lowering project priority.
 - Identity: Q-020 must close before local state depends on stable ids/source fingerprints. Candidate rule is local state attaches to both identity and fingerprint.
 - Context recovery: show captured user intent only when DevDeck has a handoff/operator-note snapshot; do not invent chat history.
+- Conversation tracking: current repo-state sources cannot reconstruct arbitrary agent chats. Q-021 must define an explicit source or capture mode before DevDeck claims conversation awareness.
 - Determinism: ranking is pure for a fixed input fixture.
 - Timeouts: shell-outs need bounded execution so UI does not hang on `gh`.
 - Observability: MVP shows source freshness/confidence in UI; no telemetry.
@@ -153,6 +156,8 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - Q-018: operator pause semantics for high-judgment parked work.
 - Q-019: context recovery for prior user instructions.
 - Q-020: stable item id and source fingerprint design.
+- Q-021: AI agent conversation tracking source design.
+- Q-022: work versus non-work conversation classification.
 
 ## Related Requirements
 
@@ -163,5 +168,6 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - REQ-020, NFR-009 -> Operator pause state, ranking, and UI.
 - REQ-021, NFR-010 -> Stable identity and source fingerprint review/finalization.
 - REQ-022 -> Intent snapshot and context recovery surfaces.
+- REQ-023 -> Agent conversation source feasibility and design.
 - REQ-009, REQ-011, REQ-012, REQ-013 -> Ink UI, handoff, display copy.
 - REQ-014, REQ-015 -> Cache and rescan.

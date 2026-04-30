@@ -37,6 +37,8 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 | Q-018 | How should DevDeck model the user's red-light pause workflow? | Add local operator pause state. Paused work leaves the active feed, remains visible in a paused queue, and priority does not override pause except through explicit pause-review triggers. | accepted | project |
 | Q-019 | How should DevDeck help recover "what did I ask the agent to do?" | Attach optional user intent snapshots to stable item identities. MVP captures DevDeck handoffs/operator notes; future chat connectors may capture exact prompts. | open | project |
 | Q-020 | How should stable item ids and source fingerprints work? | Candidate direction: separate conceptual item identity from source evidence fingerprints. Needs joint review before acceptance. | open | project |
+| Q-021 | Can DevDeck track AI agent conversations? | Current MVP sources cannot track arbitrary chat history. Requires explicit conversation source or session-capture design. | open | project |
+| Q-022 | How should DevDeck distinguish work from non-work conversation? | Not every agent message should become a work item. Needs classification and dismissal rules. | open | project |
 
 ## Immediate Decisions
 
@@ -50,3 +52,4 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 - Use source contract probes and fixtures to manage boilerplate/project drift.
 - Use operator pause to model dogfood focus control without relying on terminal tab state.
 - Review and accept stable identities/source fingerprints before pause/cache/intent state depends on them.
+- Design AI agent conversation tracking before claiming DevDeck can recover arbitrary chat context.
