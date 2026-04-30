@@ -193,3 +193,26 @@ Handoff and command panes should support copy when terminal/platform support is 
 **Rationale**
 
 Clipboard support varies across terminals, SSH sessions, and OS setups. Copy failure should not block the workflow.
+
+---
+
+### DEC-013: Keep ranking explanation diagnostic after dogfood
+
+- Date: 2026-04-30
+- Status: accepted
+- Resolves: product simplicity feedback
+- Impacts: REQ-010, ranking policy, display copy
+
+**Decision**
+
+During dogfood, DevDeck may show ranking explanations prominently so the ranking policy can be audited. After dogfood, the default user-facing feed should stay action-first and should not expose "why this is #1" as primary copy.
+
+**Rationale**
+
+Ranking explanations are useful for trust calibration while the model is being tuned. Once the feed works, most users need the next action, not the scoring rationale.
+
+**Consequences**
+
+- Positive: main UI stays simple.
+- Positive: diagnostics and evals remain debuggable.
+- Follow-ups: keep explanation available in detail/debug/eval surfaces, not main feed chrome.

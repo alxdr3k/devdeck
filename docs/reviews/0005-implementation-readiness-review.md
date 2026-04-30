@@ -30,6 +30,7 @@ The previous docs were directionally correct but not leaf-level enough. This rev
 | Initial dependency set was not explicit. | DEC-010 defines Node 22/npm/TypeScript/TSX/Vitest/Ink/React/YAML/Zod. |
 | Copy behavior could fail in some terminals. | DEC-012 requires fallback to selectable text. |
 | Acceptance gates did not cover scanner command boundary or copy fallback. | AC-019 and AC-020 added. |
+| "Why this is #1" may be too much for post-dogfood users. | DEC-013 keeps ranking explanation diagnostic after dogfood. |
 
 ## Remaining Open Questions
 

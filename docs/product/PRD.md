@@ -65,7 +65,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - GitHub PR, checks, review, and Codex review state through `gh`.
 - Project-level status model with source, freshness, confidence, and missing-source handling.
 - Attention item model for human-actionable work.
-- Deterministic ranking policy with visible "why this is #1" explanation.
+- Deterministic ranking policy with dogfood/diagnostic explanation. Post-dogfood default UI should keep the feed simple and avoid exposing "why this is #1" as primary copy.
 - Ink TUI priority feed with a strong top item and short top 5 queue.
 - Secondary project table as a map, not the primary action UI.
 - Handoff prompt generation.
@@ -96,7 +96,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | REQ-007 | Generate `AttentionItem`s that describe concrete human actions. | must | Items are not raw machine states. |
 | REQ-008 | Rank items using severity, project priority, today focus, age, trust, freshness, and estimated effort. | must | Deterministic ties. |
 | REQ-009 | Show top 1 item and top 5 queue in the default TUI view. | must | Strong top 1 emphasis. |
-| REQ-010 | Show why the top item is ranked first. | must | Expose inputs, not just score. |
+| REQ-010 | Preserve ranking explanation for dogfood, diagnostics, and evals. | must | Do not require "why this is #1" as primary end-user copy after dogfood. |
 | REQ-011 | Generate a 2-minute handoff prompt with current task, why next, next action, trust, read order, and commands. | must | Copyable output. |
 | REQ-012 | Display open targets and commands without executing repo commands. | must | MVP action safety boundary. |
 | REQ-013 | Surface stale, missing, auth, and parse errors in plain language. | must | No silent failures. |

@@ -53,6 +53,22 @@ Config loader + project locator
 | Ink UI | Render top item, top 5 queue, project table, detail, handoff/command panes. | domain outputs |
 | Cache | Store last scan summaries and freshness metadata outside dogfood repos. | user-local JSON |
 
+## Repo State Source Inventory
+
+DevDeck reads repo state from explicit, read-only sources:
+
+| Source | Where DevDeck reads | Adapter | Normalized output | Notes |
+|---|---|---|---|---|
+| Project config | `devdeck.yml` | config loader / project locator | `ProjectConfig`, `LocatedProject` | Defines repo id, local path, priority, today focus, optional GitHub repo override. |
+| Filesystem | configured local repo path | filesystem adapter | path state, mtimes, missing/not-directory errors | Missing repo is a project status, not a process crash. |
+| Boilerplate docs | known paths under repo `docs/` | docs adapter | `DocsStatus`, current task hints, testing command hints | Known-path resolver handles `docs/current/TESTING.md`, `docs/TESTING.md`, and `docs/testing.md` variants. |
+| Git | repo `.git` via read-only `git` commands | git adapter | `GitStatus` | Branch, default branch, dirty files, ahead/behind, recent commit. |
+| GitHub | GitHub CLI JSON/API reads | `gh` adapter | `GitHubStatus` | Current branch PR, open PR summaries, checks, review decision, best-effort Codex signals. |
+| Dev-cycle state | `.dev-cycle/dev-cycle-run-id`, `.dev-cycle/dev-cycle-briefs.md` | dev-cycle adapter | `DevCycleStatus` | Latest cycle result, work, verification, review/ship, risk. |
+| Cache | user-local JSON cache | cache module | stale fallback scan state | Never written into dogfood repos. |
+
+Adapters produce source-specific data plus `SourceTrust`. The status builder is the only layer that combines them into `ProjectStatus`.
+
 ## Data Model Summary
 
 | Entity | Key fields | Storage |

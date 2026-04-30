@@ -34,7 +34,6 @@ Each item shows:
 
 ```text
 <repo>  <plain title>
-<why it matters>
 Next: <one action>
 Trust: <confidence> · <freshness> · <important missing source if any>
 ```
@@ -43,10 +42,11 @@ Example:
 
 ```text
 actwyn  Codex feedback needs your response
-Priority 100 today-focus repo. PR #10 has new actionable review feedback.
 Next: open the review comments, patch, push, then wait for Codex again.
 Trust: High · checked 4m ago · GitHub and git agree
 ```
+
+During dogfood, a diagnostic/detail view may show why an item was ranked first. After dogfood, the default feed should stay action-first and avoid "why this is #1" as primary user-facing copy.
 
 ## Project Table Columns
 
@@ -173,6 +173,8 @@ Read first:
 Commands:
 <copyable commands, not automatically executed in MVP>
 ```
+
+Handoff may keep "why this is next" because it is context for another coding session, not default feed chrome.
 
 ## Error and Empty States
 
