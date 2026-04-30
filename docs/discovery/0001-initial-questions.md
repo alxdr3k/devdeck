@@ -36,7 +36,7 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 | Q-016 | How should DevDeck handle boilerplate/project repo schema or workflow drift? | Treat repo shapes as versioned source contracts. Probe required capabilities before parsing, add fixtures for drift, and degrade to trust-repair items instead of crashing or silently trusting broken parse output. | accepted | project |
 | Q-018 | How should DevDeck model the user's red-light pause workflow? | Add local operator pause state. Paused work leaves the active feed, remains visible in a paused queue, and priority does not override pause except through explicit pause-review triggers. | accepted | project |
 | Q-019 | How should DevDeck help recover "what did I ask the agent to do?" | Attach optional user intent snapshots to stable item identities. MVP captures DevDeck handoffs/operator notes; future chat connectors may capture exact prompts. | open | project |
-| Q-020 | How should stable item ids and source fingerprints work? | Use versioned stable identities for conceptual items and separate source fingerprints for evidence changes. Local state attaches to both. | accepted | project |
+| Q-020 | How should stable item ids and source fingerprints work? | Candidate direction: separate conceptual item identity from source evidence fingerprints. Needs joint review before acceptance. | open | project |
 
 ## Immediate Decisions
 
@@ -49,4 +49,4 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 - Use ranking bands before numeric weights.
 - Use source contract probes and fixtures to manage boilerplate/project drift.
 - Use operator pause to model dogfood focus control without relying on terminal tab state.
-- Use stable identities and source fingerprints before pause/cache/intent state.
+- Review and accept stable identities/source fingerprints before pause/cache/intent state depends on them.

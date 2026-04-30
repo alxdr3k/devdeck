@@ -272,21 +272,28 @@ The user's current split-tab workflow already uses `!` as a practical red-light 
 ### DEC-016: Separate stable item identity from source fingerprint
 
 - Date: 2026-04-30
-- Status: accepted
-- Resolves: Q-020
+- Status: proposed
+- Related question: Q-020
 - Impacts: REQ-021, NFR-010, operator pause, cache, handoff, context recovery
 
-**Decision**
+**Candidate Decision**
 
-Use versioned stable identities for conceptual attention items and separate source fingerprints for evidence changes. Stable ids answer "is this the same item?" Fingerprints answer "did the evidence behind this item change?"
+Pending user review, use versioned stable identities for conceptual attention items and separate source fingerprints for evidence changes. Stable ids answer "is this the same item?" Fingerprints answer "did the evidence behind this item change?"
 
-Local state such as operator pause, cache references, and future user intent snapshots must attach to both id and fingerprint.
+Candidate rule: local state such as operator pause, cache references, and future user intent snapshots attaches to both id and fingerprint.
 
-**Rationale**
+**Rationale To Review**
 
 If identity changes too often, pause and suppression become useless. If identity never changes and no fingerprint exists, DevDeck cannot tell whether paused or cached state is stale. The two-value model keeps feed order stable while still detecting meaningful source changes.
 
-**Consequences**
+**Open Review Points**
+
+- Which anchors are stable enough across PR, branch, roadmap, and chat-only workflows?
+- Which source changes should invalidate local state versus only refresh display data?
+- How should local path privacy and future service migration affect id shape?
+- What migration path is acceptable after dogfood state exists?
+
+**Expected Consequences If Accepted**
 
 - Positive: pause, cache, suppression, and future intent recovery have a stable attachment point.
 - Positive: source changes can trigger review without losing local state.

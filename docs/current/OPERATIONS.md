@@ -58,7 +58,7 @@ No deployment pipeline currently defined.
 | GitHub unavailable | Run `gh auth status`; DevDeck should still show local status. |
 | Source format changed | Inspect source contract probe evidence and add/update drift fixture before changing parser behavior. |
 | Important repo disappeared from active feed | Check paused queue and operator pause reason/review trigger. |
-| Pause or intent note attached to wrong item | Check stable id and source fingerprint fixtures before changing ranking. |
+| Pause or intent note attached to wrong item | Check Q-020 status and accepted identity/fingerprint fixtures before changing ranking. |
 | User asks "what did I ask the agent?" | Check whether an intent snapshot exists; otherwise DevDeck should omit that block. |
 | Top item feels wrong | Inspect ranking explanation and source trust; compare dogfood eval notes. |
 | Command ran unexpectedly | Critical bug; MVP must only display/copy commands. |

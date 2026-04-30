@@ -231,7 +231,7 @@ During context switching, the user often sees an agent response and needs to rec
 
 - Opened: 2026-04-30
 - Owner: project
-- Status: resolved
-- Proposed Answer: Use versioned stable identities for conceptual items and separate source fingerprints for evidence changes. Local state such as pause and intent snapshots attaches to both.
+- Status: open
+- Proposed Answer: Candidate direction is to separate conceptual item identity from source evidence fingerprints, but this is not accepted yet. Review must validate anchors, staleness rules, local-path privacy, pre-PR/chat-only work, and migration behavior.
 - Blocks: REQ-021, NFR-010, `MODEL-1A.0`, `MODEL-1B.3`, `MODEL-1C.1`
-- Resolution: DEC-016
+- Resolution: —

@@ -47,7 +47,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Pull-first scanners for boilerplate docs, git, GitHub through `gh`, and `.dev-cycle` state.
 - Source contract probes so evolving boilerplate/project repo shapes degrade safely instead of breaking scans.
 - `ProjectStatus` model with trust/freshness/confidence metadata.
-- `AttentionItem` generator with stable identity/fingerprint support, deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator.
+- `AttentionItem` generator with deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator. Stable identity/fingerprint behavior is a draft under Q-020 review.
 - Operator pause state so high-judgment/external-dependency/milestone-review work can be parked outside the active feed without being forgotten.
 - Optional user intent snapshots so context switching can recover "what did I ask the agent?" when DevDeck captured the prompt or operator note.
 - MVP actions: open target, generate/copy handoff, display commands, and local pause/unpause state. DevDeck must not execute repo commands in MVP.
@@ -87,7 +87,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Inspect real `actwyn`, `concluv`, and `../xeflabs/xef-scale` boilerplate docs before locking parser fixtures.
 - Capture source contract fixtures for current and drifted boilerplate/doc shapes.
 - Capture a dogfood pause scenario with one high-priority paused repo and one lower-priority active repo.
-- Capture stable identity/fingerprint fixtures before implementing pause/cache/intent attachments.
+- Jointly review and accept stable identity/fingerprint rules before implementing pause/cache/intent attachments.
 - Verify whether `.dev-cycle` state is always present or must be missing-source tolerant.
 
 ## Links

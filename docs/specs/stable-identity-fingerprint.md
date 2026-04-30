@@ -2,7 +2,7 @@
 id: devdeck-stable-identity-fingerprint
 type: spec
 title: Stable Identity And Source Fingerprint
-status: active
+status: draft
 created_at: 2026-04-30
 updated_at: 2026-04-30
 scope: specs
@@ -15,18 +15,29 @@ ai_include: true
 
 # Stable Identity And Source Fingerprint
 
+Status: joint review draft. This document is not an accepted design yet. It captures the current candidate model so the project can review the tradeoffs before implementation depends on it.
+
 ## Purpose
 
-DevDeck needs stable identities before pause, cache, suppression, handoff, and future context-recovery features can work reliably.
+DevDeck likely needs stable identities before pause, cache, suppression, handoff, and future context-recovery features can work reliably. The exact contract is still under review in Q-020.
 
-Two related values solve different problems:
+The candidate model separates two related values:
 
 | Value | Question it answers | Should change when |
 |---|---|---|
 | stable item id | Is this the same conceptual attention item across scans? | The underlying anchor changes: PR number, slice id, source purpose, or root cause. |
 | source fingerprint | Did the evidence behind this item change since the last scan/pause/handoff? | Relevant normalized source facts change. Timestamps and ranking score alone do not count. |
 
-The id prevents feed flicker. The fingerprint detects stale local state.
+The intended split is: stable ids prevent feed flicker; fingerprints detect stale local state. This still needs validation against dogfood examples before acceptance.
+
+## Review Questions
+
+- What should count as the same conceptual item when a PR is rebased, retitled, closed/reopened, or superseded?
+- Which evidence changes should make pause/cache/intent state stale, and which changes should be ignored as noise?
+- How should DevDeck identify work that exists only in an agent chat or operator note before there is a PR, branch, or roadmap slice?
+- How much local path information can appear in ids without making later service migration painful?
+- What should happen when a paused high-priority item and a newly urgent unpaused item share the same repo or branch?
+- What migration behavior is acceptable if the identity scheme changes after dogfood usage has created local state?
 
 ## Principles
 
@@ -38,7 +49,7 @@ The id prevents feed flicker. The fingerprint detects stale local state.
 - Preserve source refs for debugging, but keep ids compact and privacy-aware.
 - If DevDeck cannot form a stable id, mark confidence lower and include a deterministic fallback reason.
 
-## Core Types
+## Candidate Core Types
 
 ```ts
 type IdentityVersion = "v1";
@@ -86,7 +97,7 @@ interface FingerprintPart {
 
 `ProjectId`, `AttentionKind`, and `SourceRef` are defined in `docs/specs/status-model.md` and `docs/specs/attention-item-model.md`.
 
-## Stable Id Format
+## Candidate Stable Id Format
 
 Format:
 
@@ -107,7 +118,7 @@ Examples:
 
 If an anchor value can contain unsafe characters, normalize to lowercase where appropriate, trim whitespace, replace path separators with `~`, and hash only the sensitive portion. Keep the original evidence in `SourceRef`, not the id.
 
-## Anchor Priority
+## Candidate Anchor Priority
 
 Choose the highest-quality anchor available:
 
@@ -121,7 +132,7 @@ Choose the highest-quality anchor available:
 
 Do not use commit SHA as the primary stable id anchor for human-attention items. Commit SHA belongs in the fingerprint because it changes as work progresses.
 
-## Fingerprint Inputs
+## Candidate Fingerprint Inputs
 
 Fingerprint inputs are normalized key/value pairs sorted by key before hashing.
 
@@ -137,9 +148,9 @@ Fingerprint inputs are normalized key/value pairs sorted by key before hashing.
 
 Fingerprint changes should mean "recheck the local state attached to this item." For example, an operator pause should become stale when the item fingerprint changes even if the stable item id remains the same.
 
-## Local State Attachment
+## Candidate Local State Attachment
 
-Local user state must attach to stable ids plus source fingerprints:
+Candidate rule: local user state attaches to stable ids plus source fingerprints:
 
 ```ts
 interface LocalStateAttachment {
@@ -157,9 +168,9 @@ Rules:
 - If `identityId` matches but fingerprint differs, keep the local state but mark it stale/needs review.
 - If neither id nor fingerprint matches, treat the local state as orphaned and show it only in diagnostics.
 
-## User Intent Snapshot
+## Candidate User Intent Snapshot
 
-The context-switching problem "what did I ask the agent to do?" should be solved by attaching an optional intent snapshot to a stable identity:
+The context-switching problem "what did I ask the agent to do?" may be solved by attaching an optional intent snapshot to a stable identity:
 
 ```ts
 interface UserIntentSnapshot {
@@ -175,14 +186,14 @@ interface UserIntentSnapshot {
 
 MVP can capture this only when DevDeck creates a handoff or when the user adds an operator note. Future chat connectors may capture the exact sent prompt from Claude Code/Codex logs if available. Until then, DevDeck must label the snapshot source clearly and avoid pretending it read private chat history it cannot access.
 
-## Collision And Migration Policy
+## Candidate Collision And Migration Policy
 
 - `id` collisions across different root causes are bugs and need fixture coverage.
 - If canonicalization changes, introduce a new identity version and migrate local state opportunistically.
 - Old local state should never crash scan; mark it orphaned and show a repair/debug hint.
 - Tests must cover stable id unchanged while fingerprint changes.
 
-## Required Fixtures
+## Candidate Fixtures
 
 | Fixture | Expected result |
 |---|---|

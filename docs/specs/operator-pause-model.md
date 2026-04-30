@@ -70,7 +70,7 @@ interface OperatorPause {
 }
 ```
 
-Stable id and fingerprint semantics are defined in `docs/specs/stable-identity-fingerprint.md`.
+Stable id and fingerprint semantics are draft review material in `docs/specs/stable-identity-fingerprint.md` and are tracked by Q-020. The pause model should not depend on final identity/fingerprint behavior until Q-020 is accepted.
 
 ## Pause Reasons
 
@@ -120,7 +120,7 @@ Do not let pause become a silent black hole.
 An active-feed item may be generated for paused work only when the item is about the pause itself, not the original task:
 
 - pause review is due
-- source changed since the pause fingerprint
+- source changed since the pause fingerprint, after Q-020 defines accepted fingerprint semantics
 - external dependency may now be ready
 - active feed is empty and paused work is the next best review surface
 
@@ -135,7 +135,7 @@ DEVDECK_STATE_PATH
   or default user-local app state path
 ```
 
-The state should include pause records and enough item/source fingerprint data to detect when a pause may be stale. DevDeck must not write pause state into the dogfood repos in MVP.
+The state should include pause records and, after Q-020 is accepted, enough item/source fingerprint data to detect when a pause may be stale. DevDeck must not write pause state into the dogfood repos in MVP.
 
 ## UI Contract
 
@@ -170,8 +170,8 @@ Closed
 |---|---|
 | Important high-priority work disappears. | Always show paused count and stale/review triggers. |
 | Pause becomes a vague dumping ground. | Require a reason; require note for `other`. |
-| Repo-level pause hides an unrelated urgent PR/check event. | Track source fingerprint and show "paused repo changed" review item. |
-| Item IDs change and pause attaches to the wrong work. | Use `StableIdentity` plus `SourceFingerprint` fixtures before pause implementation. |
+| Repo-level pause hides an unrelated urgent PR/check event. | Track accepted fingerprint/source-change evidence and show "paused repo changed" review item. |
+| Item IDs change and pause attaches to the wrong work. | Close Q-020 with reviewed identity/fingerprint fixtures before item-scoped pause implementation. |
 | User confuses pause with external waiting or done. | Copy and queue naming must say paused/review, not complete. |
 | Future hosted service has multiple users. | Treat pause as user-specific state, not project truth. |
 
