@@ -154,6 +154,8 @@ The first provider is local filesystem. A later service could add hosted connect
 
 Source contract versioning is part of this boundary. Local paths can remain dogfood-only, but each provider still has to report which `boilerplate_docs`, `dev_cycle`, `git_cli`, and `github_gh` capabilities it can satisfy before DevDeck trusts parsed state.
 
+Hosted production contract operations are intentionally deferred. Before serviceizing DevDeck, reopen Q-017 to design a source contract registry, connector health model, raw snapshot storage, parser-versioned reprocessing, and rollout policy.
+
 ## Success Metrics
 
 - User can identify the top human-attention item within 30 seconds of opening DevDeck.
