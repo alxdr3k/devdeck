@@ -20,6 +20,7 @@ Status: planned. No implementation files exist yet.
 | `src/scan/` | Planned scan orchestration and source timeouts. |
 | `src/shell/` | Planned bounded read-only command wrapper for scanner adapters. |
 | `src/cache/` | Planned user-local JSON cache. |
+| `src/state/` | Planned user-local operator pause state. |
 | `src/ui/` | Planned Ink feed, detail, handoff, command display. |
 
 ## Domain / Services
@@ -30,6 +31,7 @@ Status: planned. No implementation files exist yet.
 | `src/domain/attention.ts` | Planned `AttentionItem` and suppression logic. |
 | `src/domain/ranking.ts` | Planned ranking bands, scoring, tie-breakers, explanations. |
 | `src/domain/handoff.ts` | Planned handoff prompt generation. |
+| `src/domain/operator-pause.ts` | Planned pause overlay and paused queue rules. |
 
 ## Adapters
 
@@ -50,6 +52,7 @@ Status: planned. No implementation files exist yet.
 | `tests/scan/` | Planned scan orchestration and resilience tests. |
 | `tests/adapters/` | Planned filesystem/git/docs/github/dev-cycle fixtures. |
 | `tests/contracts/` | Planned source contract probe and drift fixtures. |
+| `tests/state/` | Planned operator pause persistence fixtures. |
 | `tests/domain/` | Planned status, attention, ranking, handoff tests. |
 | `tests/ui/` | Planned display-copy and Ink smoke tests. |
 | `tests/evals/` | Planned dogfood top-item quality eval fixtures. |

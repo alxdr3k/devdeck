@@ -36,13 +36,14 @@ Rank by hard band first, then score within the band. This prevents high-priority
 | `urgent_human_blocker` | `codex_feedback`, `changes_requested`, `checks_failing`, `blocked` | Human action is blocking review, checks, or workflow progress. |
 | `ship_ready` | `ready_to_merge` | Work can be shipped under current policy. |
 | `resume_work` | `resume_active_task` | No higher blocker; resume implementation. |
+| `operator_review` | `pause_review` | Paused work itself needs review because it is due, stale, changed, or all active work is empty. |
 | `trust_repair` | `github_auth`, `missing_source`, `source_contract_drift`, `unknown_state` | DevDeck cannot be trusted until the source is fixed. |
 | `hygiene` | `docs_stale` | Useful cleanup but usually not the top human unblock. |
 
 Band order:
 
 ```text
-urgent_human_blocker > ship_ready > resume_work > trust_repair > hygiene > unknown
+urgent_human_blocker > ship_ready > resume_work > operator_review > trust_repair > hygiene > unknown
 ```
 
 ## Inputs
@@ -53,6 +54,7 @@ urgent_human_blocker > ship_ready > resume_work > trust_repair > hygiene > unkno
 | severity | `AttentionItem.severity` | How damaging delay is. |
 | project priority | config | User-defined project importance, 0-100. |
 | today focus | config | Daily boost for intentionally focused projects. |
+| operator pause | user-local state | Whether an item/project is intentionally parked outside the active feed. |
 | age | source timestamps | Older unresolved human-attention items rise gradually. |
 | trust | `SourceTrust` | Low confidence lowers rank unless the item is about trust failure. |
 | freshness | `SourceTrust.checkedAt` | Stale scans are less decisive. |
@@ -71,6 +73,7 @@ urgent_human_blocker > ship_ready > resume_work > trust_repair > hygiene > unkno
 | `missing_source` | 70 |
 | `source_contract_drift` | 68 |
 | `resume_active_task` | 62 |
+| `pause_review` | 60 |
 | `docs_stale` | 45 |
 | `unknown_state` | 25 |
 
@@ -116,6 +119,17 @@ Defaults:
 
 Exception: trust-failure items such as `github_auth`, `missing_source`, and `source_contract_drift` should not be heavily penalized for their own missing source or unsupported contract. They exist to tell the user trust is broken.
 
+## Operator Pause Policy
+
+Operator pause is applied before active-feed ranking:
+
+1. Exclude paused project/item work from the active feed by default.
+2. Keep paused work visible in a separate paused queue.
+3. Rank the paused queue by project priority, today focus, pause age, review trigger, and source freshness.
+4. Generate an active `pause_review` item only when the pause itself needs attention: review time elapsed, source changed since pause, external dependency may be ready, or there are no active items.
+
+When pause conflicts with priority, pause wins for active-feed eligibility. A priority 100 paused repo should not outrank a lower-priority unpaused active item unless a `pause_review` breakthrough condition is present.
+
 ## Tie Breakers
 
 Use this order:
@@ -158,7 +172,9 @@ Default post-dogfood user UI should not make "why this is #1" primary copy. Keep
 
 ## Defer and Override
 
-Manual defer/pin/snooze is out of first MVP implementation. The ranking model should be designed so a future local override can add a modifier without changing item generation.
+Generic manual defer/pin/snooze is out of first MVP implementation. Operator pause is the narrower dogfood-proven local override and is modeled separately in `docs/specs/operator-pause-model.md`.
+
+The ranking model should still allow future generic overrides without changing item generation.
 
 Future modifier shape:
 
@@ -179,6 +195,8 @@ Fixture tests should verify:
 - trust failures do not crash ranking
 - missing repos still rank when actionable
 - unsupported source contracts rank as trust repair only when they reduce actionability
+- paused high-priority items do not appear in the active feed unless pause review is due
+- paused queue order still respects project priority and pause age
 - today focus changes rank in expected cases
 - stale low-confidence items do not outrank fresh high-confidence blockers
 - tie breakers prevent feed flicker

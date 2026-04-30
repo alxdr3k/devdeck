@@ -40,7 +40,7 @@ The wedge is sharp: DevDeck is a dogfood-first developer cockpit for the user's 
 
 ## Scope Guardrails
 
-- Keep `done`, `defer`, `snooze`, and `pin` out of the first implementation unless dogfood proves ranking is noisy.
+- Keep generic `done`, `defer`, `snooze`, and `pin` out of the first implementation unless dogfood proves ranking is noisy. Later update: dogfood proved a narrower operator-pause need, accepted in DEC-015.
 - Keep config editing out of the TUI until scanner and ranking are trusted.
 - Keep command execution out of MVP even if command display feels one step away.
 - Do not broaden to non-developer workflows before the developer contract works.

@@ -48,6 +48,12 @@ Trust: High · checked 4m ago · GitHub and git agree
 
 During dogfood, a diagnostic/detail view may show why an item was ranked first. After dogfood, the default feed should stay action-first and avoid "why this is #1" as primary user-facing copy.
 
+If any work is operator-paused, the default view should show a compact paused count without mixing paused work into the active feed:
+
+```text
+Paused: 3
+```
+
 ## Project Table Columns
 
 Use plain-language columns:
@@ -81,6 +87,9 @@ MVP keyboard actions:
 | `j` / down | Move selection down the feed. | no |
 | `k` / up | Move selection up the feed. | no |
 | `enter` | Open detail pane for selected item. | no |
+| `p` | Pause selected item/project with a reason. | no |
+| `u` | Unpause selected paused item/project. | no |
+| `P` | Toggle paused queue. | no |
 | `h` | Show/copy handoff text. | no |
 | `c` | Show/copy recommended command. | no |
 | `o` | Show open target or PR URL command. | no |
@@ -103,6 +112,7 @@ If clipboard integration is unavailable, the UI should show selectable text and 
 | `missing_source` | Configured repo is missing | The configured path does not exist on disk. |
 | `source_contract_drift` | Source format changed | DevDeck found a source shape it does not fully support. |
 | `github_auth` | GitHub state unavailable | `gh` could not read PR/check/review state. |
+| `pause_review` | Paused work needs review | This paused item is due, stale, changed, or the active feed is empty. |
 | `blocked` | Blocker needs a decision | The workflow reports a blocker that needs human action. |
 | `unknown_state` | State is unclear | DevDeck does not have enough evidence to rank this confidently. |
 
@@ -190,6 +200,8 @@ Handoff may keep "why this is next" because it is context for another coding ses
 | Parser failed | DevDeck could not read the expected section. The raw file is still linked. |
 | Scan in progress | Scanning configured repos. |
 | Cache shown | Showing cached state because live scan failed. |
+| Paused queue hidden | Paused items are hidden from the active feed. Open paused queue to review them. |
+| Paused item changed | Paused item changed since it was parked. Review whether it should stay paused. |
 
 ## First-run Copy
 
@@ -223,3 +235,5 @@ Display tests should assert:
 - command display never says it executed
 - missing source copy includes the path/config fix
 - source contract drift copy stays plain-language and points to the source
+- paused count is visible when paused work exists
+- paused copy never implies work is done or ignored

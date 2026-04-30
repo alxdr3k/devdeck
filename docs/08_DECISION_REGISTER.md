@@ -240,3 +240,29 @@ The boilerplate repo and project repos will keep evolving. Filename fallbacks al
 - Positive: parser support can be upgraded with fixtures instead of ad hoc runtime patches.
 - Trade-off: adapters need a small probe layer before parsing.
 - Follow-ups: implement `SRC-1A.0`, keep `docs/specs/source-contract-versioning.md` current, and add drift fixtures.
+
+---
+
+### DEC-015: Add operator pause as local focus-control state
+
+- Date: 2026-04-30
+- Status: accepted
+- Resolves: Q-018
+- Impacts: REQ-020, NFR-009, ranking policy, display copy
+
+**Decision**
+
+Support an explicit local operator pause overlay for project/item work that the user intentionally parks because it requires high judgment, external setup, milestone review, leaf promotion, or a later energy window.
+
+Paused work is removed from the active feed by default and shown in a paused queue. Project priority still ranks paused work inside that queue, but priority does not override pause for active-feed eligibility.
+
+**Rationale**
+
+The user's current split-tab workflow already uses `!` as a practical red-light marker. DevDeck should preserve the useful behavior without depending on terminal UI state. This is narrower and better motivated than generic defer/pin/snooze.
+
+**Consequences**
+
+- Positive: active feed matches what the user is actually ready to focus on.
+- Positive: high-priority paused work remains visible instead of being forgotten.
+- Trade-off: MVP gains a small user-local state store.
+- Follow-ups: implement `OperatorPause`, paused queue display, stale-pause review, and priority conflict fixtures.

@@ -48,7 +48,8 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Source contract probes so evolving boilerplate/project repo shapes degrade safely instead of breaking scans.
 - `ProjectStatus` model with trust/freshness/confidence metadata.
 - `AttentionItem` generator, deterministic ranking policy, top 1/top 5 feed, detail pane, and handoff prompt generator.
-- MVP actions: open target, generate/copy handoff, display commands. DevDeck must not execute repo commands in MVP.
+- Operator pause state so high-judgment/external-dependency/milestone-review work can be parked outside the active feed without being forgotten.
+- MVP actions: open target, generate/copy handoff, display commands, and local pause/unpause state. DevDeck must not execute repo commands in MVP.
 
 ## Explicit non-goals
 
@@ -56,6 +57,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Web/mobile dashboard in MVP.
 - Running `codex-loop`, tests, merge, push, or other repo commands from DevDeck in MVP.
 - Write-back to boilerplate docs, GitHub, or `.dev-cycle` state in MVP.
+- Generic defer/pin/snooze beyond operator pause.
 - Supporting non-developer or GitHub-less workflows in the developer MVP.
 
 ## Current priorities
@@ -68,7 +70,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 
 - `Q-005`: Parser depth for boilerplate docs and `.dev-cycle` briefs needs to be right-sized.
 - `Q-016`: Boilerplate/project contract drift needs fixture coverage before parser assumptions harden.
-- `Q-010`: Manual defer/pin/snooze remains undecided for post-MVP.
+- `Q-010`: Generic defer/pin/snooze remains future; dogfood operator pause is accepted as Q-018 / DEC-015.
 - `Q-012`: Final product name remains open and does not block implementation.
 
 ## Current validation
@@ -82,6 +84,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Confirm `gh auth status` in the user's shell before implementing GitHub scans.
 - Inspect real `actwyn`, `concluv`, and `../xeflabs/xef-scale` boilerplate docs before locking parser fixtures.
 - Capture source contract fixtures for current and drifted boilerplate/doc shapes.
+- Capture a dogfood pause scenario with one high-priority paused repo and one lower-priority active repo.
 - Verify whether `.dev-cycle` state is always present or must be missing-source tolerant.
 
 ## Links
@@ -94,6 +97,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Ranking policy: `docs/specs/ranking-policy.md`
 - Display copy contract: `docs/specs/display-copy-contract.md`
 - Source contract versioning: `docs/specs/source-contract-versioning.md`
+- Operator pause model: `docs/specs/operator-pause-model.md`
 - Dogfood eval: `docs/evals/dogfood-top-item-quality.md`
 - Reviews: `docs/reviews/`
 

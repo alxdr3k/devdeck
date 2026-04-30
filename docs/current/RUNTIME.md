@@ -10,10 +10,12 @@ start DevDeck
   -> resolve project paths
   -> probe source contracts and capabilities
   -> scan sources with bounded adapter calls
+  -> load local operator pause state
   -> build ProjectStatus per configured repo
   -> generate AttentionItems
+  -> split active feed and paused queue
   -> rank by band and score
-  -> render Ink feed/detail
+  -> render Ink feed/paused/detail
   -> on user action, display/copy handoff or command text only
 ```
 
@@ -43,6 +45,8 @@ LocatedProject
 | `gh` timeout | Use cache if present; mark GitHub stale/error. |
 | `.dev-cycle` missing | Lower confidence only where workflow expects it. |
 | Cache stale | Show stale cache as fallback, never as fresh source. |
+| Operator-paused item | Keep it out of the active feed; show it in paused queue with reason and review trigger. |
+| Paused item changed | Generate a pause review item or paused-queue warning. |
 | Command action selected | Show/copy command text; do not execute. |
 | Clipboard unavailable | Show selectable text and report that copy was unavailable. |
 

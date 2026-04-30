@@ -10,6 +10,7 @@ Status: planned. Code, tests, and generated references become authoritative afte
 | `LocatedProject` | Config plus locator, resolved path state, and repo metadata. | `docs/specs/status-model.md` |
 | `SourceContractProbe` | Per-source contract id, detected version, compatibility, capabilities, and missing required capabilities. | `docs/specs/status-model.md` / `docs/specs/source-contract-versioning.md` |
 | `SourceTrust` | Per-source state, checked time, confidence, summary, and fix hint. | `docs/specs/status-model.md` |
+| `OperatorPause` | Local user pause overlay for intentionally parked project/item work. | `docs/specs/operator-pause-model.md` |
 | `ProjectStatus` | Normalized repo status consumed by attention/ranking/UI. | `docs/specs/status-model.md` |
 | `AttentionItem` | Human-actionable item with source refs, next action, ranking band, commands, handoff seed. | `docs/specs/attention-item-model.md` |
 | `RankingResult` | Ordered feed item plus band/score/explanation. | `docs/specs/ranking-policy.md` |
@@ -23,6 +24,7 @@ Status: planned. Code, tests, and generated references become authoritative afte
 |---|---|---|
 | `devdeck.yml` | Project config. | PRD / HLD |
 | user-local JSON cache | Last scan fallback and freshness metadata. | DEC-004 |
+| user-local JSON state | Operator pause overlays and source fingerprints. | DEC-015 |
 | dogfood repos | Read-only source state. | ADR-0001 |
 
 ## Lifecycle States
@@ -31,8 +33,9 @@ Status: planned. Code, tests, and generated references become authoritative afte
 |---|---|---|
 | `SourceTrust.state` | `ok`, `missing`, `stale`, `error`, `unsupported`, `not_checked` | Source failures are data. |
 | `SourceContractProbe.compatibility` | `supported`, `compatible_legacy`, `partial`, `unsupported`, `unknown` | Contract drift is detected before parsing. |
-| `ProjectStatus.workStatus` | `ready_to_resume`, `waiting_for_human`, `agent_running`, `checks_pending`, `checks_failing`, `review_feedback`, `ready_to_merge`, `blocked`, `stale`, `unknown` | Derived in status builder. |
-| `AttentionItem.rankingBand` | `urgent_human_blocker`, `ship_ready`, `resume_work`, `trust_repair`, `hygiene`, `unknown` | Bands sort before score. |
+| `ProjectStatus.workStatus` | `ready_to_resume`, `waiting_for_human`, `operator_paused`, `agent_running`, `checks_pending`, `checks_failing`, `review_feedback`, `ready_to_merge`, `blocked`, `stale`, `unknown` | Derived in status builder. |
+| `AttentionItem.rankingBand` | `urgent_human_blocker`, `ship_ready`, `resume_work`, `operator_review`, `trust_repair`, `hygiene`, `unknown` | Bands sort before score. |
+| `OperatorPause.reason` | `milestone_review`, `decision_required`, `external_dependency`, `leaf_promotion`, `energy_heavy`, `waiting_for_user_window`, `other` | Pause gates active-feed eligibility. |
 | `PullRequestStatus.state` | `open`, `closed`, `merged`, `draft`, `unknown` | Current branch PR is distinct from open PR summaries. |
 | `ReadOnlyCommand.kind` | `git_read`, `gh_read` | Workflow/mutation commands are not represented. |
 

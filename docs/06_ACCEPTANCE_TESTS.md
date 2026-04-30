@@ -27,6 +27,8 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | AC-019 | REQ-003, REQ-004, REQ-012, NFR-001 | Given scanner adapters run, when collecting state, then only bounded read-only `git`/`gh` commands are invoked and no generated workflow command can execute. | TEST-003, TEST-013 | defined |
 | AC-020 | REQ-011, REQ-012 | Given clipboard copy is unavailable, when handoff or command copy is requested, then DevDeck falls back to showing selectable text. | TEST-013 | defined |
 | AC-021 | REQ-019, NFR-004, NFR-008 | Given a repo has an unsupported or partial source contract, when scanning, then DevDeck records contract compatibility, keeps other sources usable, and generates repair guidance only when actionability is reduced. | TEST-016 | defined |
+| AC-022 | REQ-020, NFR-009 | Given a high-priority item is operator-paused and a lower-priority item is active, when ranking, then the paused item is excluded from the active feed and shown in the paused queue. | TEST-017 | defined |
+| AC-023 | REQ-020, NFR-009 | Given a paused item is due for review or changed since pause, when scanning, then DevDeck surfaces a pause review item or paused-queue warning without marking the original task complete. | TEST-017 | defined |
 
 ## Tests
 
@@ -48,12 +50,13 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | TEST-014 | Scan cache | `tests/cache/scan-cache.test.ts` | AC-014 |
 | TEST-015 | Dogfood top item quality eval | `tests/evals/dogfood-top-item-quality.test.ts` or manual eval packet | AC-015, AC-016 |
 | TEST-016 | Source contract probe and drift fixtures | `tests/contracts/source-contracts.test.ts` | AC-021 |
+| TEST-017 | Operator pause state and ranking fixtures | `tests/state/operator-pause.test.ts`, `tests/domain/operator-pause.test.ts` | AC-022, AC-023 |
 
 ## CI/CD Gates
 
 | Gate | Environment | Verified by | Required? | Notes |
 |---|---|---|---|---|
-| PR validation | local/CI once configured | TEST-001..TEST-014, TEST-016 | yes after scaffold | No CI workflow is active yet. |
+| PR validation | local/CI once configured | TEST-001..TEST-014, TEST-016, TEST-017 | yes after scaffold | No CI workflow is active yet. |
 | MVP dogfood | local realistic environment | TEST-015 + manual dogfood rubric | yes for MVP | Uses real `actwyn`, `concluv`, `../xeflabs/xef-scale`. |
 | Command-safety review | local/CI | TEST-003 + TEST-013 + code review | yes | Scanner may run read-only `git`/`gh`; workflow commands must not execute. |
 

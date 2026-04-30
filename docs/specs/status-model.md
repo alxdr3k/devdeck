@@ -64,6 +64,7 @@ type AttentionOwner = "user" | "agent" | "github" | "none" | "unknown";
 type WorkStatus =
   | "ready_to_resume"
   | "waiting_for_human"
+  | "operator_paused"
   | "agent_running"
   | "checks_pending"
   | "checks_failing"
@@ -179,6 +180,7 @@ interface ProjectStatus {
   devCycle: DevCycleStatus;
   validation: ValidationStatus;
   contracts: SourceContractProbe[];
+  operatorPause?: OperatorPause;
   trust: SourceTrust[];
   confidence: Confidence;
   scannedAt: string;
@@ -280,6 +282,37 @@ interface ValidationStatus {
   lastResult?: "passing" | "failing" | "not_run" | "unknown";
   commands?: string[];
 }
+
+type PauseScope = "project" | "attention_item";
+
+type PauseReason =
+  | "milestone_review"
+  | "decision_required"
+  | "external_dependency"
+  | "leaf_promotion"
+  | "energy_heavy"
+  | "waiting_for_user_window"
+  | "other";
+
+type PauseResumeTrigger =
+  | "manual"
+  | "source_changed"
+  | "review_after"
+  | "external_ready";
+
+interface OperatorPause {
+  id: string;
+  scope: PauseScope;
+  projectId: ProjectId;
+  itemId?: string;
+  reason: PauseReason;
+  note?: string;
+  resumeTriggers: PauseResumeTrigger[];
+  reviewAfter?: string;
+  sourceFingerprint?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 ```
 
 ## Derived Work Status Rules
@@ -287,15 +320,28 @@ interface ValidationStatus {
 Evaluate in this order:
 
 1. Missing repo path -> `blocked`, owner `user`, confidence `high`.
-2. GitHub auth/API error with local state available -> status from local sources, confidence lowered.
-3. Codex review feedback or changes requested -> `review_feedback`, owner `user`.
-4. Failing required checks -> `checks_failing`, owner `user` unless clearly external.
-5. Pending checks/review -> `checks_pending`, owner `github`.
-6. Mergeable PR with passing checks and approval/pass reaction -> `ready_to_merge`, owner `user`.
-7. Active slice or current task with no PR blocker -> `ready_to_resume`, owner `user`.
-8. Required source contract unsupported and actionability reduced -> `blocked`, owner `user`, confidence lowered.
-9. Docs older than git/GitHub activity -> `stale`, owner `user`.
-10. No useful evidence -> `unknown`, owner `unknown`.
+2. Operator pause applies and no pause review/breakthrough item is due -> `operator_paused`, owner `user`, confidence unchanged.
+3. GitHub auth/API error with local state available -> status from local sources, confidence lowered.
+4. Codex review feedback or changes requested -> `review_feedback`, owner `user`.
+5. Failing required checks -> `checks_failing`, owner `user` unless clearly external.
+6. Pending checks/review -> `checks_pending`, owner `github`.
+7. Mergeable PR with passing checks and approval/pass reaction -> `ready_to_merge`, owner `user`.
+8. Active slice or current task with no PR blocker -> `ready_to_resume`, owner `user`.
+9. Required source contract unsupported and actionability reduced -> `blocked`, owner `user`, confidence lowered.
+10. Docs older than git/GitHub activity -> `stale`, owner `user`.
+11. No useful evidence -> `unknown`, owner `unknown`.
+
+## Operator Pause Boundary
+
+Operator pause is local user state applied after source scanning and before active-feed ranking. It is not source truth from a repo, and it must not be written into dogfood repos.
+
+| Field | Meaning |
+|---|---|
+| `operatorPause` | Project-level pause if the whole repo is intentionally parked. |
+| `AttentionItem.operatorPause` | Item-level pause if only one generated item is parked. |
+| `sourceFingerprint` | Stable summary of the item/source state when paused, used to detect stale pauses. |
+
+Detailed semantics live in `docs/specs/operator-pause-model.md`.
 
 ## Known Path Resolver
 

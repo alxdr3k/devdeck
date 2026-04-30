@@ -21,10 +21,11 @@ Question / Decision / Requirement / Gate / Slice links for DevDeck MVP.
 | TRACE-013 | Q-013 | DEC-010 | NFR-007 | AC-001 / TEST-001 | P0-M2 | CORE | CORE-1A | CORE-1A.1, CORE-1A.2 | Initial npm/TypeScript/Vitest/Ink scaffold. |
 | TRACE-014 | none | DEC-013 | REQ-010 | AC-011 / TEST-011 | P0-M4/P0-M5 | RANK/UI | RANK-1A/UI-1A | RANK-1A.3, UI-1A.4 | Ranking explanation is diagnostic after dogfood. |
 | TRACE-015 | Q-016 | DEC-014 | REQ-019, NFR-004, NFR-008 | AC-021 / TEST-016 | P0-M2 | SRC | SRC-1A | SRC-1A.0, SRC-1A.1 | Source contract probes manage boilerplate/project drift. |
+| TRACE-016 | Q-010, Q-018 | DEC-015 | REQ-020, NFR-009 | AC-022, AC-023 / TEST-017 | P0-M5 | MODEL/RANK/UI | MODEL-1C/RANK-1B/UI-1B | MODEL-1C.1..MODEL-1C.3, RANK-1B.1, UI-1B.1..UI-1B.2 | Operator pause gates active-feed eligibility without lowering priority. |
 
 ## Gaps
 
 - Q-005 parser depth remains open until dogfood fixtures prove enough coverage.
 - Q-016 is accepted, but concrete supported contract versions are verified through fixtures during `SRC-1A.0`.
-- Q-010 defer/pin/snooze is intentionally post-MVP.
+- Generic Q-010 defer/pin/snooze is future; dogfood operator pause is accepted through Q-018 / DEC-015.
 - Q-012 final name remains open and does not block implementation.
