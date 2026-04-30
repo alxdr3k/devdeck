@@ -146,3 +146,19 @@ When `../boilerplate` or a dogfood repo changes its docs/workflow shape, capture
 6. Update docs/current references if code-level generated docs exist.
 
 This keeps DevDeck aligned with evolving repos without turning the MVP into a broad markdown crawler.
+
+## Future Production Discussion
+
+Dogfood can manage drift through repo docs, fixtures, and manual parser updates. A hosted/live service needs an operational layer instead of relying on project docs as the repair surface.
+
+Future production design should revisit:
+
+- server-side source contract registry with supported versions, required capabilities, optional capabilities, deprecation status, and parser versions
+- connector probe results stored per workspace/repo as integration health data
+- raw source snapshots separated from normalized `ProjectStatus` so parser upgrades can reprocess historical scans
+- background reparse jobs when a parser or contract support matrix changes
+- dual-read or shadow-parse rollout for new major parser versions before promotion
+- user-facing drift copy moved mostly to integration health/data quality surfaces, with feed items only when actionability is reduced
+- workspace-level capability mapping for custom repo layouts, without turning DevDeck into an unrestricted markdown crawler
+
+This is not an MVP requirement. Reopen Q-017 before designing a hosted service, multi-user deployment, or persistent connector backend.

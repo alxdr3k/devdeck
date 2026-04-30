@@ -179,3 +179,18 @@ The handoff path was corrected after inspecting the local workspace.
 - Proposed Answer: Treat boilerplate docs, `.dev-cycle`, git CLI, and `gh` output as versioned source contracts. Probe required capabilities before parsing, capture drift fixtures, and degrade to source trust plus repair guidance instead of crashing or silently trusting broken parse output.
 - Blocks: REQ-019, NFR-008, `SRC-1A.0`
 - Resolution: DEC-014
+
+---
+
+### Q-017: How should a hosted DevDeck service operate source contract drift?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: future
+- Proposed Answer: Defer until service design. Likely direction is a server-side contract registry, connector probe health, raw snapshots, parser-versioned normalized outputs, background reparse, and shadow rollout for major parser changes.
+- Blocks: future hosted service / multi-user connector backend
+- Resolution: —
+
+**Context**
+
+Dogfood can record drift in docs and fixtures because the tool runs locally for one user. Production should not rely on project docs as the operational repair surface. See `docs/specs/source-contract-versioning.md`.
