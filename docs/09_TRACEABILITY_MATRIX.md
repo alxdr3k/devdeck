@@ -19,6 +19,7 @@ Question / Decision / Requirement / Gate / Slice links for DevDeck MVP.
 | TRACE-011 | none | DEC-006, DEC-012 | REQ-009, REQ-011, REQ-012 | AC-012, AC-013, AC-020 / TEST-012, TEST-013 | P0-M5 | UI | UI-1A | UI-1A.2..UI-1A.7 | Feed, handoff, command display, copy fallback. |
 | TRACE-012 | none | DEC-009 | REQ-001, REQ-017 | AC-002, AC-003 / TEST-002 | P0-M2 | CORE | CORE-1A | CORE-1A.2 | Local paths behind `ProjectLocator`. |
 | TRACE-013 | Q-013 | DEC-010 | NFR-007 | AC-001 / TEST-001 | P0-M2 | CORE | CORE-1A | CORE-1A.1, CORE-1A.2 | Initial npm/TypeScript/Vitest/Ink scaffold. |
+| TRACE-014 | none | DEC-013 | REQ-010 | AC-011 / TEST-011 | P0-M4/P0-M5 | RANK/UI | RANK-1A/UI-1A | RANK-1A.3, UI-1A.4 | Ranking explanation is diagnostic after dogfood. |
 
 ## Gaps
 

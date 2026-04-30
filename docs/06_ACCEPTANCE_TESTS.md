@@ -16,7 +16,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 | AC-008 | REQ-005 | Given `.dev-cycle/dev-cycle-briefs.md`, when scanning, then latest cycle result and summary are captured. | TEST-008 | defined |
 | AC-009 | REQ-006, NFR-006 | Given mixed source states, when building `ProjectStatus`, then every status includes source trust, freshness, and confidence. | TEST-009 | defined |
 | AC-010 | REQ-007 | Given a `ProjectStatus`, when generating items, then each item has source refs, one next action, trust, commands, and handoff seed. | TEST-010 | defined |
-| AC-011 | REQ-008, REQ-010, NFR-003 | Given fixed attention fixtures, when ranking, then hard bands rank blockers above resume/hygiene, ties are deterministic, and explanation names the decisive factors. | TEST-011 | defined |
+| AC-011 | REQ-008, REQ-010, NFR-003 | Given fixed attention fixtures, when ranking, then hard bands rank blockers above resume/hygiene, ties are deterministic, and diagnostic explanation names the decisive factors. | TEST-011 | defined |
 | AC-012 | REQ-009, REQ-013 | Given ranked feed output, when rendered, then top 1, top 5 queue, project table, error/empty states, and trust copy are visible in plain language. | TEST-012 | defined |
 | AC-013 | REQ-011, REQ-012, NFR-001 | Given selected item has commands, when command/handoff actions are used, then DevDeck displays or copies text but executes no repo command. | TEST-013 | defined |
 | AC-014 | REQ-014, REQ-015 | Given cache exists and live source fails, when scanning, then cache is shown as stale fallback and manual rescan can refresh it. | TEST-014 | defined |

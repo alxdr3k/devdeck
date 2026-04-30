@@ -128,23 +128,25 @@ Use this order:
 7. Lexicographic `projectId`.
 8. Lexicographic `id`.
 
-## Explanation Contract
+## Diagnostic Explanation Contract
 
-The top item must show a compact explanation:
+Ranking must produce a compact diagnostic explanation for dogfood, tests, and debugging:
 
 ```text
-Why this is #1:
+Diagnostic:
 Codex feedback is waiting on a priority 100 today-focus repo.
 Checks were last confirmed 4m ago. Confidence: high.
 ```
 
-The explanation should include:
+The diagnostic explanation should include:
 
 - item kind in plain language
 - project priority/today focus when they materially changed rank
 - blocking state or time sensitivity
 - trust/freshness
 - missing source when relevant
+
+Default post-dogfood user UI should not make "why this is #1" primary copy. Keep the explanation available in diagnostic/detail surfaces and eval artifacts so ranking remains debuggable without making the main product feel complicated.
 
 ## Top 1 and Top 5
 
