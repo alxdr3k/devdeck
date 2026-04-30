@@ -52,6 +52,7 @@ Source contract probes
 | Dev-cycle adapter | Read `.dev-cycle/dev-cycle-run-id` and brief log latest cycle. | filesystem |
 | Status builder | Combine source outputs into `ProjectStatus` and `SourceTrust`. | adapters |
 | Attention generator | Convert status into human-actionable `AttentionItem`s. | status model |
+| Operator state | Store local pause overlays for projects/items intentionally parked by the user. | user-local JSON |
 | Ranking engine | Apply hard bands, score within band, produce explanation. | ranking policy |
 | Handoff generator | Produce copyable Claude/Codex resume prompt. | attention item |
 | Ink UI | Render top item, top 5 queue, project table, detail, handoff/command panes. | domain outputs |
@@ -96,6 +97,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 | `SourceContractProbe` | source, contract id, detected version, compatibility, capabilities | derived; cached |
 | `SourceTrust` | source, state, checkedAt, confidence, summary, fixHint | derived; cached |
 | `ProjectStatus` | project, workStatus, docs, git, github, devCycle, validation, contracts, trust | derived; cached |
+| `OperatorPause` | scope, projectId, itemId, reason, resume triggers, source fingerprint | user-local JSON |
 | `AttentionItem` | id, kind, rankingBand, severity, nextAction, sourceRefs, commands, handoff | derived; cached |
 | `RankingResult` | ordered items, score, band, explanation | derived |
 | `ScanCache` | projects, statuses, items, scannedAt, source versions | user-local JSON |
@@ -105,7 +107,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - CLI/TUI entrypoint: planned `npm run dev` for local development, later `devdeck`.
 - Config input: `devdeck.yml`.
 - Adapter inputs: repo filesystem, `git`, `gh`, `.dev-cycle`.
-- UI outputs: priority feed, project table, detail pane, handoff text, command display.
+- UI outputs: active priority feed, paused queue, project table, detail pane, handoff text, command display.
 - External integrations: GitHub through installed/authenticated `gh`; no direct API client in MVP.
 
 ## Cross-cutting
@@ -115,6 +117,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - Privacy: local repo state stays local except user-triggered `gh` calls to GitHub.
 - Errors: source failures become `SourceTrust` entries; one failed repo/source does not stop the scan.
 - Contract drift: unsupported or partial source contracts become `SourceContractProbe` plus low-confidence `SourceTrust`; parser failures do not throw through scan orchestration.
+- Focus control: local operator pause removes intentionally parked work from the active feed without lowering project priority.
 - Determinism: ranking is pure for a fixed input fixture.
 - Timeouts: shell-outs need bounded execution so UI does not hang on `gh`.
 - Observability: MVP shows source freshness/confidence in UI; no telemetry.
@@ -133,6 +136,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - DEC-011: read-only scanner shell-outs are allowed; workflow command execution is prohibited.
 - DEC-012: clipboard copy falls back to selectable text.
 - DEC-014: source contract probes and capability checks manage boilerplate/project drift.
+- DEC-015: operator pause is local user state that gates active-feed eligibility.
 
 ## Open Questions
 
@@ -140,6 +144,7 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - Q-005: boilerplate parser depth for implementation plan and `.dev-cycle`.
 - Q-010: future defer/pin/snooze item state.
 - Q-012: final product name.
+- Q-018: operator pause semantics for high-judgment parked work.
 
 ## Related Requirements
 
@@ -147,5 +152,6 @@ This avoids two failure modes: silently trusting stale/broken parsing, and crash
 - REQ-002, REQ-003, REQ-004, REQ-005, REQ-018, REQ-019 -> Source adapters and source contract probes.
 - REQ-006, NFR-004, NFR-006 -> Status builder and trust model.
 - REQ-007, REQ-008, REQ-010, NFR-003 -> Attention/ranking domain.
+- REQ-020, NFR-009 -> Operator pause state, ranking, and UI.
 - REQ-009, REQ-011, REQ-012, REQ-013 -> Ink UI, handoff, display copy.
 - REQ-014, REQ-015 -> Cache and rescan.

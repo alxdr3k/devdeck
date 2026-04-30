@@ -39,7 +39,7 @@ These do not block `CORE-1A.1`.
 | Question | Blocks | Action |
 |---|---|---|
 | Q-005 parser depth | `SRC-1A.5` / `SRC-1A.6` | Start with known headings and expand from fixtures. |
-| Q-010 defer/pin/snooze | post-MVP | Revisit only if dogfood ranking is noisy. |
+| Q-010 defer/pin/snooze | partially superseded | Generic defer/pin/snooze remain future; dogfood operator pause is accepted in DEC-015. |
 | Q-012 final name | packaging/release | Keep DevDeck as working name. |
 
 ## Implementation Start Conditions

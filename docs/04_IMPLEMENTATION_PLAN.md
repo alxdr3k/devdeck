@@ -26,14 +26,14 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `P0-M2` | DevDeck can load config and produce local-only statuses for all dogfood repos. | next | `planned` | AC-001..AC-006, AC-021 | not started | Includes path resolver, source contract probes, and docs/git adapters. |
 | `P0-M3` | DevDeck can include GitHub PR/check/review state without blocking local scans. | after P0-M2 | `planned` | AC-007..AC-009, AC-017 | not started | `gh` adapter boundary. |
 | `P0-M4` | DevDeck can generate ranked attention feed and handoff prompts from fixtures. | after P0-M3 | `planned` | AC-010..AC-014 | not started | Domain-first before Ink polish. |
-| `P0-M5` | Dogfood TUI works on `actwyn`, `concluv`, and `../xeflabs/xef-scale`. | after P0-M4 | `planned` | AC-015..AC-018 + dogfood eval | not started | Top item quality is release gate. |
+| `P0-M5` | Dogfood TUI works on `actwyn`, `concluv`, and `../xeflabs/xef-scale`. | after P0-M4 | `planned` | AC-015..AC-018, AC-022, AC-023 + dogfood eval | not started | Top item quality and operator pause behavior are release gates. |
 
 ## Tracks
 
 | Track | Purpose | Active phase | Status | Notes |
 |---|---|---|---|---|
 | `DOC` | Source-of-truth docs, reviews, traceability | `DOC-1A` | `accepted` | Current phase complete. |
-| `CORE` | TypeScript project, config, cache, CLI shell | `CORE-1A` | `ready` | First code track. |
+| `CORE` | TypeScript project, config, cache, local state, CLI shell | `CORE-1A` | `ready` | First code track. |
 | `SRC` | Source adapters for docs/git/GitHub/dev-cycle | `SRC-1A` | `planned` | Fixture-heavy, with source contract probes before parsers. |
 | `GH` | GitHub adapter details and `gh` fixture coverage | `GH-1A` | `planned` | Split from local source adapters because failure modes differ. |
 | `MODEL` | ProjectStatus and AttentionItem domain | `MODEL-1A` | `planned` | Pure functions first. |
@@ -55,6 +55,7 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `CORE-1A.4` | `P0-M2` | `CORE` | `CORE-1A` | Implement `ProjectLocator` local_path provider and path validation for dogfood repos. | `CORE-1A.3` | AC-003, TEST-002 | `defined` | `planned` | not started | Do not leak raw path into domain beyond `LocatedProject`. |
 | `CORE-1A.5` | `P0-M2` | `CORE` | `CORE-1A` | Implement scan orchestration shell with per-project result collection and non-fatal source errors. | `CORE-1A.4` | AC-004, TEST-004 | `defined` | `planned` | not started | Local sources can be stubbed initially. |
 | `CORE-1A.6` | `P0-M2` | `CORE` | `CORE-1A` | Implement user-local JSON cache path resolution, read/write, stale marker, and `DEVDECK_CACHE_PATH`. | `CORE-1A.5` | AC-014, TEST-014 | `defined` | `planned` | not started | Do not write into dogfood repos. |
+| `CORE-1A.7` | `P0-M5` | `CORE` | `CORE-1A` | Implement user-local operator state path resolution, read/write, and `DEVDECK_STATE_PATH`. | `CORE-1A.6` | AC-022, TEST-017 | `defined` | `planned` | not started | Local state only; no repo writes. |
 | `SRC-1A.0` | `P0-M2` | `SRC` | `SRC-1A` | Implement source contract probe types, support matrix, capability result shape, and drift fixture harness. | `CORE-1A.2` | AC-021, TEST-016 | `defined` | `planned` | not started | Probe before parsing; no broad markdown crawl. |
 | `SRC-1A.1` | `P0-M2` | `SRC` | `SRC-1A` | Add adapter result/test fixture conventions shared by filesystem, git, docs, dev-cycle, GitHub. | `CORE-1A.2`, `SRC-1A.0` | TEST-004, TEST-016 | `defined` | `planned` | not started | Keeps adapters consistent. |
 | `SRC-1A.2` | `P0-M2` | `SRC` | `SRC-1A` | Implement filesystem adapter for exists/not-directory/missing state and mtimes. | `SRC-1A.1`, `CORE-1A.4` | AC-004, TEST-004 | `defined` | `planned` | not started | Missing project does not abort scan. |
@@ -77,9 +78,13 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `MODEL-1B.3` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement deterministic item ids and suppression rules. | `MODEL-1B.1`, `MODEL-1B.2` | AC-010, TEST-010 | `defined` | `planned` | not started | Prevent feed flicker. |
 | `MODEL-1B.4` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement command suggestions as display-only data with prohibited execution coverage. | `MODEL-1B.3`, `DEC-011` | AC-013, TEST-013 | `defined` | `planned` | not started | `executesInMvp: false`. |
 | `MODEL-1B.5` | `P0-M4` | `MODEL` | `MODEL-1B` | Implement handoff generator from attention items and known doc path fallbacks. | `MODEL-1B.4`, `SRC-1A.4` | AC-010, AC-016, TEST-010, TEST-015 | `defined` | `planned` | not started | Keep prompt under 2-minute resume target. |
+| `MODEL-1C.1` | `P0-M5` | `MODEL` | `MODEL-1C` | Define `OperatorPause`, pause reasons, resume triggers, and stable source fingerprint shape. | `CORE-1A.7`, `MODEL-1B.3` | AC-022, TEST-017 | `defined` | `planned` | not started | Model observed red-light workflow, not generic defer. |
+| `MODEL-1C.2` | `P0-M5` | `MODEL` | `MODEL-1C` | Apply pause overlays to projects/items and split generated items into active feed and paused queue. | `MODEL-1C.1` | AC-022, TEST-017 | `defined` | `planned` | not started | Pause beats priority for active-feed eligibility. |
+| `MODEL-1C.3` | `P0-M5` | `MODEL` | `MODEL-1C` | Generate `pause_review` items for due pauses, source changes, external-ready hints, and empty active feed. | `MODEL-1C.2` | AC-023, TEST-017 | `defined` | `planned` | not started | Review pause, do not mark original task done. |
 | `RANK-1A.1` | `P0-M4` | `RANK` | `RANK-1A` | Implement ranking band assignment and band-order sort. | `MODEL-1B.3` | AC-011, TEST-011 | `defined` | `planned` | not started | Blockers outrank hygiene. |
 | `RANK-1A.2` | `P0-M4` | `RANK` | `RANK-1A` | Implement score within band, trust/freshness/effort modifiers, and deterministic tie-breakers. | `RANK-1A.1` | AC-011, TEST-011 | `defined` | `planned` | not started | No tuning without eval. |
 | `RANK-1A.3` | `P0-M4` | `RANK` | `RANK-1A` | Implement diagnostic ranking explanation and nearby-item explanation fields for dogfood/evals. | `RANK-1A.2` | AC-011, TEST-011 | `defined` | `planned` | not started | Explanation names decisive factors but is not primary post-dogfood UI. |
+| `RANK-1B.1` | `P0-M5` | `RANK` | `RANK-1B` | Implement pause-aware ranking: active feed excludes paused work, paused queue ranks by priority/review trigger/age. | `MODEL-1C.2`, `RANK-1A.2` | AC-022, AC-023, TEST-017 | `defined` | `planned` | not started | Priority does not break pause by itself. |
 | `UI-1A.1` | `P0-M5` | `UI` | `UI-1A` | Implement CLI bootstrap for no-config, scan-start, and non-interactive smoke rendering. | `CORE-1A.5`, `RANK-1A.3` | AC-001, AC-002, TEST-001, TEST-012 | `defined` | `planned` | not started | Useful before full TUI. |
 | `UI-1A.2` | `P0-M5` | `UI` | `UI-1A` | Implement Ink top item and top 5 feed layout from ranked items. | `UI-1A.1` | AC-012, TEST-012 | `defined` | `planned` | not started | Top item dominates. |
 | `UI-1A.3` | `P0-M5` | `UI` | `UI-1A` | Implement project table as secondary map with plain-language copy. | `UI-1A.2` | AC-012, TEST-012 | `defined` | `planned` | not started | Table must not outrank feed. |
@@ -87,9 +92,12 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `UI-1A.5` | `P0-M5` | `UI` | `UI-1A` | Implement keyboard flow for selection, detail, rescan, handoff pane, command pane, quit. | `UI-1A.4` | AC-012, AC-013, TEST-012, TEST-013 | `defined` | `planned` | not started | No execution handlers. |
 | `UI-1A.6` | `P0-M5` | `UI` | `UI-1A` | Implement handoff and command text panes with clipboard copy fallback to selectable text. | `UI-1A.5`, `DEC-012` | AC-013, AC-016, TEST-013 | `defined` | `planned` | not started | Copy failure is non-blocking. |
 | `UI-1A.7` | `P0-M5` | `UI` | `UI-1A` | Implement loading, empty, stale cache, missing repo, GitHub unavailable, and parser-failed states. | `UI-1A.5` | AC-012, AC-017, AC-018, TEST-012 | `defined` | `planned` | not started | Plain-language errors. |
+| `UI-1B.1` | `P0-M5` | `UI` | `UI-1B` | Render paused count, paused queue, pause reason, review trigger, and changed-since-pause warning. | `UI-1A.7`, `RANK-1B.1` | AC-022, AC-023, TEST-012, TEST-017 | `defined` | `planned` | not started | Active feed stays uncluttered. |
+| `UI-1B.2` | `P0-M5` | `UI` | `UI-1B` | Add pause/unpause keyboard flow with small reason set and note fallback for `other`. | `UI-1B.1`, `CORE-1A.7` | AC-022, TEST-017 | `defined` | `planned` | not started | Local state mutation only; no repo command. |
 | `EVAL-1A.1` | `P0-M5` | `EVAL` | `EVAL-1A` | Capture minimized dogfood source fixtures for docs/git/dev-cycle/GitHub states. | `SRC-1A.8`, `GH-1A.5` | TEST-015 | `defined` | `planned` | not started | Redact private content if needed. |
 | `EVAL-1A.2` | `P0-M5` | `EVAL` | `EVAL-1A` | Implement automated top-item fixture eval and rubric output. | `EVAL-1A.1`, `RANK-1A.3`, `MODEL-1B.5` | AC-015, AC-016, TEST-015 | `defined` | `planned` | not started | Product gate. |
 | `EVAL-1A.3` | `P0-M5` | `EVAL` | `EVAL-1A` | Run live dogfood eval and record false positives/negatives plus follow-up slices. | `UI-1A.7`, `EVAL-1A.2` | AC-015..AC-018 | `defined` | `planned` | not started | Must pass before MVP accepted. |
+| `EVAL-1A.4` | `P0-M5` | `EVAL` | `EVAL-1A` | Run dogfood pause scenario: high-priority paused repo, lower-priority active repo, stale paused item. | `UI-1B.2`, `EVAL-1A.2` | AC-022, AC-023 | `defined` | `planned` | not started | Confirms red-light workflow maps to DevDeck. |
 | `DOC-1B.1` | `P0-M5` | `DOC` | `DOC-1B` | Update current docs, testing commands, and traceability after implementation slices land. | each implementation slice | docs freshness | `defined` | `planned` | not started | Keep docs current during implementation. |
 
 ## Dependencies
@@ -104,6 +112,7 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 - Boilerplate docs differ enough to break hard-coded paths.
 - Boilerplate/project contract drift may break parser assumptions unless probes and fixtures land first.
 - Ranking may feel wrong if hygiene/source-trust items outrank PR-loop blockers.
+- Pause may hide important work if count/review triggers are weak.
 - TUI may hide evidence and lose user trust.
 
 ## Acceptance

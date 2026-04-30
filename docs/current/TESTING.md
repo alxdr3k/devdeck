@@ -38,7 +38,7 @@ Planned after `CORE-1A.1`: `npm run build`.
 
 No command currently defined.
 
-Planned after source adapters exist: fixture-driven tests under `tests/contracts/` and `tests/adapters/`.
+Planned after source adapters exist: fixture-driven tests under `tests/contracts/`, `tests/adapters/`, and `tests/state/`.
 
 ## Evals
 

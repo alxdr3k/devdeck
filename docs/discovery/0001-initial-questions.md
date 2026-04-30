@@ -28,12 +28,13 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 | Q-007 | How deep should markdown parsing go? | Known headings and tables first. Use parser utilities and fixtures, not brittle global regex chains. | recommended | project |
 | Q-008 | How should DevDeck handle `gh` auth failure? | Emit source-level error with fix command suggestion, keep local git/doc status usable. | recommended | project |
 | Q-009 | What does `open` do in MVP? | Display or copy `cd <path>`, PR URL, or `gh pr view --web` command. Do not change parent shell cwd. | recommended | project |
-| Q-010 | Should `done`, `defer`, `snooze`, or `pin` ship in MVP? | Defer/pin are useful but create local state. Keep out of first implementation unless dogfood demands. | open | project |
+| Q-010 | Should `done`, `defer`, `snooze`, or `pin` ship in MVP? | Generic defer/pin/snooze remain future. Dogfood has proven a narrower operator pause need, tracked as Q-018 / DEC-015. | resolved | project |
 | Q-011 | Should DevDeck write back to docs or `.dev-cycle`? | No write-back in MVP. Handoff/cache only. | accepted | project |
 | Q-012 | What is the final product/repo name? | DevDeck is accepted as working name. Final name can change later. | open | user |
 | Q-013 | How should differing boilerplate doc paths be resolved? | Use a known-path resolver: prefer `docs/current/*`, fall back to legacy top-level docs such as `docs/TESTING.md`. | accepted | project |
 | Q-014 | Should ranking be pure score or banded? | Use hard bands first, then score within a band. PR-loop blockers outrank resume/doc hygiene. | accepted | project |
 | Q-016 | How should DevDeck handle boilerplate/project repo schema or workflow drift? | Treat repo shapes as versioned source contracts. Probe required capabilities before parsing, add fixtures for drift, and degrade to trust-repair items instead of crashing or silently trusting broken parse output. | accepted | project |
+| Q-018 | How should DevDeck model the user's red-light pause workflow? | Add local operator pause state. Paused work leaves the active feed, remains visible in a paused queue, and priority does not override pause except through explicit pause-review triggers. | accepted | project |
 
 ## Immediate Decisions
 
@@ -45,3 +46,4 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 - Use `../xeflabs/xef-scale` as the dogfood path for `xef-scale`.
 - Use ranking bands before numeric weights.
 - Use source contract probes and fixtures to manage boilerplate/project drift.
+- Use operator pause to model dogfood focus control without relying on terminal tab state.

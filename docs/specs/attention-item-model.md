@@ -32,6 +32,7 @@ type AttentionKind =
   | "missing_source"
   | "source_contract_drift"
   | "github_auth"
+  | "pause_review"
   | "blocked"
   | "unknown_state";
 
@@ -43,6 +44,7 @@ type RankingBand =
   | "urgent_human_blocker"
   | "ship_ready"
   | "resume_work"
+  | "operator_review"
   | "trust_repair"
   | "hygiene"
   | "unknown";
@@ -63,6 +65,7 @@ interface AttentionItem {
   rankInputs: RankInputs;
   commands: CommandSuggestion[];
   handoff: HandoffSeed;
+  operatorPause?: OperatorPause;
   createdAt: string;
   updatedAt: string;
 }
@@ -109,6 +112,8 @@ interface HandoffSeed {
 }
 ```
 
+`OperatorPause` is defined in `docs/specs/operator-pause-model.md`.
+
 ## Item Kinds
 
 | Kind | Trigger | Default severity | Owner | Next action pattern |
@@ -122,6 +127,7 @@ interface HandoffSeed {
 | `missing_source` | Configured source path/doc missing | medium | user | Fix config or create missing source. |
 | `source_contract_drift` | Boilerplate, `.dev-cycle`, git, or `gh` source contract is unsupported or missing a required capability | medium | user | Update DevDeck parser support, adjust repo docs, or accept degraded local-only state. |
 | `github_auth` | `gh` unavailable/auth failed | medium | user | Authenticate or continue local-only. |
+| `pause_review` | Paused work is due for review, changed since pause, or is the only remaining useful queue | medium | user | Review the pause reason and either unpause, keep paused, or update the note. |
 | `blocked` | Source says blocked or required state unavailable | high | user | Resolve named blocker. |
 | `unknown_state` | Too little evidence for reliable status | low | user | Open repo and inspect manually. |
 
@@ -135,6 +141,7 @@ interface HandoffSeed {
 - Every item must be explainable without showing raw enum values.
 - Missing/stale/error states generate items only when they affect trust or actionability.
 - Unsupported or partial source contracts generate `source_contract_drift` only when they reduce actionability; otherwise they remain detail trust metadata.
+- Paused items are excluded from the active feed by default; generate `pause_review` only when the pause itself needs attention.
 - PR-loop blockers should be generated in `urgent_human_blocker` before resume/doc hygiene items.
 
 ## Suppression Examples
@@ -146,6 +153,7 @@ interface HandoffSeed {
 | Boilerplate docs contract unsupported, but GitHub has a clear failing-check blocker | `checks_failing` plus contract warning in detail | duplicate top-level `source_contract_drift` unless parser drift blocks the next action |
 | `gh` auth failed but local docs show active slice | `github_auth`, optionally lower-ranked `resume_active_task` | unknown state panic item |
 | Ready to merge with stale docs | `ready_to_merge` | `docs_stale` unless docs are required before merge |
+| Priority 100 repo is operator-paused for milestone review | paused queue entry, and `pause_review` only if due/stale | original `resume_active_task` from active feed |
 
 ## Handoff Template Contract
 
@@ -190,7 +198,8 @@ Examples:
 - `concluv:ready_to_merge:pr-14`
 - `xef-scale:missing_source:path`
 - `actwyn:source_contract_drift:boilerplate_docs`
+- `actwyn:pause_review:project`
 
 ## MVP Lifecycle
 
-MVP items are derived, not persisted. Future defer/pin/snooze features may add local item state, but that is out of scope for the first implementation slice.
+Most MVP items are derived, not persisted. Operator pause is the first local user-state exception because dogfood has proven the need to park high-judgment work without losing it. Generic defer/pin/snooze remain future features unless dogfood shows a separate need.

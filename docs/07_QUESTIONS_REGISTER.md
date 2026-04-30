@@ -109,10 +109,10 @@ The handoff path was corrected after inspecting the local workspace.
 
 - Opened: 2026-04-30
 - Owner: project
-- Status: open
-- Proposed Answer: No for first implementation. Revisit only if dogfood ranking is noisy.
-- Blocks: post-MVP
-- Resolution: —
+- Status: resolved
+- Proposed Answer: Generic defer/snooze/pin stay out of the first implementation. Implement the narrower dogfood-proven operator pause instead.
+- Blocks: post-MVP generic overrides
+- Resolution: DEC-015 for operator pause; generic overrides remain future
 
 ---
 
@@ -194,3 +194,18 @@ The handoff path was corrected after inspecting the local workspace.
 **Context**
 
 Dogfood can record drift in docs and fixtures because the tool runs locally for one user. Production should not rely on project docs as the operational repair surface. See `docs/specs/source-contract-versioning.md`.
+
+---
+
+### Q-018: How should DevDeck model the user's red-light pause workflow?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: resolved
+- Proposed Answer: Add explicit local operator pause state. Paused work leaves the active feed by default, remains in a paused queue with reason/review trigger, and project priority ranks paused work only inside that queue.
+- Blocks: REQ-020, NFR-009, `MODEL-1C`, `RANK-1B`, `UI-1B`
+- Resolution: DEC-015
+
+**Context**
+
+The user currently types `!` in high-judgment repo chat tabs to create a red visual marker and then focuses only on unmarked tabs. DevDeck should not depend on terminal tab state, but it should model the same focus-control behavior.

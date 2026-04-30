@@ -66,12 +66,13 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Project-level status model with source, freshness, confidence, and missing-source handling.
 - Source contract probing for evolving boilerplate docs, `.dev-cycle`, GitHub CLI output, and parser compatibility.
 - Attention item model for human-actionable work.
+- Local operator pause state for intentionally parked, high-judgment, external-dependency, or milestone-review work during dogfood.
 - Deterministic ranking policy with dogfood/diagnostic explanation. Post-dogfood default UI should keep the feed simple and avoid exposing "why this is #1" as primary copy.
 - Ink TUI priority feed with a strong top item and short top 5 queue.
 - Secondary project table as a map, not the primary action UI.
 - Handoff prompt generation.
-- Open target and command display actions.
-- Local JSON cache for last scan results and freshness metadata.
+- Open target, local pause/unpause, and command display actions.
+- Local JSON cache for last scan results, freshness metadata, and operator pause state.
 - Read-only scanner shell-outs for `git` and `gh`.
 
 ### Out of Scope
@@ -83,6 +84,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 - Write-back to docs, GitHub, or `.dev-cycle`.
 - Team workflow, assignment, notifications, or cross-user collaboration.
 - GitHub-less non-developer workflow.
+- Generic task-manager defer/pin/snooze beyond the operator pause workflow.
 
 ## Functional Requirements
 
@@ -107,6 +109,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | REQ-017 | Resolve repo-specific boilerplate doc paths through a known-path resolver with fallbacks. | must | Dogfood repos are similar but not identical. |
 | REQ-018 | Represent current-branch PR state separately from other open PRs and default-branch sync state. | should | Prevents single-PR assumptions from hiding blockers. |
 | REQ-019 | Probe source contract compatibility before parsing docs, `.dev-cycle`, git, or `gh` output. | must | Unsupported or partial contracts become trust data and repair items, not scan crashes. |
+| REQ-020 | Support local operator pause for work the user intentionally parks because it needs high judgment, external setup, milestone review, or leaf promotion. | should | Paused work leaves the active feed by default but remains visible in a paused queue. |
 
 ## Non-functional Requirements
 
@@ -120,6 +123,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | NFR-006 | Trust | Every item shows source, freshness, confidence, and missing source. | Display contract checks. |
 | NFR-007 | Testability | Domain models, ranking, and handoff generation are pure or easily fixture-driven. | Unit test coverage before TUI polish. |
 | NFR-008 | Contract evolution | Boilerplate/project workflow drift must be managed with versioned probes, capability checks, and fixtures. | Source contract tests and dogfood evals. |
+| NFR-009 | Focus control | User-declared pause state must not be overridden by project priority in the active feed, and must not silently hide work forever. | Pause/ranking/display fixtures. |
 
 ## Implementation Stack
 
@@ -196,6 +200,8 @@ DevDeck must not execute workflow or mutation commands in MVP:
 - no shell command generated from an `AttentionItem`
 
 Generated commands are display/copy text only. Clipboard copy should fall back to showing selectable text when clipboard support is unavailable.
+
+Local pause/unpause may mutate DevDeck's user-local state, but it must not mutate dogfood repos, GitHub, git state, `.dev-cycle`, or project docs.
 
 ## Open Questions
 

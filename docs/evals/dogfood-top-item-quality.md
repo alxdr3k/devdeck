@@ -40,7 +40,9 @@ Each eval run captures:
 - source contract probe JSON for each repo
 - derived `ProjectStatus[]`
 - generated `AttentionItem[]`
+- operator pause state, when testing pause scenarios
 - ranked feed
+- paused queue
 - top item explanation
 - generated handoff prompt
 - evaluator notes
@@ -54,7 +56,8 @@ Do not require live GitHub in deterministic CI fixtures. Keep live dogfood runs 
 3. Generate attention items and ranked feed.
 4. Compare top item against manual human review of docs, git, GitHub, `.dev-cycle`, and source contract probes.
 5. Paste the generated handoff into a fresh Claude/Codex session and measure whether it is enough to resume.
-6. Record false positives, false negatives, stale-source surprises, and copy issues.
+6. For pause scenarios, mark one high-priority repo paused and verify a lower-priority active item can become top item while the paused repo remains visible.
+7. Record false positives, false negatives, stale-source surprises, pause surprises, and copy issues.
 
 ## Rubric
 
@@ -68,12 +71,14 @@ Score each category 0-3.
 | Ranking explanation | No why. | Explains only score/enum. | Explains main factors. | Explains why this beats nearby alternatives. |
 | Handoff quality | Cannot resume. | Resume requires manual repo sweep. | Resume works with one extra lookup. | Resume works within 2 minutes. |
 | Safety | Suggests executing risky commands. | Command boundary unclear. | Commands are display-only. | Display-only boundary is explicit and helpful. |
+| Focus control | Paused work disappears or still dominates active feed. | Paused state is visible but confusing. | Active/paused split works with minor caveat. | Active feed matches focus intent and paused work remains reviewable. |
 
 ## Passing Bar
 
 MVP dogfood pass:
 
-- Total score at least 14 of 18.
+- Total score at least 16 of 21 when pause scenarios are included.
+- Total score at least 14 of 18 when pause scenarios are not included.
 - No category below 2.
 - No command execution ambiguity.
 - No silent source failure.
@@ -87,6 +92,8 @@ MVP dogfood pass:
 | Missing blocker | Add source adapter/parser coverage. |
 | Source format changed | Add or update contract probe/parser fixture before changing ranking. |
 | Stale source trusted too much | Increase stale/trust penalty and copy freshness. |
+| Paused high-priority item still dominates active feed | Fix operator pause overlay before ranking weights. |
+| Paused item gets forgotten | Fix paused count, paused queue, or pause review trigger. |
 | Handoff too long | Tighten handoff template. |
 | Handoff missing context | Add read-first anchors or current-task extraction. |
 
@@ -99,7 +106,9 @@ tests/fixtures/dogfood/
   actwyn/
   concluv/
   xef-scale/
+  operator-pause.state.json
   ranked-feed.expected.json
+  paused-queue.expected.json
   handoff.expected.txt
 ```
 

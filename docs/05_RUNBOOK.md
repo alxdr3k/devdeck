@@ -71,6 +71,7 @@ adapters:
 - Detection: top item contradicts manual repo review.
 - Triage:
   - Open item detail and inspect source trust.
+  - Check whether the expected item is operator-paused.
   - Check whether the item is in the expected ranking band.
   - Compare nearby items in top 5.
   - Record a dogfood eval failure.
@@ -80,6 +81,16 @@ adapters:
   3. Fix ranking band.
   4. Tune weights last.
 - Related: AC-011, AC-015.
+
+## Important Work Is Not In The Active Feed
+
+- Detection: a repo should matter but does not appear in the active top item/top 5.
+- Triage:
+  - Open the paused queue.
+  - Check pause reason, source fingerprint, review trigger, and age.
+  - If the pause is no longer valid, unpause it.
+- Expected DevDeck behavior: paused work is not mixed into the active feed, but paused count and paused queue make it visible.
+- Related: AC-022, AC-023, DEC-015.
 
 ## Command Safety Incident
 
