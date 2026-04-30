@@ -51,6 +51,8 @@ type RankingBand =
 
 interface AttentionItem {
   id: string;
+  identity: StableIdentity;
+  sourceFingerprint: SourceFingerprint;
   projectId: ProjectId;
   kind: AttentionKind;
   severity: Severity;
@@ -113,6 +115,7 @@ interface HandoffSeed {
 ```
 
 `OperatorPause` is defined in `docs/specs/operator-pause-model.md`.
+`StableIdentity` and `SourceFingerprint` are defined in `docs/specs/stable-identity-fingerprint.md`.
 
 ## Item Kinds
 
@@ -186,19 +189,21 @@ Commands:
 
 ## ID Format
 
-Use deterministic IDs so repeated scans do not flicker:
+Use deterministic, versioned IDs so repeated scans do not flicker:
 
 ```text
-<project_id>:<kind>:<stable-source-anchor>
+v1:attention_item:<project_id>:<kind>:<anchor_kind>:<anchor_value>
 ```
 
 Examples:
 
-- `actwyn:codex_feedback:pr-10`
-- `concluv:ready_to_merge:pr-14`
-- `xef-scale:missing_source:path`
-- `actwyn:source_contract_drift:boilerplate_docs`
-- `actwyn:pause_review:project`
+- `v1:attention_item:actwyn:codex_feedback:github_pr:10`
+- `v1:attention_item:concluv:ready_to_merge:github_pr:14`
+- `v1:attention_item:xef-scale:missing_source:repo_path:configured`
+- `v1:attention_item:actwyn:source_contract_drift:source_contract:boilerplate_docs`
+- `v1:attention_item:actwyn:pause_review:project:actwyn`
+
+The id identifies the conceptual item. `sourceFingerprint` detects whether the evidence changed since a pause, handoff, cache entry, or intent snapshot was created.
 
 ## MVP Lifecycle
 

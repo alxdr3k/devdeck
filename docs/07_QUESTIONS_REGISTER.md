@@ -209,3 +209,29 @@ Dogfood can record drift in docs and fixtures because the tool runs locally for 
 **Context**
 
 The user currently types `!` in high-judgment repo chat tabs to create a red visual marker and then focuses only on unmarked tabs. DevDeck should not depend on terminal tab state, but it should model the same focus-control behavior.
+
+---
+
+### Q-019: How should DevDeck help recover "what did I ask the agent to do?"
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: open
+- Proposed Answer: Add an optional user intent snapshot attached to a stable item identity. MVP can capture DevDeck-generated handoff text and operator notes; future chat connectors may capture exact sent prompts if explicitly supported. Detail/handoff views should show "You asked" or "Operator intent" when known.
+- Blocks: REQ-022, future context recovery UI
+- Resolution: —
+
+**Context**
+
+During context switching, the user often sees an agent response and needs to recover the original instruction. Searching prior chat manually is expensive. DevDeck should make the initiating instruction visible when it can do so honestly, while distinguishing captured notes from observed repo state.
+
+---
+
+### Q-020: How should stable item ids and source fingerprints work?
+
+- Opened: 2026-04-30
+- Owner: project
+- Status: resolved
+- Proposed Answer: Use versioned stable identities for conceptual items and separate source fingerprints for evidence changes. Local state such as pause and intent snapshots attaches to both.
+- Blocks: REQ-021, NFR-010, `MODEL-1A.0`, `MODEL-1B.3`, `MODEL-1C.1`
+- Resolution: DEC-016

@@ -188,6 +188,17 @@ Commands:
 
 Handoff may keep "why this is next" because it is context for another coding session, not default feed chrome.
 
+When an intent snapshot exists, detail and handoff views should include it with explicit source labeling:
+
+```text
+You asked:
+<captured instruction>
+
+Captured from: DevDeck handoff
+```
+
+Do not show this block when DevDeck has no captured instruction. Do not imply DevDeck read chat history unless a future explicit connector provides it.
+
 ## Error and Empty States
 
 | Situation | Copy |

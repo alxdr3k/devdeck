@@ -342,6 +342,7 @@ Operator pause is local user state applied after source scanning and before acti
 | `sourceFingerprint` | Stable summary of the item/source state when paused, used to detect stale pauses. |
 
 Detailed semantics live in `docs/specs/operator-pause-model.md`.
+Stable id and source fingerprint rules live in `docs/specs/stable-identity-fingerprint.md`.
 
 ## Known Path Resolver
 
