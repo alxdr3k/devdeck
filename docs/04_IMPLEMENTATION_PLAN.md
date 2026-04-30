@@ -65,12 +65,12 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 | `SRC-1A.6` | `P0-M2` | `SRC` | `SRC-1A` | Parse implementation plan active milestone/track/phase/slice and next ready leaf. | `SRC-1A.4` | AC-006, TEST-006 | `defined` | `planned` | not started | Start with table/heading parser. |
 | `SRC-1A.7` | `P0-M2` | `SRC` | `SRC-1A` | Parse testing docs for known validation commands and mark unknown commands explicitly. | `SRC-1A.4` | AC-006, TEST-006 | `defined` | `planned` | not started | No invented commands. |
 | `SRC-1A.8` | `P0-M3` | `SRC` | `SRC-1A` | Parse `.dev-cycle` latest run id, latest cycle, result, work, verification, review/ship, risk. | `SRC-1A.2` | AC-008, TEST-008 | `defined` | `planned` | not started | Handles missing `.dev-cycle`. |
-| `GH-1A.1` | `P0-M3` | `GH` | `GH-1A` | Run SPIKE-001 and capture read-only `gh` JSON/error fixtures for dogfood repos. | `CORE-1A.1` | spike result | `defined` | `planned` | not started | Report any blocker before `GH-1A.3`. |
+| `GH-1A.1` | `P0-M3` | `GH` | `GH-1A` | Run SPIKE-001 and capture read-only `gh` JSON/error fixtures plus local Codex conversation examples for dogfood repos. | `CORE-1A.1` | spike result | `defined` | `planned` | not started | Redact tokens/secrets; report blockers before `GH-1A.3`. |
 | `GH-1A.2` | `P0-M3` | `GH` | `GH-1A` | Implement `gh` availability, auth, repo resolution, timeout, and error-code mapping. | `GH-1A.1` | AC-017, TEST-007 | `defined` | `planned` | not started | Local scan remains usable on failure. |
 | `GH-1A.3` | `P0-M3` | `GH` | `GH-1A` | Implement current-branch PR and open PR summary adapter. | `GH-1A.2` | AC-007, TEST-007 | `defined` | `planned` | not started | Avoid single-PR domain assumption. |
 | `GH-1A.4` | `P0-M3` | `GH` | `GH-1A` | Implement checks, review decision, actionable count, and Codex pass/feedback best-effort adapter. | `GH-1A.3` | AC-007, AC-017, TEST-007 | `defined` | `planned` | not started | If Codex signal is weak, lower confidence. |
 | `GH-1A.5` | `P0-M3` | `GH` | `GH-1A` | Integrate GitHub adapter into scan orchestration with cache fallback and source trust. | `GH-1A.4`, `CORE-1A.6` | AC-007, AC-017, TEST-007, TEST-014 | `defined` | `planned` | not started | No `--watch` commands. |
-| `MODEL-1A.0` | `P0-M4` | `MODEL` | `MODEL-1A` | Review, finalize, and implement stable identity/source fingerprint canonicalization helpers with fixtures. | Q-020 closure, `CORE-1A.2` | AC-024, TEST-018 | `defined` | `planned` | draft spec under review | Do not implement helpers until Q-020 closes. |
+| `MODEL-1A.0` | `P0-M4` | `MODEL` | `MODEL-1A` | Implement dogfood v1 stable identity/source fingerprint helpers for the boilerplate workflow profile. | Q-020 dogfood decision, `CORE-1A.2` | AC-024, TEST-018 | `defined` | `planned` | dogfood profile decided | Leaf/slice primary anchor; generic workflow identity deferred. |
 | `MODEL-1A.1` | `P0-M4` | `MODEL` | `MODEL-1A` | Define and export concrete TypeScript domain models matching specs. | `MODEL-1A.0` | TEST-009 | `defined` | `planned` | not started | Keep raw adapter output separate. |
 | `MODEL-1A.2` | `P0-M4` | `MODEL` | `MODEL-1A` | Build source trust aggregation and project confidence rules. | `MODEL-1A.1`, `SRC-1A.3`, `SRC-1A.4` | AC-009, TEST-009 | `defined` | `planned` | not started | Trust is visible data. |
 | `MODEL-1A.3` | `P0-M4` | `MODEL` | `MODEL-1A` | Build `ProjectStatus` builder and derived work-status rules. | `MODEL-1A.2`, `SRC-1A.8`, `GH-1A.5` | AC-009, TEST-009 | `defined` | `planned` | not started | Evaluate status rule order. |
@@ -108,10 +108,12 @@ Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
 - Local dogfood repos: `../actwyn`, `../concluv`, `../xeflabs/xef-scale`.
 - CLI tools: Node 22+, npm, git, `gh`.
 - GitHub auth: required for GitHub source trust, not for local-only scan.
+- Fixture baseline: boilerplate docs/ops layout; dogfood repo fixtures should be concrete instances of that contract.
 
 ## Risks
 
 - `gh` output may not expose Codex review state cleanly.
+- Local Codex conversation examples may contain private tokens or credentials; fixtures must redact secrets and avoid storing personal tokens.
 - Boilerplate docs differ enough to break hard-coded paths.
 - Boilerplate/project contract drift may break parser assumptions unless probes and fixtures land first.
 - Ranking may feel wrong if hygiene/source-trust items outrank PR-loop blockers.

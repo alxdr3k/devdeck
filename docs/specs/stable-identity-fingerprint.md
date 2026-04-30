@@ -15,7 +15,9 @@ ai_include: true
 
 # Stable Identity And Source Fingerprint
 
-Status: joint review draft. This document is not an accepted design yet. It captures the current candidate model so the project can review the tradeoffs before implementation depends on it.
+Status: joint review draft. This document is not an accepted generic design yet. It captures the current candidate model so the project can review the tradeoffs before implementation depends on it.
+
+Dogfood v1 working decision: implement only the boilerplate workflow profile first. In that profile, leaf/slice is the primary work-unit anchor, while PR and branch are evidence links unless no leaf/slice is available. Generic product identity strategy is deferred.
 
 ## Purpose
 
@@ -58,6 +60,8 @@ Branchless orphan work is possible. DevDeck may need a temporary local work-unit
 Non-work conversation is also possible. A simple question or casual message should not automatically create a work unit or attention item.
 
 PR can be a reasonable default anchor in generic workflows, but it is not guaranteed to represent one coherent work unit because users can create very large PRs. Branch can be even weaker because it can be reused, renamed, or missing. DevDeck should track anchor confidence and avoid attaching durable local state too strongly to weak anchors.
+
+Dogfood implementation should not solve every generic anchor case. It should implement the boilerplate profile, expose anchor confidence, and leave generic PR-centric/orphan-work policy behind an explicit future workflow profile.
 
 ## Principles
 

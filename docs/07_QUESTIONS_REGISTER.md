@@ -231,10 +231,10 @@ During context switching, the user often sees an agent response and needs to rec
 
 - Opened: 2026-04-30
 - Owner: project
-- Status: open
-- Proposed Answer: Candidate direction is to separate conceptual item identity from source evidence fingerprints, but this is not accepted yet. Review must validate anchors, staleness rules, local-path privacy, pre-PR/chat-only work, and migration behavior.
+- Status: dogfood_v1_decided_generic_deferred
+- Proposed Answer: For dogfood v1, use a boilerplate workflow profile where leaf/slice is the primary work-unit anchor. PR and branch are evidence links unless no leaf/slice is available. Generic identity rules for non-boilerplate workflows are deferred.
 - Blocks: REQ-021, NFR-010, `MODEL-1A.0`, `MODEL-1B.3`, `MODEL-1C.1`
-- Resolution: —
+- Resolution: dogfood v1 working decision; generic product decision deferred
 
 **Discussion Notes**
 
@@ -243,6 +243,8 @@ The user agrees with the rough distinction, but clarified that the core work-uni
 Branchless orphan work can exist. A user-agent exchange may describe real work before any branch, PR, or repo mutation exists.
 
 Follow-up concern: leaf/slice may be too specific to the user's boilerplate workflow to become the universal product anchor. Candidate refinement is to make identity anchors workflow/provider-specific: dogfood boilerplate can prefer leaf/slice, PR-centric workflows can prefer PR, and branchless work can use low-confidence local orphan ids until attached.
+
+Implementation scope clarification: dogfood v1 only needs the boilerplate profile decision. Non-boilerplate identity strategy, PR-centric generic behavior, and production migration semantics should be reopened later.
 
 ---
 

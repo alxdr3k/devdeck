@@ -36,7 +36,7 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 | Q-016 | How should DevDeck handle boilerplate/project repo schema or workflow drift? | Treat repo shapes as versioned source contracts. Probe required capabilities before parsing, add fixtures for drift, and degrade to trust-repair items instead of crashing or silently trusting broken parse output. | accepted | project |
 | Q-018 | How should DevDeck model the user's red-light pause workflow? | Add local operator pause state. Paused work leaves the active feed, remains visible in a paused queue, and priority does not override pause except through explicit pause-review triggers. | accepted | project |
 | Q-019 | How should DevDeck help recover "what did I ask the agent to do?" | Attach optional user intent snapshots to stable item identities. MVP captures DevDeck handoffs/operator notes; future chat connectors may capture exact prompts. | open | project |
-| Q-020 | How should stable item ids and source fingerprints work? | Candidate direction: separate conceptual item identity from source evidence fingerprints. Needs joint review before acceptance. | open | project |
+| Q-020 | How should stable item ids and source fingerprints work? | Dogfood v1 decision: boilerplate workflow profile with leaf/slice as primary work-unit anchor; generic identity deferred. | dogfood_v1_decided | project |
 | Q-021 | Can DevDeck track AI agent conversations? | Current MVP sources cannot track arbitrary chat history. Requires explicit conversation source or session-capture design. | open | project |
 | Q-022 | How should DevDeck distinguish work from non-work conversation? | Not every agent message should become a work item. Needs classification and dismissal rules. | open | project |
 

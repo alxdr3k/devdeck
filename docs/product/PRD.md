@@ -112,7 +112,7 @@ The product should be dogfood-first. It should fit the user's existing terminal 
 | REQ-018 | Represent current-branch PR state separately from other open PRs and default-branch sync state. | should | Prevents single-PR assumptions from hiding blockers. |
 | REQ-019 | Probe source contract compatibility before parsing docs, `.dev-cycle`, git, or `gh` output. | must | Unsupported or partial contracts become trust data and repair items, not scan crashes. |
 | REQ-020 | Support local operator pause for work the user intentionally parks because it needs high judgment, external setup, milestone review, or leaf promotion. | should | Paused work leaves the active feed by default but remains visible in a paused queue. |
-| REQ-021 | Define, review, and validate stable item identities and source fingerprints before local state attachments depend on them. | must | Q-020 remains open; implementation cannot treat the current draft rules as accepted. |
+| REQ-021 | Define, review, and validate stable item identities and source fingerprints before local state attachments depend on them. | must | Dogfood v1 uses the boilerplate workflow profile with leaf/slice as primary anchor; generic identity is deferred. |
 | REQ-022 | Preserve or display the user's last instruction/operator intent when available. | should | MVP can capture DevDeck handoff text or operator notes; future connectors may read chat logs if explicitly supported. |
 | REQ-023 | Define whether and how DevDeck can track AI agent conversation state. | should | Current repo-state sources are insufficient for arbitrary chat recovery; Q-021 remains open and transcript connectors are dogfood v2 scope. |
 
