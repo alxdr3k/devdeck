@@ -39,7 +39,6 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 | Q-020 | How should stable item ids and source fingerprints work? | Dogfood v1 decision: boilerplate workflow profile with leaf/slice as primary work-unit anchor; generic identity deferred. | dogfood_v1_decided | project |
 | Q-021 | Can DevDeck track AI agent conversations? | Current MVP sources cannot track arbitrary chat history. Requires explicit conversation source or session-capture design. | open | project |
 | Q-022 | How should DevDeck distinguish work from non-work conversation? | Not every agent message should become a work item. Needs classification and dismissal rules. | open | project |
-| Q-023 | When, if ever, should DevDeck execute workflow actions? | Keep dogfood MVP read-mostly. Treat execution as future control-surface tension; if added later, route through a foreground workflow runner and structured event/result artifacts rather than direct shell ownership in DevDeck. | future | project |
 
 ## Immediate Decisions
 
@@ -54,4 +53,3 @@ These questions are implementation inputs, not reasons to keep ideating in secon
 - Use operator pause to model dogfood focus control without relying on terminal tab state.
 - Review and accept stable identities/source fingerprints before pause/cache/intent state depends on them.
 - Design AI agent conversation tracking before claiming DevDeck can recover arbitrary chat context.
-- Preserve the read-mostly MVP boundary; track future command execution as a separate control-surface design question.
