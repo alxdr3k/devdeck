@@ -9,7 +9,7 @@ This is DevDeck's canonical roadmap and status ledger.
 | Milestone | Product/user gate | `P0-M3` |
 | Track | Technical stream | `SRC` |
 | Phase | Ordered stage inside a track | `SRC-1A` |
-| Slice | Commit-sized unit | `SRC-1A.2` |
+| Slice | Commit-sized implementation/verification unit | `SRC-1A.2` |
 | Gate | Acceptance/eval check | `AC-007` / `TEST-007` |
 
 ## Status Vocabulary
@@ -17,6 +17,16 @@ This is DevDeck's canonical roadmap and status ledger.
 Implementation status: `planned`, `ready`, `in_progress`, `landed`, `accepted`, `blocked`, `deferred`, `dropped`.
 
 Gate status: `defined`, `not_run`, `passing`, `failing`, `waived`.
+
+## Unplanned Feedback
+
+User feedback from real usage is triaged before it enters the roadmap.
+
+- Clear defects, UX regressions, or acceptance failures may become small hotfix slices.
+- Broader product or architecture changes go through Q / DEC / PRD / roadmap updates.
+- Keep detailed feedback threads in the issue tracker. Record only the actionable
+  slice, gate, evidence, and next step here.
+- Bug fixes should leave regression evidence when practical.
 
 ## Milestones
 
