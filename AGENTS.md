@@ -1,5 +1,6 @@
 # AGENTS.md
 
+See also: `AGENTS.policy.md` — boilerplate-owned cross-cutting agent behaviour rules.
 ## Working principles
 
 - Think before editing: state assumptions and tradeoffs when ambiguity changes the solution. Ask before unsafe guesses.
