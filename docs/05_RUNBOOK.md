@@ -4,16 +4,14 @@ Operational procedures for DevDeck. This is a local developer tool; no deploymen
 
 ## How To Run Locally
 
-No runnable app exists yet.
-
-After `CORE-1A.1`, expected flow:
+Current scaffold flow:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Before `CORE-1A.1`, use docs only.
+This starts the scaffold CLI smoke path. Dogfood repo config and scans remain planned.
 
 ## How To Configure Dogfood Repos
 

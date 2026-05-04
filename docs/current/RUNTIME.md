@@ -1,6 +1,15 @@
 # Runtime Flow
 
-Status: planned. No runtime implementation exists yet.
+Status: scaffolded. The current runtime is a minimal CLI startup smoke path; source scanning and TUI rendering remain planned.
+
+## Current Flow
+
+```text
+npm run dev
+  -> load src/cli.ts through Node 22 with the tsx loader
+  -> call the scaffold startup function
+  -> write a startup message
+```
 
 ## Planned Flow
 

@@ -6,7 +6,7 @@ Acceptance criteria for DevDeck MVP. Status is `defined` until implementation ex
 
 | ID | REQ/NFR | Scenario | Verification | Status |
 |---|---|---|---|---|
-| AC-001 | REQ-001 | Given Node/npm project is installed, when the dev command runs, then the CLI/TUI entrypoint starts without stack traces. | TEST-001 | defined |
+| AC-001 | REQ-001 | Given Node/npm project is installed, when the dev command runs, then the CLI/TUI entrypoint starts without stack traces. | TEST-001 | passing |
 | AC-002 | REQ-001, REQ-016 | Given no `devdeck.yml`, when DevDeck starts, then it shows a minimal dogfood config example. | TEST-002 | defined |
 | AC-003 | REQ-001, REQ-017 | Given config includes `../xeflabs/xef-scale`, when paths are resolved, then `xef-scale` is treated as existing. | TEST-002 | defined |
 | AC-004 | REQ-003, NFR-004 | Given one configured repo path is missing, when scanning, then other repos still produce statuses and the missing repo gets `repo.path_missing`. | TEST-004 | defined |

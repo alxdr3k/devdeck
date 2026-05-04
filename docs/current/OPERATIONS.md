@@ -1,19 +1,15 @@
 # Operations
 
-Status: planned. DevDeck has no deployment pipeline or production service.
+Status: scaffolded. DevDeck has no deployment pipeline or production service.
 
 ## Local Run
 
-No runnable app exists yet.
+Current local flow:
 
-Planned local flow:
-
-```text
-npm install
+```bash
+npm ci
 npm run dev
 ```
-
-Do not treat these as real commands until `CORE-1A.1` lands and `docs/current/TESTING.md` is updated.
 
 ## Environment Variables
 

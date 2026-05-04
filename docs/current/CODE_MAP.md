@@ -1,12 +1,13 @@
 # Code Map
 
-Status: planned. No implementation files exist yet.
+Status: scaffolded. Runtime/domain/adapters are still planned beyond the CLI smoke entrypoint.
 
 ## Entry Points
 
 | Path | Purpose |
 |---|---|
-| `src/cli.ts` | Planned CLI entrypoint. |
+| `src/cli.ts` | CLI entrypoint loaded by `npm run dev`. |
+| `src/cli-core.ts` | Scaffold startup function used by the CLI smoke test. |
 | `src/ui/App.tsx` | Planned Ink root component. |
 | `devdeck.yml` | Planned local config file for dogfood repos. |
 
@@ -48,6 +49,7 @@ Status: planned. No implementation files exist yet.
 
 | Path | Purpose |
 |---|---|
+| `tests/cli/startup.test.ts` | Vitest smoke coverage for the scaffold CLI startup. |
 | `tests/config/` | Planned config and first-run behavior tests. |
 | `tests/shell/` | Planned read-only command boundary tests. |
 | `tests/scan/` | Planned scan orchestration and resilience tests. |

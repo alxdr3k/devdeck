@@ -1,8 +1,6 @@
 # Testing
 
-Status: no implementation commands currently defined.
-
-Do not invent commands before package scripts exist. The planned command shape below becomes authoritative only after `CORE-1A.1` lands.
+Status: scaffold commands defined.
 
 ## Testing policy
 
@@ -16,15 +14,15 @@ Do not invent commands before package scripts exist. The planned command shape b
 
 ## Install
 
-No command currently defined.
-
-Planned after `CORE-1A.1`: `npm install`.
+```bash
+npm ci
+```
 
 ## Typecheck
 
-No command currently defined.
-
-Planned after `CORE-1A.1`: `npm run typecheck`.
+```bash
+npm run typecheck
+```
 
 ## Lint
 
@@ -34,15 +32,15 @@ No lint command is required for the first scaffold unless lint tooling is explic
 
 ## Unit Tests
 
-No command currently defined.
-
-Planned after `CORE-1A.1`: `npm test`.
+```bash
+npm test
+```
 
 ## Build
 
-No command currently defined.
-
-Planned after `CORE-1A.1`: `npm run build`.
+```bash
+npm run build
+```
 
 ## Integration Tests
 
@@ -60,20 +58,14 @@ Planned after `EVAL-1A.1`: dogfood top-item quality eval using `docs/evals/dogfo
 
 | Check | Local command | CI workflow / job | Required? | Notes |
 |---|---|---|---|---|
-| install | No command currently defined. | none | no | Becomes required after scaffold. |
-| typecheck | No command currently defined. | none | no | Planned. |
-| unit tests | No command currently defined. | none | no | Planned. |
+| install | `npm ci` | none | no | Uses committed npm lockfile. |
+| typecheck | `npm run typecheck` | none | no | Strict TypeScript scaffold. |
+| unit tests | `npm test` | none | no | Vitest scaffold smoke. |
 | integration fixtures | No command currently defined. | none | no | Planned; use boilerplate docs/ops layout as fixture baseline. Local Codex history is private reference material only for v1; redact any token/secret from minimized notes. |
 | dogfood eval | No command currently defined. | none | no | Manual/product gate first. |
 
 ## Before Opening A PR
 
-Until code exists:
-
-- update docs when product/spec/plan changes
-- run `git diff --check`
-
-After scaffold:
-
 - run install/typecheck/tests from this file
+- run `git diff --check`
 - update current docs if behavior, data model, runtime, operations, or test commands change

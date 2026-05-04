@@ -4,7 +4,7 @@ type: current_state
 title: DevDeck Current State
 status: active
 created_at: 2026-04-30
-updated_at: 2026-04-30
+updated_at: 2026-05-04
 scope: project
 project_id: devdeck
 provenance: user_curated_ai_assisted
@@ -15,7 +15,7 @@ ai_include: true
 
 # Current State
 
-Status: implementation-ready docs and leaf roadmap complete. No implementation exists yet.
+Status: Node/TypeScript scaffold is in place; local config and source implementation remain planned.
 
 This repo is now the current truth for DevDeck. The second-brain ideation handoff is history and should be used only for background.
 
@@ -28,9 +28,9 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - current milestone: `P0-M2` local config and local-source status implementation
 - active tracks: `CORE`, then `SRC`
 - active phase: `CORE-1A`
-- active slice: `CORE-1A.1` scaffold Node 22 + npm + TypeScript + Vitest project
-- last accepted gate: implementation readiness review findings backfilled on 2026-04-30
-- next gate: `CORE-1A.1` TypeScript/Node scaffold with documented checks
+- active slice: `CORE-1A.2` create source/test directory skeleton and export domain placeholder types
+- last accepted gate: `CORE-1A.1` TypeScript/Node scaffold with documented checks
+- next gate: `CORE-1A.2` source/test skeleton stays compile-green
 - canonical ledger: `docs/04_IMPLEMENTATION_PLAN.md`
 
 ## Implemented
@@ -38,7 +38,8 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 - Boilerplate documentation and agent-command scaffold copied into this repo.
 - DevDeck PRD, workflow ADR, status model, attention item model, ranking policy, display copy contract, dogfood eval, and project-stage reviews created.
 - Implementation readiness review completed; roadmap is decomposed to commit-sized leaf slices.
-- No TypeScript, Node, Ink, scanner, model, ranking, cache, or TUI implementation exists yet.
+- Node 22/npm scaffold with strict TypeScript, `tsx` dev loader, Vitest, and CLI startup smoke test exists.
+- No config loader, Ink UI, scanner, model, ranking, or cache implementation exists yet.
 
 ## Planned
 
@@ -63,8 +64,8 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 
 ## Current priorities
 
-1. Start `CORE-1A.1`: scaffold TypeScript/Node 22 + npm + strict TypeScript + Vitest.
-2. Keep `npm run build`, `npm run typecheck`, and `npm test` green as soon as scripts exist.
+1. Start `CORE-1A.2`: create source/test directory skeleton and export domain placeholder types without behavior.
+2. Keep `npm run build`, `npm run typecheck`, and `npm test` green.
 3. Do not begin GitHub adapter implementation before `GH-1A.1` captures `gh` fixtures.
 
 ## Current risks / unknowns
@@ -81,7 +82,7 @@ DevDeck is a dogfood-first developer TUI for managing 3-5 simultaneous Claude Co
 ## Current validation
 
 - Product eval: `docs/evals/dogfood-top-item-quality.md`.
-- Automated checks: none yet. Do not invent commands before implementation exists.
+- Automated checks: `npm ci`, `npm run typecheck`, `npm test`, `npm run build`, `npm run dev`, `git diff --check`.
 
 ## Needs audit
 

@@ -33,7 +33,7 @@ User feedback from real usage is triaged before it enters the roadmap.
 | Milestone | Product / user gate | Target | Status | Gate | Evidence | Notes |
 |---|---|---|---|---|---|---|
 | `P0-M1` | Project contract, docs, reviews, acceptance gates, and leaf roadmap are ready for implementation. | now | `accepted` | docs review | source docs + reviews + this ledger | No code yet. |
-| `P0-M2` | DevDeck can load config and produce local-only statuses for all dogfood repos. | next | `planned` | AC-001..AC-006, AC-021 | not started | Includes path resolver, source contract probes, and docs/git adapters. |
+| `P0-M2` | DevDeck can load config and produce local-only statuses for all dogfood repos. | next | `in_progress` | AC-001..AC-006, AC-021 | scaffold landed | Includes path resolver, source contract probes, and docs/git adapters. |
 | `P0-M3` | DevDeck can include GitHub PR/check/review state without blocking local scans. | after P0-M2 | `planned` | AC-007..AC-009, AC-017 | not started | `gh` adapter boundary. |
 | `P0-M4` | DevDeck can generate ranked attention feed and handoff prompts from fixtures. | after P0-M3 | `planned` | AC-010..AC-014, AC-024 | not started | Stable identity and domain-first before Ink polish. |
 | `P0-M5` | Dogfood TUI works on `actwyn`, `concluv`, and `../xeflabs/xef-scale`. | after P0-M4 | `planned` | AC-015..AC-018, AC-022, AC-023 + dogfood eval | not started | Top item quality and operator pause behavior are release gates; context recovery is dogfood v2. |
@@ -43,7 +43,7 @@ User feedback from real usage is triaged before it enters the roadmap.
 | Track | Purpose | Active phase | Status | Notes |
 |---|---|---|---|---|
 | `DOC` | Source-of-truth docs, reviews, traceability | `DOC-1A` | `accepted` | Current phase complete. |
-| `CORE` | TypeScript project, config, cache, local state, CLI shell | `CORE-1A` | `ready` | First code track. |
+| `CORE` | TypeScript project, config, cache, local state, CLI shell | `CORE-1A` | `in_progress` | Scaffold landed; source skeleton next. |
 | `SRC` | Source adapters for docs/git/GitHub/dev-cycle | `SRC-1A` | `planned` | Fixture-heavy, with source contract probes before parsers. |
 | `GH` | GitHub adapter details and `gh` fixture coverage | `GH-1A` | `planned` | Split from local source adapters because failure modes differ. |
 | `MODEL` | ProjectStatus and AttentionItem domain | `MODEL-1A` | `planned` | Pure functions first. |
@@ -59,8 +59,8 @@ User feedback from real usage is triaged before it enters the roadmap.
 | `DOC-1A.2` | `P0-M1` | `DOC` | `DOC-1A` | Run CEO, Design, DevEx, Engineering reviews and backfill findings. | `DOC-1A.1` | review backfill | `passing` | `accepted` | `docs/reviews/`, this ledger | Complete. |
 | `DOC-1A.3` | `P0-M1` | `DOC` | `DOC-1A` | Run implementation readiness review, close implementation-blocking decisions, and decompose roadmap to leaf slices. | `DOC-1A.2` | readiness review | `passing` | `accepted` | `docs/reviews/0005-implementation-readiness-review.md`, DEC-010..DEC-012 | Complete. |
 | `DOC-1A.4` | `P0-M1` | `DOC` | `DOC-1A` | Define source contract versioning and drift handling for evolving boilerplate/project repos. | `DOC-1A.3` | docs review | `passing` | `accepted` | `docs/specs/source-contract-versioning.md`, DEC-014 | Complete. |
-| `CORE-1A.1` | `P0-M2` | `CORE` | `CORE-1A` | Scaffold `package.json`, Node 22/npm scripts, TypeScript strict config, TSX dev entrypoint, Vitest. | `DOC-1A.4` | AC-001, TEST-001 | `defined` | `ready` | not started | Start here. |
-| `CORE-1A.2` | `P0-M2` | `CORE` | `CORE-1A` | Create source/test directory skeleton and export domain placeholder types without behavior. | `CORE-1A.1` | TEST-001 | `defined` | `planned` | not started | Keep compile green. |
+| `CORE-1A.1` | `P0-M2` | `CORE` | `CORE-1A` | Scaffold `package.json`, Node 22/npm scripts, TypeScript strict config, TSX dev entrypoint, Vitest. | `DOC-1A.4` | AC-001, TEST-001 | `passing` | `landed` | `package.json`, `tsconfig.json`, `src/cli.ts`, `tests/cli/startup.test.ts`; `npm ci`, `npm run typecheck`, `npm test`, `npm run build`, `npm run dev` | Complete. |
+| `CORE-1A.2` | `P0-M2` | `CORE` | `CORE-1A` | Create source/test directory skeleton and export domain placeholder types without behavior. | `CORE-1A.1` | TEST-001 | `defined` | `ready` | not started | Keep compile green. |
 | `CORE-1A.3` | `P0-M2` | `CORE` | `CORE-1A` | Implement config schema, YAML loader, snake_case to camelCase mapping, workflow contract, identity profile, and no-config first-run output. | `CORE-1A.2` | AC-002, TEST-002 | `defined` | `planned` | not started | Include dogfood example with `identity_profile: boilerplate_v1`. |
 | `CORE-1A.4` | `P0-M2` | `CORE` | `CORE-1A` | Implement `ProjectLocator` local_path provider and path validation for dogfood repos. | `CORE-1A.3` | AC-003, TEST-002 | `defined` | `planned` | not started | Do not leak raw path into domain beyond `LocatedProject`. |
 | `CORE-1A.5` | `P0-M2` | `CORE` | `CORE-1A` | Implement scan orchestration shell with per-project result collection and non-fatal source errors. | `CORE-1A.4` | AC-004, TEST-004 | `defined` | `planned` | not started | Local sources can be stubbed initially. |
